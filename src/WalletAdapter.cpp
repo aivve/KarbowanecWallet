@@ -95,11 +95,11 @@ quint64 WalletAdapter::getPendingBalance() const {
 }
 
 quint64 WalletAdapter::getUnmixableBalance() const {
-  try {
-    return m_wallet == nullptr ? 0 : m_wallet->dustBalance();
-  } catch (std::system_error&) {
+  //try {
+  //  return m_wallet == nullptr ? 0 : m_wallet->dustBalance();
+  //} catch (std::system_error&) {
     return 0;
-  }
+  //}
 }
 
 void WalletAdapter::open(const QString& _password) {
@@ -330,10 +330,10 @@ bool WalletAdapter::getAccountKeys(CryptoNote::AccountKeys& _keys) {
 
 Crypto::SecretKey WalletAdapter::getTxKey(Crypto::Hash& txid) {
   Q_CHECK_PTR(m_wallet);
-  try {
-    return m_wallet->getTxKey(txid);
-  } catch (std::system_error&) {
-  }
+  //try {
+  //  return m_wallet->getTxKey(txid);
+  //} catch (std::system_error&) {
+  //}
 
   return CryptoNote::NULL_SECRET_KEY;
 }
@@ -353,7 +353,7 @@ void WalletAdapter::sweepDust(const std::vector<CryptoNote::WalletLegacyTransfer
   Q_CHECK_PTR(m_wallet);
   try {
     lock();
-    m_wallet->sendDustTransaction(_transfers, _fee, NodeAdapter::instance().convertPaymentId(_paymentId), _mixin, 0);
+    m_wallet->/*sendDustTransaction*/sendTransaction(_transfers, _fee, NodeAdapter::instance().convertPaymentId(_paymentId), _mixin, 0);
     Q_EMIT walletStateChangedSignal(tr("Sweeping unmixable dust"));
   } catch (std::system_error&) {
     unlock();
@@ -362,27 +362,27 @@ void WalletAdapter::sweepDust(const std::vector<CryptoNote::WalletLegacyTransfer
 
 quint64 WalletAdapter::estimateFusion(quint64 _threshold) {
   Q_CHECK_PTR(m_wallet);
-  try {
-    return m_wallet->estimateFusion(_threshold);
-  } catch (std::system_error&) {
+  //try {
+  //  return m_wallet->estimateFusion(_threshold);
+  //} catch (std::system_error&) {
     return 0;
-  }
+  //}
 }
 
 std::list<CryptoNote::TransactionOutputInformation> WalletAdapter::getFusionTransfersToSend(quint64 _threshold, size_t _min_input_count, size_t _max_input_count) {
   Q_CHECK_PTR(m_wallet);
-  try {
-    return m_wallet->selectFusionTransfersToSend(_threshold, _min_input_count, _max_input_count);
-  } catch (std::system_error&) {
+  //try {
+  //  return m_wallet->selectFusionTransfersToSend(_threshold, _min_input_count, _max_input_count);
+  //} catch (std::system_error&) {
     return {};
-  }
+  //}
 }
 
 void WalletAdapter::sendFusionTransaction(const std::list<CryptoNote::TransactionOutputInformation>& _fusion_inputs, quint64 _fee, const QString& _extra, quint64 _mixin) {
   Q_CHECK_PTR(m_wallet);
   try {
     lock();
-    m_wallet->sendFusionTransaction(_fusion_inputs, _fee, _extra.toStdString(), _mixin, 0);
+   // m_wallet->sendFusionTransaction(_fusion_inputs, _fee, _extra.toStdString(), _mixin, 0);
     Q_EMIT walletStateChangedSignal(tr("Optimizing wallet"));
   } catch (std::system_error&) {
     unlock();
@@ -435,7 +435,7 @@ void WalletAdapter::onWalletInitCompleted(int _error, const QString& _errorText)
   case 0: {
     Q_EMIT walletActualBalanceUpdatedSignal(m_wallet->actualBalance());
     Q_EMIT walletPendingBalanceUpdatedSignal(m_wallet->pendingBalance());
-    Q_EMIT walletUnmixableBalanceUpdatedSignal(m_wallet->dustBalance());
+    //Q_EMIT walletUnmixableBalanceUpdatedSignal(m_wallet->dustBalance());
     Q_EMIT updateWalletAddressSignal(QString::fromStdString(m_wallet->getAddress()));
     Q_EMIT reloadWalletTransactionsSignal();
     Q_EMIT walletStateChangedSignal(tr("Ready"));
@@ -498,9 +498,9 @@ void WalletAdapter::pendingBalanceUpdated(uint64_t _pending_balance) {
   Q_EMIT walletPendingBalanceUpdatedSignal(_pending_balance);
 }
 
-void WalletAdapter::unmixableBalanceUpdated(uint64_t _dust_balance) {
-  Q_EMIT walletUnmixableBalanceUpdatedSignal(_dust_balance);
-}
+//void WalletAdapter::unmixableBalanceUpdated(uint64_t _dust_balance) {
+//  Q_EMIT walletUnmixableBalanceUpdatedSignal(_dust_balance);
+//}
 
 void WalletAdapter::externalTransactionCreated(CryptoNote::TransactionId _transactionId) {
   if (!m_isSynchronized) {
@@ -693,7 +693,7 @@ QString WalletAdapter::getTxProof(Crypto::Hash& _txid, CryptoNote::AccountPublic
   Q_CHECK_PTR(m_wallet);
   try {
     std::string sig_str;
-    m_wallet->getTxProof(_txid, _address, _tx_key, sig_str);
+    //m_wallet->getTxProof(_txid, _address, _tx_key, sig_str);
     return QString::fromStdString(sig_str);
   } catch (std::system_error&) {
     QMessageBox::critical(nullptr, tr("Failed to get the transaction proof"), tr("Failed to get the transaction proof."), QMessageBox::Ok);
@@ -712,7 +712,7 @@ QString WalletAdapter::getReserveProof(const quint64 &_reserve, const QString &_
     } else {
       amount = _reserve;
     }
-    const std::string sig_str = m_wallet->getReserveProof(amount, (!_message.isEmpty() ? _message.toStdString() : ""));
+    const std::string sig_str; //= m_wallet->getReserveProof(amount, (!_message.isEmpty() ? _message.toStdString() : ""));
     return QString::fromStdString(sig_str);
   } catch (std::system_error&) {
     QMessageBox::critical(nullptr, tr("Failed to get the reserve proof"), tr("Failed to get the reserve proof."), QMessageBox::Ok);

@@ -71,7 +71,7 @@ private:
   ~NodeAdapter();
 
   bool initInProcessNode();
-  CryptoNote::CoreConfig makeCoreConfig() const;
+  //CryptoNote::CoreConfig makeCoreConfig() const;
   CryptoNote::NetNodeConfig makeNetNodeConfig() const;
 
 Q_SIGNALS:
@@ -80,7 +80,7 @@ Q_SIGNALS:
   void nodeInitCompletedSignal();
   void peerCountUpdatedSignal(quintptr _count);
   void initNodeSignal(Node** _node, const CryptoNote::Currency* currency, INodeCallback* _callback, Logging::LoggerManager* _loggerManager,
-    const CryptoNote::CoreConfig& _coreConfig, const CryptoNote::NetNodeConfig& _netNodeConfig);
+    /*const CryptoNote::CoreConfig& _coreConfig,*/ const CryptoNote::NetNodeConfig& _netNodeConfig);
   void deinitNodeSignal(Node** _node);
   void connectionFailedSignal();
 };

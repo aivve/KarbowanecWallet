@@ -16,9 +16,10 @@ namespace CryptoNote {
 class INode;
 class IWalletLegacy;
 class Currency;
-class CoreConfig;
+//class CoreConfig;
 class NetNodeConfig;
-
+class Checkpoints;
+class DataBaseConfig;
 }
 
 namespace Logging {
@@ -67,7 +68,7 @@ public:
 };
 
 Node* createRpcNode(const CryptoNote::Currency& currency, INodeCallback& callback, Logging::LoggerManager& logManager, const std::string& nodeHost, unsigned short nodePort);
-Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerManager& logManager,
-  const CryptoNote::CoreConfig& coreConfig, const CryptoNote::NetNodeConfig& netNodeConfig, INodeCallback& callback);
+//Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerManager& logManager,
+//  const CryptoNote::CoreConfig& coreConfig, const CryptoNote::NetNodeConfig& netNodeConfig, INodeCallback& callback);
 
 }

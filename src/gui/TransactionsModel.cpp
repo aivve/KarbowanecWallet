@@ -405,14 +405,14 @@ QVariant TransactionsModel::getUserRole(const QModelIndex& _index, int _role, Cr
   case ROLE_HASH:
     return QByteArray(reinterpret_cast<char*>(&_transaction.hash), sizeof(_transaction.hash));
 
-  case ROLE_SECRET_KEY: {
+  /*case ROLE_SECRET_KEY: {
     if (_transaction.secretKey) {
       Crypto::SecretKey txkey = _transaction.secretKey.get();
       if (txkey != CryptoNote::NULL_SECRET_KEY) {
         return QByteArray(reinterpret_cast<char*>(&txkey), sizeof(txkey));
       }
     }
-  }
+  }*/
 
   case ROLE_ADDRESS:
     return QString::fromStdString(_transfer.address);
