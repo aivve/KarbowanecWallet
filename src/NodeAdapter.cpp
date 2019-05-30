@@ -32,7 +32,7 @@ std::vector<std::string> convertStringListToVector(const QStringList& list) {
 }
 
 }
-/*
+
 class InProcessNodeInitializer : public QObject {
   Q_OBJECT
   Q_DISABLE_COPY(InProcessNodeInitializer)
@@ -49,9 +49,9 @@ public:
   ~InProcessNodeInitializer() {
   }
 
-  void start(Node** _node, const CryptoNote::Currency* currency,  INodeCallback* _callback, Logging::LoggerManager* _loggerManager,
-    const CryptoNote::CoreConfig& _coreConfig, const CryptoNote::NetNodeConfig& _netNodeConfig) {
-    (*_node) = createInprocessNode(*currency, *_loggerManager, _coreConfig, _netNodeConfig, *_callback);
+  void start(Node** _node, const CryptoNote::Currency* currency, INodeCallback* _callback, Logging::LoggerManager* _loggerManager,
+    const CryptoNote::NetNodeConfig& _netNodeConfig) {
+    (*_node) = createInprocessNode(*currency, *_loggerManager, _netNodeConfig, *_callback);
     try {
       (*_node)->init([this](std::error_code _err) {
           if (_err) {
@@ -79,21 +79,20 @@ public:
     (*_node)->deinit();
   }
 };
-*/
+
 NodeAdapter& NodeAdapter::instance() {
   static NodeAdapter inst;
   return inst;
 }
 
-NodeAdapter::NodeAdapter() : QObject(), m_node(nullptr)/*, m_nodeInitializerThread(), m_nodeInitializer(new InProcessNodeInitializer)*/ {
-  //m_nodeInitializer->moveToThread(&m_nodeInitializerThread);
+NodeAdapter::NodeAdapter() : QObject(), m_node(nullptr), m_nodeInitializerThread(), m_nodeInitializer(new InProcessNodeInitializer) {
+  m_nodeInitializer->moveToThread(&m_nodeInitializerThread);
 
-  //qRegisterMetaType<CryptoNote::CoreConfig>("CryptoNote::CoreConfig");
   qRegisterMetaType<CryptoNote::NetNodeConfig>("CryptoNote::NetNodeConfig");
 
-  //connect(m_nodeInitializer, &InProcessNodeInitializer::nodeInitCompletedSignal, this, &NodeAdapter::nodeInitCompletedSignal, Qt::QueuedConnection);
-  //connect(this, &NodeAdapter::initNodeSignal, m_nodeInitializer, &InProcessNodeInitializer::start, Qt::QueuedConnection);
-  //connect(this, &NodeAdapter::deinitNodeSignal, m_nodeInitializer, &InProcessNodeInitializer::stop, Qt::QueuedConnection);
+  connect(m_nodeInitializer, &InProcessNodeInitializer::nodeInitCompletedSignal, this, &NodeAdapter::nodeInitCompletedSignal, Qt::QueuedConnection);
+  connect(this, &NodeAdapter::initNodeSignal, m_nodeInitializer, &InProcessNodeInitializer::start, Qt::QueuedConnection);
+  connect(this, &NodeAdapter::deinitNodeSignal, m_nodeInitializer, &InProcessNodeInitializer::stop, Qt::QueuedConnection);
 }
 
 NodeAdapter::~NodeAdapter() {
@@ -131,7 +130,7 @@ bool NodeAdapter::init() {
   if(connection.compare("embedded") == 0) {
 
       m_node = nullptr;
-      //return initInProcessNode();
+      return initInProcessNode();
 
   } else if(connection.compare("local") == 0) {
       QUrl localNodeUrl = QUrl::fromUserInput(QString("127.0.0.1:%1").arg(Settings::instance().getCurrentLocalDaemonPort()));
@@ -197,7 +196,7 @@ bool NodeAdapter::init() {
       }
       delete m_node;
       m_node = nullptr;
-      //return initInProcessNode();
+      return initInProcessNode();
   }
 
   return true;
@@ -306,12 +305,11 @@ quint64 NodeAdapter::getSpeed() const {
   return m_node->getSpeed();
 }
 
-/*bool NodeAdapter::initInProcessNode() {
+bool NodeAdapter::initInProcessNode() {
   Q_ASSERT(m_node == nullptr);
   m_nodeInitializerThread.start();
-  CryptoNote::CoreConfig coreConfig = makeCoreConfig();
   CryptoNote::NetNodeConfig netNodeConfig = makeNetNodeConfig();
-  Q_EMIT initNodeSignal(&m_node, &CurrencyAdapter::instance().getCurrency(), this, &LoggerAdapter::instance().getLoggerManager(), coreConfig, netNodeConfig);
+  Q_EMIT initNodeSignal(&m_node, &CurrencyAdapter::instance().getCurrency(), this, &LoggerAdapter::instance().getLoggerManager(), netNodeConfig);
   QEventLoop waitLoop;
   connect(m_nodeInitializer, &InProcessNodeInitializer::nodeInitCompletedSignal, &waitLoop, &QEventLoop::quit);
   connect(m_nodeInitializer, &InProcessNodeInitializer::nodeInitFailedSignal, &waitLoop, &QEventLoop::exit);
@@ -323,13 +321,13 @@ quint64 NodeAdapter::getSpeed() const {
   Q_EMIT lastKnownBlockHeightUpdatedSignal(getLastKnownBlockHeight());
   return true;
 }
-*/
+
 void NodeAdapter::deinit() {
   if (m_node != nullptr) {
     if (m_nodeInitializerThread.isRunning()) {
-      //m_nodeInitializer->stop(&m_node);
+      m_nodeInitializer->stop(&m_node);
       QEventLoop waitLoop;
-      //connect(m_nodeInitializer, &InProcessNodeInitializer::nodeDeinitCompletedSignal, &waitLoop, &QEventLoop::quit, Qt::QueuedConnection);
+      connect(m_nodeInitializer, &InProcessNodeInitializer::nodeDeinitCompletedSignal, &waitLoop, &QEventLoop::quit, Qt::QueuedConnection);
       waitLoop.exec();
       m_nodeInitializerThread.quit();
       m_nodeInitializerThread.wait();
@@ -339,15 +337,6 @@ void NodeAdapter::deinit() {
     }
   }
 }
-
-/*CryptoNote::CoreConfig NodeAdapter::makeCoreConfig() const {
-  CryptoNote::CoreConfig config;
-  boost::program_options::variables_map options;
-  boost::any dataDir = std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data());
-  options.insert(std::make_pair("data-dir", boost::program_options::variable_value(dataDir, false)));
-  config.init(options);
-  return config;
-}*/
 
 CryptoNote::NetNodeConfig NodeAdapter::makeNetNodeConfig() const {
   CryptoNote::NetNodeConfig config;

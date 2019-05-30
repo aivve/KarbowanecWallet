@@ -171,7 +171,7 @@ if (WIN32)
   set(BUILD_PLATFORM WIN32)
   set(BUILD_RESOURCES src/cryptonotewallet.rc)
   set(QTMAIN Qt5::WinMain)
-
+  
 elseif (UNIX)
   set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   if (APPLE)
@@ -215,17 +215,31 @@ include_directories(cryptonote/src/Platform/Posix)
 file(GLOB PLATFORM_SOURCES cryptonote/src/Platform/${PLATFORM_DIR}/System/*)
 set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} ${PLATFORM_SOURCES})
 
-add_library(rocksdblib STATIC IMPORTED GLOBAL)
-set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/rocksdblib.lib)
+if(MSVC)
+    add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+    set_property(TARGET rocksdb PROPERTY FOLDER "external")
+	add_library(rocksdblib STATIC IMPORTED GLOBAL)
+    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
+elseif(NOT MSVC)
+    add_subdirectory(cryptonote/external)
+    add_custom_target(
+       rocksdb
+       COMMAND $(MAKE) rocksdb
+       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/rocksdb
+    )
+    add_library(rocksdblib STATIC IMPORTED GLOBAL)
+    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a)
+    add_dependencies(rocksdblib rocksdb)
+endif()
 
 add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
 add_library(Mnemonics ${Mnemonics})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 
 if (APPLE OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-target_link_libraries(${CRYPTONOTE_LIB} ${Boost_LIBRARIES} -lresolv)
+target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES} -lresolv)
 else ()
-target_link_libraries(${CRYPTONOTE_LIB} ${Boost_LIBRARIES})
+target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES})
 endif ()
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
