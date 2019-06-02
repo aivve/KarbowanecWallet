@@ -25,6 +25,7 @@
 #include "CryptoNoteCore/DataBaseConfig.h"
 #include "CryptoNoteCore/DataBaseErrors.h"
 #include "CryptoNoteCore/MainChainStorage.h"
+#include "CryptoNoteCore/IMainChainStorage.h"
 #include "CryptoNoteCore/RocksDBWrapper.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "InProcessNode/InProcessNode.h"
@@ -447,13 +448,10 @@ private:
 
 class InprocessNode : CryptoNote::INodeObserver, public Node {
 public:
-  Logging::LoggerManager& m_logManager;
-  
   InprocessNode(const CryptoNote::Currency& currency, 
     Logging::LoggerManager& logManager,
     CryptoNote::Checkpoints& checkpoints,
-    CryptoNote::DataBaseConfig& dbConfig,
-    CryptoNote::RocksDBWrapper& database,
+    
     const CryptoNote::NetNodeConfig& netNodeConfig,
     INodeCallback& callback) :
     m_currency(currency),
@@ -461,54 +459,47 @@ public:
     m_callback(callback),
     m_logManager(logManager),
     m_checkpoints(checkpoints),
-    m_database(database),
-    m_dbConfig(dbConfig),
+    m_dbConfig(),
+    m_database(logManager),
     m_netNodeConfig(netNodeConfig),
-    m_protocolHandler(currency, m_dispatcher, m_core, nullptr, logManager),
     m_core(currency, logManager, std::move(m_checkpoints), m_dispatcher,
       std::unique_ptr<CryptoNote::IBlockchainCacheFactory>(new CryptoNote::DatabaseBlockchainCacheFactory(m_database, m_logManager)),
       CryptoNote::createSwappedMainChainStorage(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()), currency)),
+    m_protocolHandler(currency, m_dispatcher, m_core, nullptr, logManager),
     m_nodeServer(m_dispatcher, m_protocolHandler, logManager),
     m_node(m_core, m_protocolHandler, m_dispatcher) {
 
-    //TODO: make command line options
-    dbConfig.setConfigFolderDefaulted(true);
-    dbConfig.setDataDir(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()));
-    dbConfig.setMaxOpenFiles(100);
-    dbConfig.setReadCacheSize(128 * 1024 * 1024);
-    dbConfig.setWriteBufferSize(128 * 1024 * 1024);
-    dbConfig.setTestnet(false);
-    dbConfig.setBackgroundThreadsCount(4);
-    
-    QString blocksFilePath = Settings::instance().getDataDir().absoluteFilePath(QString::fromStdString(m_currency.blocksFileName()));
-    QString indexesFilePath = Settings::instance().getDataDir().absoluteFilePath(QString::fromStdString(m_currency.blockIndexesFileName()));
-    std::unique_ptr<CryptoNote::IMainChainStorage> mainChainStorage(new CryptoNote::MainChainStorage(std::string(blocksFilePath.toLocal8Bit().data()), indexesFilePath.toStdString()));
-    if (mainChainStorage->getBlockCount() == 0) {
-        CryptoNote::RawBlock genesis;
-        genesis.block = CryptoNote::toBinaryArray(m_currency.genesisBlock());
-        mainChainStorage->pushBlock(genesis);
+    //TODO: move to settings?
+    m_dbConfig.setConfigFolderDefaulted(true);
+    m_dbConfig.setDataDir(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()));
+    m_dbConfig.setMaxOpenFiles(100);
+    m_dbConfig.setReadCacheSize(128 * 1024 * 1024);
+    m_dbConfig.setWriteBufferSize(128 * 1024 * 1024);
+    m_dbConfig.setTestnet(false);
+    m_dbConfig.setBackgroundThreadsCount(4);
+
+    try {
+      m_database.init(m_dbConfig);
+      if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(m_database, logManager))
+      {
+        m_database.shutdown();
+        m_database.destoy(m_dbConfig);
+        m_database.init(m_dbConfig);
+      }
+    }
+    catch (const std::system_error& _error) {
+      if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
+        throw std::runtime_error("IO error");
+      }
+      throw std::runtime_error("Database in usage");
+    }
+    catch (const std::exception& _error) {
+      throw std::runtime_error("Database initialization failed");
     }
 
-      try {
-            m_database.init(dbConfig);
-            if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(m_database, m_logManager))
-            {
-              m_database.shutdown();
-              m_database.destoy(dbConfig);
-              m_database.init(dbConfig);
-            }
-      } catch (const std::system_error& _error) {
-            if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
-              throw std::runtime_error("IO error");
-            }
-            throw std::runtime_error("Database in usage");
-      } catch (const std::exception& _error) {
-            throw std::runtime_error("Database initialization failed");
-      }
-      
-    m_protocolHandler.set_p2p_endpoint(&m_nodeServer);
-
     m_core.load();
+
+    m_protocolHandler.set_p2p_endpoint(&m_nodeServer);
 
   }
 
@@ -518,11 +509,6 @@ public:
 
   void init(const std::function<void(std::error_code)>& callback) override {
     try {
-      //if (!m_core.init(m_coreConfig, CryptoNote::MinerConfig(), true)) {
-      //  callback(make_error_code(CryptoNote::error::NOT_INITIALIZED));
-      //  return;
-      //}
-
       if (!m_nodeServer.init(m_netNodeConfig)) {
         callback(make_error_code(CryptoNote::error::NOT_INITIALIZED));
         return;
@@ -539,7 +525,8 @@ public:
 
     m_nodeServer.run();
     m_nodeServer.deinit();
-    //m_core.deinit();
+    m_database.shutdown();
+    m_database.destoy(m_dbConfig);
     m_node.shutdown();
   }
 
@@ -640,9 +627,10 @@ private:
   INodeCallback& m_callback;
   const CryptoNote::Currency& m_currency;
   System::Dispatcher m_dispatcher;
-
+  //CryptoNote::ICore& m_core;
+  Logging::LoggerManager& m_logManager;
   CryptoNote::Checkpoints& m_checkpoints;
-  CryptoNote::RocksDBWrapper& m_database;
+  CryptoNote::RocksDBWrapper m_database;
   CryptoNote::DataBaseConfig m_dbConfig;
   CryptoNote::NetNodeConfig m_netNodeConfig;
   CryptoNote::Core m_core;
@@ -652,8 +640,8 @@ private:
   std::future<bool> m_nodeServerFuture;
 
   void peerCountUpdated(size_t count) {
-    //m_callback.peerCountUpdated(*this, count);
-    m_callback.peerCountUpdated(*this, m_nodeServer.get_connections_count() - 1);
+    m_callback.peerCountUpdated(*this, count);
+    //m_callback.peerCountUpdated(*this, m_nodeServer.get_connections_count() - 1);
   }
 
   void localBlockchainUpdated(uint64_t height) {
@@ -670,17 +658,15 @@ Node* createRpcNode(const CryptoNote::Currency& currency, INodeCallback& callbac
 }
 
 Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerManager& logManager,
-  /*CryptoNote::DataBaseConfig& dbConfig, CryptoNote::RocksDBWrapper& database,*/ const CryptoNote::NetNodeConfig& netNodeConfig, INodeCallback& callback) {
+  const CryptoNote::NetNodeConfig& netNodeConfig, INodeCallback& callback) {
 
-  CryptoNote::DataBaseConfig dbConfig;
-  CryptoNote::RocksDBWrapper database(logManager);
   CryptoNote::Checkpoints checkpoints(logManager);
   for (const CryptoNote::CheckpointData& checkpoint : CryptoNote::CHECKPOINTS) {
     checkpoints.addCheckpoint(checkpoint.index, checkpoint.blockId);
   }
   checkpoints.loadCheckpointsFromDns();
 
-  return new InprocessNode(currency, logManager, checkpoints, dbConfig, database, netNodeConfig, callback);
+  return new InprocessNode(currency, logManager, checkpoints, netNodeConfig, callback);
 }
 
 }
