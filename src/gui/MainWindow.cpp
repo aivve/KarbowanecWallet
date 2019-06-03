@@ -386,13 +386,19 @@ void MainWindow::createNonDeterministicWallet() {
 }
 
 void MainWindow::openWallet() {
-  QString filePath = QFileDialog::getOpenFileName(this, tr("Open .wallet/.keys file"),
+  QString walletDirectory = "";
+  QString lastwalletDir = QFileInfo(Settings::instance().getWalletFile()).absolutePath();
+  if (!lastwalletDir.isEmpty()) {
+    walletDirectory = lastwalletDir;
+  } else {
 #ifdef Q_OS_WIN
-    //QApplication::applicationDirPath(),
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    walletDirectory = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #else
-    QDir::homePath(),
+    walletDirectory = QDir::homePath();
 #endif
+  }
+  QString filePath = QFileDialog::getOpenFileName(this, tr("Open .wallet/.keys file"),
+    walletDirectory,
     tr("Wallet (*.wallet *.keys)"));
 
   if (!filePath.isEmpty()) {
@@ -970,6 +976,8 @@ void MainWindow::walletOpened(bool _error, const QString& _error_text) {
       action->setEnabled(true);
     }
 
+    setWindowTitle(QString(tr("%1 - Karbo Wallet %2")).arg(Settings::instance().getWalletFile()).arg(Settings::instance().getVersion()));
+
     m_ui->m_overviewAction->trigger();
     accountWidget->setVisible(true);
     m_ui->m_overviewFrame->show();
@@ -1014,6 +1022,9 @@ void MainWindow::walletClosed() {
   m_encryptionStateIconLabel->hide();
   m_trackingModeIconLabel->hide();
   m_synchronizationStateIconLabel->hide();
+
+  setWindowTitle(QString(tr("Karbo Wallet %2")).arg(Settings::instance().getVersion()));
+
   QList<QAction*> tabActions = m_tabActionGroup->actions();
   Q_FOREACH(auto action, tabActions) {
     action->setEnabled(false);
