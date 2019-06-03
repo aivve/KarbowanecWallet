@@ -451,7 +451,6 @@ public:
   InprocessNode(const CryptoNote::Currency& currency, 
     Logging::LoggerManager& logManager,
     CryptoNote::Checkpoints& checkpoints,
-    
     const CryptoNote::NetNodeConfig& netNodeConfig,
     INodeCallback& callback) :
     m_currency(currency),
@@ -608,7 +607,7 @@ public:
   }
 
   uint64_t getMinimalFee() {
-    return m_currency.minimumFee(); //m_core.getMinimalFee();
+    return m_core.getMinimalFee();
   }
 
   CryptoNote::BlockHeaderInfo getLastLocalBlockHeaderInfo() {
@@ -627,7 +626,6 @@ private:
   INodeCallback& m_callback;
   const CryptoNote::Currency& m_currency;
   System::Dispatcher m_dispatcher;
-  //CryptoNote::ICore& m_core;
   Logging::LoggerManager& m_logManager;
   CryptoNote::Checkpoints& m_checkpoints;
   CryptoNote::RocksDBWrapper m_database;
