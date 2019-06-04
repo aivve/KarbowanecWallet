@@ -503,7 +503,7 @@ public:
   }
 
   ~InprocessNode() override {
-
+    m_database.shutdown();
   }
 
   void init(const std::function<void(std::error_code)>& callback) override {
@@ -525,7 +525,6 @@ public:
     m_nodeServer.run();
     m_nodeServer.deinit();
     m_database.shutdown();
-    m_database.destoy(m_dbConfig);
     m_node.shutdown();
   }
 
