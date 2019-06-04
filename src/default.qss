@@ -1,9 +1,13 @@
 * {
-	color: #15315E;
+	color: #0E0338;
 }
 
 *:disabled {
 	color: #41548D;
+}
+
+QTabBar {
+	background-color: #a8b6cb;
 }
 
 QMainWindow {
@@ -138,7 +142,7 @@ QComboBox::drop-down {
 QComboBox QAbstractItemView {
 	border: none;
 	background: white;
-	color: #15315E;
+	color: #0E0338;
 	selection-background-color: rgba(133, 167, 211, 0.2);
 }
 
@@ -165,7 +169,7 @@ QSlider {
 }
 
 QSlider::groove:horizontal {
-	border: 1px solid #15315e;
+	border: 1px solid #0E0338;
 	background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, 
 		stop: 0 #ff0000,
 		stop: 0.2 #feef00,
@@ -178,14 +182,14 @@ QSlider::groove:horizontal {
 QSlider::sub-page:horizontal {
 	background: transparent;
 	background-image: url();
-	border: 1px solid #15315e;
+	border: 1px solid #0E0338;
 	height: 5px;
 	border-radius: 2px;
 }
 
 QSlider::add-page:horizontal {
 	background: #fff;
-	border: 1px solid #15315e;
+	border: 1px solid #0E0338;
 	height: 5px;
 	border-radius: 2px;
 }
@@ -218,7 +222,7 @@ QWidget#scrollAreaWidgetContents {
 }
 
 QToolBar#accountToolBar { 
-	background-color: rgb(133, 167, 211);
+	background-color: rgb(168, 194, 226);
 	border: 0; min-height: 71px;
 }
 
@@ -229,7 +233,7 @@ QToolBar {
 }
 
 QToolBar#toolBar {
-	background-color: rgba(32, 55, 92, 0.9);
+	background-color: rgba(16, 21, 85, 0.9);
 	width: 150px; 
 	min-width: 150px; 
 	spacing: 0; 
@@ -289,7 +293,7 @@ QStatusBar#statusBar {
 }
 
 #m_accountFrame #totalBalance {
-	color: #15315e;
+	color: #0E0338;
 }
 
 #m_accountFrame #addressStatusLabel {
