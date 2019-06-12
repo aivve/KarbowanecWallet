@@ -1,5 +1,5 @@
 
 set(CN_PROJECT_NAME "KarbowanecWallet")
-set(CN_CURRENCY_DISPLAY_NAME "Karbo")
+set(CN_CURRENCY_DISPLAY_NAME "Karbo2")
 set(CN_CURRENCY_TICKER "KRB")
-set(CN_VERSION 1.3.4)
+set(CN_VERSION 2.0.0)
