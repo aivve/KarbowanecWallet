@@ -503,7 +503,6 @@ public:
   }
 
   ~InprocessNode() override {
-    m_database.shutdown();
   }
 
   void init(const std::function<void(std::error_code)>& callback) override {
