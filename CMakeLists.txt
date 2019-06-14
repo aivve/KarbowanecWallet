@@ -99,9 +99,10 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
 
   cryptonote/src/CryptoNoteCore/*.cpp
   cryptonote/src/CryptoNoteProtocol/*.cpp
-  cryptonote/src/Daemon/*.cpp
-  cryptonote/src/HTTP/*.cpp
-
+  cryptonote/src/HTTP/HttpRequest.cpp
+  cryptonote/src/HTTP/HttpParser.cpp
+  cryptonote/src/HTTP/HttpParserErrorCodes.cpp
+  cryptonote/src/HTTP/HttpResponse.cpp
 
   cryptonote/src/InProcessNode/InProcessNode.cpp
   cryptonote/src/InProcessNode/InProcessNodeErrors.cpp
@@ -121,7 +122,13 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/Transfers/TransfersSubscription.cpp
   cryptonote/src/Transfers/TransfersSynchronizer.cpp
 
-  cryptonote/src/Wallet/*.cpp
+  cryptonote/src/Wallet/LegacyKeysImporter.cpp
+  cryptonote/src/Wallet/WalletAsyncContextCounter.cpp
+  cryptonote/src/Wallet/WalletErrors.cpp
+  cryptonote/src/Wallet/WalletSerializationV1.cpp
+  cryptonote/src/Wallet/WalletSerializationV2.cpp
+  cryptonote/src/Wallet/WalletUtils.cpp
+  
   cryptonote/src/WalletLegacy/KeysStorage.cpp
   cryptonote/src/WalletLegacy/WalletLegacy.cpp
   cryptonote/src/WalletLegacy/WalletHelper.cpp
@@ -139,9 +146,6 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/System/TcpStream.cpp
 
   cryptonote/src/JsonRpcServer/*.cpp
-  cryptonote/src/PaymentGate/*.cpp
-  cryptonote/src/PaymentGateService/*.cpp
-  cryptonote/src/Miner/*.cpp
 
   cryptonote/src/BlockchainExplorer/BlockchainExplorer.cpp
   cryptonote/src/BlockchainExplorer/BlockchainExplorerDataBuilder.cpp
@@ -165,14 +169,21 @@ if (WIN32)
 	message(FATAL_ERROR "Only MSVC is supported on this platform")
   endif ()
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
+  add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+  set_property(TARGET rocksdb PROPERTY FOLDER "external")
+  add_library(rocksdblib STATIC IMPORTED GLOBAL)
+  set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
   include_directories(cryptonote/src/platform/msc)
-  set( CMAKE_CXX_FLAGS "-bigobj -EHsc")
+  set(CMAKE_CXX_FLAGS "-bigobj -EHsc")
   set(PLATFORM_DIR Windows)
   set(BUILD_PLATFORM WIN32)
   set(BUILD_RESOURCES src/cryptonotewallet.rc)
   set(QTMAIN Qt5::WinMain)
   
 elseif (UNIX)
+
+  set(LIBROCKSDB ${PROJECT_BINARY_DIR}/librocksdb.a)
+
   set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   if (APPLE)
     enable_language(ASM)
@@ -215,31 +226,14 @@ include_directories(cryptonote/src/Platform/Posix)
 file(GLOB PLATFORM_SOURCES cryptonote/src/Platform/${PLATFORM_DIR}/System/*)
 set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} ${PLATFORM_SOURCES})
 
-if(MSVC)
-    add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
-    set_property(TARGET rocksdb PROPERTY FOLDER "external")
-	add_library(rocksdblib STATIC IMPORTED GLOBAL)
-    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
-elseif(NOT MSVC)
-    add_subdirectory(cryptonote/external)
-    add_custom_target(
-       rocksdb
-       COMMAND $(MAKE) rocksdb
-       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/rocksdb
-    )
-    add_library(rocksdblib STATIC IMPORTED GLOBAL)
-    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a)
-    add_dependencies(rocksdblib rocksdb)
-endif()
-
 add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
 add_library(Mnemonics ${Mnemonics})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 
-if (APPLE OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES} -lresolv)
+if (WIN32)
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES})
 else ()
-target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES})
+  target_link_libraries(${CRYPTONOTE_LIB} ${LIBROCKSDB} ${Boost_LIBRARIES} -lresolv)
 endif ()
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
