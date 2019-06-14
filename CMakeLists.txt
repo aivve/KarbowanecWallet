@@ -215,21 +215,21 @@ include_directories(cryptonote/src/Platform/Posix)
 file(GLOB PLATFORM_SOURCES cryptonote/src/Platform/${PLATFORM_DIR}/System/*)
 set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} ${PLATFORM_SOURCES})
 
+if (NOT MSVC)
+  file(GLOB PLATFORM_POSIX cryptonote/src/Platform/Posix/System/*)
+  list(APPEND CRYPTONOTE_SOURCES ${PLATFORM_POSIX})
+endif()
+
 if(MSVC)
     add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
     set_property(TARGET rocksdb PROPERTY FOLDER "external")
 	add_library(rocksdblib STATIC IMPORTED GLOBAL)
     set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
 elseif(NOT MSVC)
-    add_subdirectory(cryptonote/external)
-    add_custom_target(
-       rocksdb
-       COMMAND $(MAKE) rocksdb
-       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/rocksdb
-    )
+    add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+    set_property(TARGET rocksdb PROPERTY FOLDER "external")
     add_library(rocksdblib STATIC IMPORTED GLOBAL)
-    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a)
-    add_dependencies(rocksdblib rocksdb)
+    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.a)
 endif()
 
 add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
