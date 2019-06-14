@@ -169,10 +169,12 @@ if (WIN32)
 	message(FATAL_ERROR "Only MSVC is supported on this platform")
   endif ()
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
+
   add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
   set_property(TARGET rocksdb PROPERTY FOLDER "external")
   add_library(rocksdblib STATIC IMPORTED GLOBAL)
   set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
+  
   include_directories(cryptonote/src/platform/msc)
   set(CMAKE_CXX_FLAGS "-bigobj -EHsc")
   set(PLATFORM_DIR Windows)
@@ -182,7 +184,13 @@ if (WIN32)
   
 elseif (UNIX)
 
-  set(LIBROCKSDB ${PROJECT_BINARY_DIR}/librocksdb.a)
+  file(GLOB PLATFORM_POSIX cryptonote/src/Platform/Posix/System/*)
+  list(APPEND CRYPTONOTE_SOURCES ${PLATFORM_POSIX})
+
+  add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+  set_property(TARGET rocksdb PROPERTY FOLDER "external")
+  add_library(rocksdblib STATIC IMPORTED GLOBAL)
+  set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.a)
 
   set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   if (APPLE)
@@ -233,7 +241,7 @@ set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOUR
 if (WIN32)
   target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES})
 else ()
-  target_link_libraries(${CRYPTONOTE_LIB} ${LIBROCKSDB} ${Boost_LIBRARIES} -lresolv)
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES} -lresolv)
 endif ()
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
