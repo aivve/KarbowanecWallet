@@ -39,7 +39,7 @@ if ((${Boost_MAJOR_VERSION} EQUAL 1) AND (${Boost_MINOR_VERSION} EQUAL 54))
 	message(SEND_ERROR "Boost version 1.54 is unsupported, more details are available here http://goo.gl/RrCFmA")
 endif ()
 
-find_package(Rocksdb)
+find_package(Rocksdb 5.15.10)
 
 if (ROCKSDB_FOUND)
   include_directories(${ROCKSDB_INCLUDE_DIR})
