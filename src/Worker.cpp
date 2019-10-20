@@ -8,6 +8,7 @@
 #include <QThread>
 
 #include <crypto/hash.h>
+#include "crypto/cn_slow_hash.hpp"
 
 #include "Worker.h"
 
@@ -32,7 +33,9 @@ void Worker::run() {
   Job localJob;
   quint32 localNonce;
   Crypto::Hash hash;
-  Crypto::cn_context context;
+  //cn_pow_hash_v2 hash_ctx;
+  cn_pow_hash_v4 krb_ctx;
+
   while (!m_isStopped) {
     {
       QReadLocker lock(&m_jobLock);
@@ -50,8 +53,10 @@ void Worker::run() {
     localNonce = ++m_nonce;
     localJob.blob.replace(39, sizeof(localNonce), reinterpret_cast<char*>(&localNonce), sizeof(localNonce));
     std::memset(&hash, 0, sizeof(hash));
-    //Crypto::cn_slow_hash(context, localJob.blob.data(), localJob.blob.size(), hash);
-    Crypto::rainforest_hash(localJob.blob.data(), hash, localJob.blob.size());
+    //cn_pow_hash_v4 ctx_v4 = cn_pow_hash_v4::make_borrowed_v4(hash_ctx);
+    //ctx_v4.hash(localJob.blob.data(), localJob.blob.size(), hash.data);
+    krb_ctx.hash(localJob.blob.data(), localJob.blob.size(), hash.data);
+
     ++m_hashCounter;
     if (Q_UNLIKELY(((quint32*)&hash)[7] < localJob.target)) {
       m_observer->processShare(localJob.jobId, localNonce, QByteArray(reinterpret_cast<char*>(&hash), sizeof(hash)));
