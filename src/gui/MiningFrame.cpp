@@ -66,7 +66,8 @@ void MiningFrame::timerEvent(QTimerEvent* _event) {
     if (hashRate == 0) {
       return;
     }
-    m_ui->m_poolLabel->setText(tr("Mining in pool. Hashrate: %1 kH/s").arg(hashRate / 1000));
+    double kHashRate = hashRate / 1000.0;
+    m_ui->m_poolLabel->setText(tr("Mining in pool. Hashrate: %1 kH/s").arg(kHashRate));
     return;
   }
 
