@@ -33,7 +33,6 @@ void Worker::run() {
   Job localJob;
   quint32 localNonce;
   Crypto::Hash hash;
-  //cn_pow_hash_v2 hash_ctx;
   cn_pow_hash_v4 krb_ctx;
 
   while (!m_isStopped) {
@@ -53,8 +52,6 @@ void Worker::run() {
     localNonce = ++m_nonce;
     localJob.blob.replace(39, sizeof(localNonce), reinterpret_cast<char*>(&localNonce), sizeof(localNonce));
     std::memset(&hash, 0, sizeof(hash));
-    //cn_pow_hash_v4 ctx_v4 = cn_pow_hash_v4::make_borrowed_v4(hash_ctx);
-    //ctx_v4.hash(localJob.blob.data(), localJob.blob.size(), hash.data);
     krb_ctx.hash(localJob.blob.data(), localJob.blob.size(), hash.data);
 
     ++m_hashCounter;
