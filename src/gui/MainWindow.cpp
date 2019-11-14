@@ -29,13 +29,14 @@
 #include "ConnectionSettings.h"
 #include "OptimizationSettings.h"
 #include "PrivateKeysDialog.h"
+#include "ImportKeyDialog.h"
+#include "ImportKeysDialog.h"
 #include "ExportTrackingKeyDialog.h"
 #include "ImportTrackingKeyDialog.h"
+#include "RestoreFromMnemonicSeedDialog.h"
 #include "SignMessageDialog.h"
 #include "CurrencyAdapter.h"
 #include "ExitWidget.h"
-#include "ImportKeyDialog.h"
-#include "RestoreFromMnemonicSeedDialog.h"
 #include "GetBalanceProofDialog.h"
 #include "MainWindow.h"
 #include "NewPasswordDialog.h"
@@ -195,6 +196,7 @@ void MainWindow::initUi() {
 
   m_ui->m_miningOnLaunchAction->setChecked(Settings::instance().isMiningOnLaunchEnabled());
   m_ui->m_startOnLoginAction->setChecked(Settings::instance().isStartOnLoginEnabled());
+  m_ui->m_hideFusionTransactions->setChecked(Settings::instance().skipFusionTransactions());
 
   m_ui->menuRecent_wallets->setVisible(false);
   QAction* recentWalletAction = 0;
@@ -425,12 +427,14 @@ void MainWindow::openRecent(){
   QAction *action = qobject_cast<QAction *>(sender());
   if (action) {
     QString filePath = action->data().toString();
-    if (!filePath.isEmpty()) {
+    if (!filePath.isEmpty() && QFile::exists(filePath)) {
       if (WalletAdapter::instance().isOpen()) {
           WalletAdapter::instance().close();
       }
       WalletAdapter::instance().setWalletFile(filePath);
       WalletAdapter::instance().open("");
+    } else {
+       QMessageBox::warning(this, tr("Recent wallet file not found"), tr("The recent wallet file is missing. Probably it was removed."), QMessageBox::Ok);
     }
   }
 }
@@ -462,6 +466,55 @@ void MainWindow::importKey() {
     } else {
       QMessageBox::warning(this, tr("Wallet keys are not valid"), tr("The private keys you entered are not valid."), QMessageBox::Ok);
     }
+  }
+}
+
+void MainWindow::importKeys() {
+  ImportKeysDialog dlg(this);
+  if (dlg.exec() == QDialog::Accepted) {
+    QString viewKeyString = dlg.getViewKeyString().trimmed();
+    QString spendKeyString = dlg.getSpendKeyString().trimmed();
+    QString filePath = dlg.getFilePath();
+    if (viewKeyString.isEmpty() || spendKeyString.isEmpty() || filePath.isEmpty()) {
+      return;
+    }
+
+    if (!filePath.endsWith(".wallet")) {
+      filePath.append(".wallet");
+    }
+
+    uint64_t addressPrefix;
+    std::string data;
+    CryptoNote::AccountKeys keys;
+
+    std::string private_spend_key_string = spendKeyString.toStdString();
+    std::string private_view_key_string = viewKeyString.toStdString();
+
+    Crypto::Hash private_spend_key_hash;
+    Crypto::Hash private_view_key_hash;
+
+    size_t size;
+    if (!Common::fromHex(private_spend_key_string, &private_spend_key_hash, sizeof(private_spend_key_hash), size) || size != sizeof(private_spend_key_hash)) {
+      QMessageBox::warning(this, tr("Key is not valid"), tr("The private spend key you entered is not valid."), QMessageBox::Ok);
+      return;
+    }
+    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_view_key_hash)) {
+      QMessageBox::warning(this, tr("Key is not valid"), tr("The private view key you entered is not valid."), QMessageBox::Ok);
+      return;
+    }
+
+    keys.spendSecretKey = *(struct Crypto::SecretKey *) &private_spend_key_hash;
+    keys.viewSecretKey = *(struct Crypto::SecretKey *) &private_view_key_hash;
+
+    Crypto::secret_key_to_public_key(keys.spendSecretKey, keys.address.spendPublicKey);
+    Crypto::secret_key_to_public_key(keys.viewSecretKey, keys.address.viewPublicKey);
+
+    if (WalletAdapter::instance().isOpen()) {
+        WalletAdapter::instance().close();
+    }
+    WalletAdapter::instance().setWalletFile(filePath);
+    WalletAdapter::instance().createWithKeys(keys);
+
   }
 }
 
@@ -516,7 +569,7 @@ void MainWindow::importTrackingKey() {
       QMessageBox::warning(this, tr("Key is not valid"), tr("The private spend key you entered is not valid."), QMessageBox::Ok);
       return;
     }
-    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_spend_key_hash)) {
+    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_view_key_hash)) {
       QMessageBox::warning(this, tr("Key is not valid"), tr("The private view key you entered is not valid."), QMessageBox::Ok);
       return;
     }
@@ -894,6 +947,13 @@ void MainWindow::setCloseToTray(bool _on) {
 #endif
 }
 
+void MainWindow::setHideFusionTransactions(bool _on) {
+  Settings::instance().setSkipFusionTransactions(_on);
+  m_ui->m_hideFusionTransactions->setChecked(Settings::instance().skipFusionTransactions());
+  m_ui->m_transactionsFrame->reloadTransactions();
+  m_ui->m_overviewFrame->reloadTransactions();
+}
+
 void MainWindow::about() {
   AboutDialog dlg(this);
   dlg.exec();
@@ -953,7 +1013,7 @@ void MainWindow::walletSynchronized(int _error, const QString& _error_text) {
   m_synchronizationStateIconLabel->setPixmap(syncIcon);
   QString syncLabelTooltip = _error > 0 ? tr("Not synchronized") : tr("Synchronized");
   m_synchronizationStateIconLabel->setToolTip(syncLabelTooltip);
-  if (WalletAdapter::instance().getActualBalance() > 0) {
+  if (WalletAdapter::instance().getActualBalance() > 0 && !(Settings::instance().isTrackingMode())) {
     m_ui->m_proofBalanceAction->setEnabled(true);
   }
 }

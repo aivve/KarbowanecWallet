@@ -17,7 +17,11 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Karbo v. %1&lt;/p&gt;&lt;p&gt;This is the next generation anonymous cryptocurrency based on CryptoNote.&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2015. CryptoNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2016. Bytecoin Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2015-2016. DigitalNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2016-2018. Karbo (Karbowanec) Developers&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://opensource.org/licenses/MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://cryptonote.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://cryptonote.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://karbo.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://karbo.io/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;THE SOFTWARE IS PROVIDED &amp;quot;AS IS&amp;quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Karbo v. %1&lt;/p&gt;&lt;p&gt;Ceci est la crypto-monnaie anonyme de la prochaine génération basée sur CryptoNote.&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2015. CryptoNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2016. Bytecoin Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2015-2016. DigitalNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2016-2018. Karbo (Karbowanec) Developers&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://opensource.org/licenses/MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://cryptonote.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://cryptonote.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://karbo.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://karbo.io/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;LA SOFTWARE EST FOURNIE &amp;quot;TELLE QUELLE&amp;quot;, SANS GARANTIE D&apos;AUCUNE SORTE, EXPLICITE OU IMPLICITE, NOTAMMENT SANS GARANTIE DE QUALITÉ MARCHANDE, D’ADÉQUATION À UN USAGE PARTICULIER ET D&apos;ABSENCE DE CONTREFAÇON. EN AUCUN CAS, LES AUTEURS OU TITULAIRES DU DROIT D&apos;AUTEUR NE SERONT RESPONSABLES DE TOUT DOMMAGE, RÉCLAMATION OU AUTRE RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D&apos;UN CONTRAT, D&apos;UN DÉLIT OU AUTRE, EN PROVENANCE DE, CONSÉCUTIF À OU EN RELATION AVEC LA SOFTWARE OU SON UTILISATION, OU AVEC D&apos;AUTRES ÉLÉMENTS DE LA SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Karbo v. %1&lt;/p&gt;&lt;p&gt;Ceci est la crypto-monnaie anonyme de la prochaine génération basée sur CryptoNote.&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2015. CryptoNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2016. Bytecoin Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2015-2016. DigitalNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2016-2018. Karbo (Karbowanec) Developers&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://opensource.org/licenses/MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://cryptonote.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://cryptonote.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://karbo.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://karbo.io/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;LA SOFTWARE EST FOURNIE &amp;quot;TELLE QUELLE&amp;quot;, SANS GARANTIE D&apos;AUCUNE SORTE, EXPLICITE OU IMPLICITE, NOTAMMENT SANS GARANTIE DE QUALITÉ MARCHANDE, D’ADÉQUATION À UN USAGE PARTICULIER ET D&apos;ABSENCE DE CONTREFAÇON. EN AUCUN CAS, LES AUTEURS OU TITULAIRES DU DROIT D&apos;AUTEUR NE SERONT RESPONSABLES DE TOUT DOMMAGE, RÉCLAMATION OU AUTRE RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D&apos;UN CONTRAT, D&apos;UN DÉLIT OU AUTRE, EN PROVENANCE DE, CONSÉCUTIF À OU EN RELATION AVEC LA SOFTWARE OU SON UTILISATION, OU AVEC D&apos;AUTRES ÉLÉMENTS DE LA SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Karbo v. %1, core v. %2&lt;/p&gt;&lt;p&gt;This is the next generation anonymous cryptocurrency based on CryptoNote.&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2015. CryptoNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2016. Bytecoin Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2015-2016. DigitalNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2016-2019. Karbo (Karbowanec) Developers&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://opensource.org/licenses/MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://cryptonote.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://cryptonote.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://karbo.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://karbo.io/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;THE SOFTWARE IS PROVIDED &amp;quot;AS IS&amp;quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Karbo v. %1, core v. %2&lt;/p&gt;&lt;p&gt;Ceci est la crypto-monnaie anonyme de la prochaine génération basée sur CryptoNote.&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2015. CryptoNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2016. Bytecoin Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2015-2016. DigitalNote Developers&lt;/p&gt;&lt;p&gt;Copyright (c) 2016-2018. Karbo (Karbowanec) Developers&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://opensource.org/licenses/MIT&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://cryptonote.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://cryptonote.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://karbo.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://karbo.io/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;LA SOFTWARE EST FOURNIE &amp;quot;TELLE QUELLE&amp;quot;, SANS GARANTIE D&apos;AUCUNE SORTE, EXPLICITE OU IMPLICITE, NOTAMMENT SANS GARANTIE DE QUALITÉ MARCHANDE, D’ADÉQUATION À UN USAGE PARTICULIER ET D&apos;ABSENCE DE CONTREFAÇON. EN AUCUN CAS, LES AUTEURS OU TITULAIRES DU DROIT D&apos;AUTEUR NE SERONT RESPONSABLES DE TOUT DOMMAGE, RÉCLAMATION OU AUTRE RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D&apos;UN CONTRAT, D&apos;UN DÉLIT OU AUTRE, EN PROVENANCE DE, CONSÉCUTIF À OU EN RELATION AVEC LA SOFTWARE OU SON UTILISATION, OU AVEC D&apos;AUTRES ÉLÉMENTS DE LA SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -404,6 +408,37 @@ S&apos;il vous plaît, patientez...</translation>
     </message>
 </context>
 <context>
+    <name>ImportKeysDialog</name>
+    <message>
+        <source>Select folder</source>
+        <translation>Choisir le dossier</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Where to save new wallet file:</source>
+        <translation>Où sauvegarder le nouveau fichier de portefeuille:</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Private View Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Private Spend Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import private keys</source>
+        <translation>Importer les clés privées</translation>
+    </message>
+</context>
+<context>
     <name>ImportTrackingKeyDialog</name>
     <message>
         <source>Import tracking key</source>
@@ -702,6 +737,14 @@ S&apos;il vous plaît, patientez...</translation>
     <message>
         <source>Get proof of balance</source>
         <translation>Confirmation de solde</translation>
+    </message>
+    <message>
+        <source>Import keys</source>
+        <translation>Importer des clés</translation>
+    </message>
+    <message>
+        <source>Don&apos;t show wallet optimization transactions</source>
+        <translation>Ne pas afficher les transactions d&apos;optimisation de portefeuille</translation>
     </message>
 </context>
 <context>
@@ -1666,6 +1709,14 @@ Voulez-vous aller à la page de téléchargement?</translation>
         <source>External port for p2p network protocol (if port forwarding used with NAT)</source>
         <translation>Port externe pour le protocole réseau p2p (si le transfert de port est utilisé avec NAT)</translation>
     </message>
+    <message>
+        <source>Rollback to height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>height</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::ConfirmSendDialog</name>
@@ -1702,6 +1753,17 @@ Voulez-vous aller à la page de téléchargement?</translation>
 </context>
 <context>
     <name>WalletGui::ImportKeyDialog</name>
+    <message>
+        <source>Wallet file</source>
+        <translation>Fichier de portefeuille</translation>
+    </message>
+    <message>
+        <source>Wallets (*.wallet)</source>
+        <translation>Portefeuilles (*.wallet)</translation>
+    </message>
+</context>
+<context>
+    <name>WalletGui::ImportKeysDialog</name>
     <message>
         <source>Wallet file</source>
         <translation>Fichier de portefeuille</translation>
@@ -1947,6 +2009,14 @@ Are you sure?</source>
     <message>
         <source>Karbo Wallet %2</source>
         <translation type="unfinished">Karbo Portefeuille %2</translation>
+    </message>
+    <message>
+        <source>Recent wallet file not found</source>
+        <translation>Fichier portefeuille récent introuvable</translation>
+    </message>
+    <message>
+        <source>The recent wallet file is missing. Probably it was removed.</source>
+        <translation>Le fichier portefeuille récent est manquant. Probablement il a été enlevé.</translation>
     </message>
 </context>
 <context>
@@ -2364,6 +2434,10 @@ quand le portefeuille aura terminé la synchronisation</translation>
         <source>Sent to myself</source>
         <translation>Envoyé à moi-même</translation>
     </message>
+    <message>
+        <source>Optimization</source>
+        <translation>Optimisation</translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::TransactionsModel</name>
@@ -2397,7 +2471,7 @@ quand le portefeuille aura terminé la synchronisation</translation>
     </message>
     <message>
         <source>(n/a)</source>
-        <translation>(n/a)</translation>
+        <translation>pas de données</translation>
     </message>
     <message>
         <source>Incoming transaction, unconfirmed</source>
@@ -2446,6 +2520,21 @@ quand le portefeuille aura terminé la synchronisation</translation>
     <message>
         <source>Key</source>
         <translation>Clé</translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation>Frais</translation>
+    </message>
+    <message>
+        <source>Wallet optimization transaction, unconfirmed</source>
+        <translation>Transaction d&apos;optimisation de portefeuille, non confirmée</translation>
+    </message>
+    <message numerus="yes">
+        <source>Wallet optimization transaction, %n confirmation(s)</source>
+        <translation>
+            <numerusform>Transaction d&apos;optimisation de portefeuille, %n confirmation</numerusform>
+            <numerusform>Transaction d&apos;optimisation de portefeuille, %n confirmations</numerusform>
+        </translation>
     </message>
 </context>
 <context>

@@ -109,6 +109,7 @@ private:
   Q_SLOT void openWallet();
   Q_SLOT void closeWallet();
   Q_SLOT void importKey();
+  Q_SLOT void importKeys();
   Q_SLOT void backupWallet();
   Q_SLOT void resetWallet();
   Q_SLOT void encryptWallet();
@@ -118,6 +119,7 @@ private:
   Q_SLOT void setMinimizeToTray(bool _on);
   Q_SLOT void setMiningOnLaunch(bool _on);
   Q_SLOT void setCloseToTray(bool _on);
+  Q_SLOT void setHideFusionTransactions(bool _on);
   Q_SLOT void showPrivateKeys();
   Q_SLOT void DisplayCmdLineHelp();
   Q_SLOT void openConnectionSettings();

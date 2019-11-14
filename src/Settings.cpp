@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2015 The Cryptonote developers
 // Copyright (c) 2015-2016 XDN developers
-// Copyright (c) 2016 The Karbowanec developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -39,6 +39,7 @@ const char OPTION_WALLET_OPTIMIZATION_MIXIN[] = "mixin";
 const quint64 DEFAULT_OPTIMIZATION_PERIOD = 1000 * 60 * 30; // 30 minutes
 const quint64 DEFAULT_OPTIMIZATION_THRESHOLD = 10000000000000;
 const quint64 DEFAULT_OPTIMIZATION_MIXIN = 3;
+const char OPTION_SKIP_WALLET_OPTIMIZATION_TRANSACTIONS[] = "skipFusionTransactions";
 
 Settings& Settings::instance() {
   static Settings inst;
@@ -178,6 +179,11 @@ QStringList Settings::getSeedNodes() const {
 QDir Settings::getDataDir() const {
   Q_CHECK_PTR(m_cmdLineParser);
   return QDir(m_cmdLineParser->getDataDir());
+}
+
+quint32 Settings::getRollBack() const {
+  Q_CHECK_PTR(m_cmdLineParser);
+  return m_cmdLineParser->rollBack();
 }
 
 QString Settings::getWalletFile() const {
@@ -409,6 +415,15 @@ quint64 Settings::getOptimizationMixin() const {
   }
 
   return optimizationObject.value(OPTION_WALLET_OPTIMIZATION_MIXIN).toString().toULongLong();
+}
+
+bool Settings::skipFusionTransactions() const {
+  if (!m_settings.contains(OPTION_WALLET_OPTIMIZATION)) {
+    return false;
+  }
+
+  QJsonObject optimizationObject = m_settings.value(OPTION_WALLET_OPTIMIZATION).toObject();
+  return optimizationObject.contains(OPTION_SKIP_WALLET_OPTIMIZATION_TRANSACTIONS) ? optimizationObject.value(OPTION_SKIP_WALLET_OPTIMIZATION_TRANSACTIONS).toBool() : false;
 }
 
 void Settings::setWalletFile(const QString& _file) {
@@ -700,6 +715,23 @@ void Settings::setOptimizationMixin(quint64 _mixin) {
     }
 
     optimizationObject.insert(OPTION_WALLET_OPTIMIZATION_MIXIN, QString::number(_mixin));
+    m_settings.insert(OPTION_WALLET_OPTIMIZATION, optimizationObject);
+    saveSettings();
+  }
+}
+
+void Settings::setSkipFusionTransactions(bool _skip) {
+  if (_skip == skipFusionTransactions()) {
+    return;
+  }
+
+  {
+    QJsonObject optimizationObject;
+    if (m_settings.contains(OPTION_WALLET_OPTIMIZATION)) {
+      optimizationObject = m_settings.value(OPTION_WALLET_OPTIMIZATION).toObject();
+    }
+
+    optimizationObject.insert(OPTION_SKIP_WALLET_OPTIMIZATION_TRANSACTIONS, _skip);
     m_settings.insert(OPTION_WALLET_OPTIMIZATION, optimizationObject);
     saveSettings();
   }
