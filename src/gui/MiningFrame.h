@@ -8,6 +8,7 @@
 
 #include <QFrame>
 #include "qcustomplot.h"
+#include "Miner.h"
 
 class QAbstractButton;
 
@@ -33,8 +34,10 @@ protected:
 private:
   QScopedPointer<Ui::MiningFrame> m_ui;
   int m_soloHashRateTimerId;
+  int m_minerRoutineTimerId;
   QString m_walletAddress;
   QVector<double> m_hX, m_hY;
+  miner* m_miner;
 
   void initCpuCoreList();
   void startSolo();

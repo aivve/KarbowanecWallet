@@ -14,14 +14,16 @@
 #include "NodeAdapter.h"
 #include "CryptoNoteWrapper.h"
 #include "CurrencyAdapter.h"
+#include "Settings.h"
 
 #include "ui_miningframe.h"
 
 namespace WalletGui {
 
 const quint32 HASHRATE_TIMER_INTERVAL = 1000;
+const quint32 MINER_ROUTINE_TIMER_INTERVAL = 60000;
 
-MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::MiningFrame), m_soloHashRateTimerId(-1) {
+MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::MiningFrame), m_miner(nullptr), m_soloHashRateTimerId(-1) {
   m_ui->setupUi(this);
   initCpuCoreList();
 
@@ -98,7 +100,8 @@ void MiningFrame::enableSolo() {
 
 void MiningFrame::timerEvent(QTimerEvent* _event) {
   if (_event->timerId() == m_soloHashRateTimerId) {
-    quint64 soloHashRate = NodeAdapter::instance().getSpeed();
+    m_miner->merge_hr();
+    quint32 soloHashRate = m_miner->get_speed();
     if (soloHashRate == 0) {
       return;
     }
@@ -108,6 +111,9 @@ void MiningFrame::timerEvent(QTimerEvent* _event) {
     plot();
 
     return;
+  }
+  if (_event->timerId() == m_minerRoutineTimerId) {
+    m_miner->on_idle();
   }
 
   QFrame::timerEvent(_event);
@@ -162,9 +168,10 @@ void MiningFrame::walletClosed() {
 }
 
 void MiningFrame::startSolo() {
-  NodeAdapter::instance().startSoloMining(m_walletAddress, m_ui->m_cpuCombo->currentData().toUInt());
+  m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->currentData().toUInt());
   m_ui->m_soloLabel->setText(tr("Starting solo mining..."));
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
+  m_minerRoutineTimerId = startTimer(MINER_ROUTINE_TIMER_INTERVAL);
   addPoint(QDateTime::currentDateTime().toTime_t(), 0);
   m_ui->m_startSolo->setEnabled(false);
   m_ui->m_stopSolo->setEnabled(true);
@@ -175,7 +182,9 @@ void MiningFrame::stopSolo() {
   if(m_solo_mining) {
   killTimer(m_soloHashRateTimerId);
   m_soloHashRateTimerId = -1;
-  NodeAdapter::instance().stopSoloMining();
+  killTimer(m_minerRoutineTimerId);
+  m_minerRoutineTimerId = -1;
+  m_miner->stop();
   addPoint(QDateTime::currentDateTime().toTime_t(), 0);
   m_ui->m_soloLabel->setText(tr("Stopped"));
   }
