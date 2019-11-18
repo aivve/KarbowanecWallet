@@ -23,7 +23,7 @@ namespace WalletGui {
 const quint32 HASHRATE_TIMER_INTERVAL = 1000;
 const quint32 MINER_ROUTINE_TIMER_INTERVAL = 60000;
 
-MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::MiningFrame), m_miner(nullptr), m_soloHashRateTimerId(-1) {
+MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::MiningFrame), m_miner(new Miner(this)), m_soloHashRateTimerId(-1) {
   m_ui->setupUi(this);
   initCpuCoreList();
 

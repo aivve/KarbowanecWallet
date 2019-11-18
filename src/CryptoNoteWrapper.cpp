@@ -418,6 +418,10 @@ public:
     return m_node.prepareBlockTemplate(b, fee, adr, diffic, height, ex_nonce, median_size, txs_size, already_generated_coins);
   }
 
+  bool handleBlockFound(CryptoNote::Block& b) {
+    return m_node.handleBlockFound(b);
+  }
+
   CryptoNote::IWalletLegacy* createWallet() override {
     return new CryptoNote::WalletLegacy(m_currency, m_node, m_logManager);
   }
@@ -599,6 +603,10 @@ public:
 
   bool prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {
     return m_core.prepareBlockTemplate(b, fee, adr, diffic, height, ex_nonce, median_size, txs_size, already_generated_coins);
+  }
+
+  bool handleBlockFound(CryptoNote::Block& b) {
+    return m_core.handle_block_found(b);
   }
 
   CryptoNote::IWalletLegacy* createWallet() override {

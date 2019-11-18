@@ -9,12 +9,15 @@
 #include <QFrame>
 #include "qcustomplot.h"
 #include "Miner.h"
+#include <Logging/LoggerMessage.h>
 
 class QAbstractButton;
 
 namespace Ui {
 class MiningFrame;
 }
+
+class Miner;
 
 namespace WalletGui {
 
@@ -37,7 +40,7 @@ private:
   int m_minerRoutineTimerId;
   QString m_walletAddress;
   QVector<double> m_hX, m_hY;
-  miner* m_miner;
+  std::unique_ptr<Miner> m_miner;
 
   void initCpuCoreList();
   void startSolo();

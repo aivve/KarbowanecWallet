@@ -18,6 +18,9 @@
 
 #pragma once
 
+#include <QObject>
+#include <QReadWriteLock>
+
 #include <atomic>
 #include <list>
 #include <mutex>
@@ -26,7 +29,6 @@
 #include "CryptoNoteCore/CryptoNoteBasic.h"
 #include "CryptoNoteCore/Currency.h"
 #include "CryptoNoteCore/Difficulty.h"
-#include "CryptoNoteCore/IMinerHandler.h"
 #include "CryptoNoteCore/OnceInInterval.h"
 #include "Logging/LoggerRef.h"
 #include <System/Dispatcher.h>
@@ -36,10 +38,12 @@
 using namespace CryptoNote;
 
 namespace WalletGui {
-  class miner {
+  class Miner : public QObject {
+    Q_OBJECT
+
   public:
-    miner(const Currency& currency, IMinerHandler& handler, Logging::ILogger& log, System::Dispatcher& dispatcher);
-    ~miner();
+    Miner(QObject* _parent);
+    ~Miner();
 
     bool set_block_template(const Block& bl, const difficulty_type& diffic);
     bool on_block_chain_update();
@@ -56,7 +60,7 @@ namespace WalletGui {
 
   private:
     bool worker_thread(uint32_t th_local_index);
-    bool request_block_template(bool wait_wallet_refresh, bool local_dispatcher);
+    bool request_block_template(bool wait_wallet_refresh);
 
     struct miner_config
     {
@@ -66,10 +70,7 @@ namespace WalletGui {
       }
     };
 
-    const Currency& m_currency;
-    Logging::LoggerRef logger;
-    System::Dispatcher& m_dispatcher;
-    std::atomic<bool> m_stop;
+    std::atomic<bool> m_stop_mining;
     std::mutex m_template_lock;
     Block m_template;
     std::atomic<uint32_t> m_template_no;
@@ -82,7 +83,6 @@ namespace WalletGui {
 
     std::list<std::thread> m_threads;
     std::mutex m_threads_lock;
-    IMinerHandler& m_handler;
     AccountPublicAddress m_mine_address;
     std::string m_mine_address_str;
     OnceInInterval m_update_block_template_interval;

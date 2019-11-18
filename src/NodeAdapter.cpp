@@ -317,6 +317,10 @@ bool NodeAdapter::prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, cons
   return m_node->prepareBlockTemplate(b, fee, adr, diffic, height, ex_nonce, median_size, txs_size, already_generated_coins);
 }
 
+bool NodeAdapter::handleBlockFound(CryptoNote::Block& b) {
+  Q_CHECK_PTR(m_node);
+  return m_node->handleBlockFound(b);
+}
 
 bool NodeAdapter::initInProcessNode() {
   Q_ASSERT(m_node == nullptr);

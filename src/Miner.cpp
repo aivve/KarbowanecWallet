@@ -22,6 +22,7 @@
 #include <numeric>
 #include <sstream>
 #include <thread>
+#include <QDebug>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -39,14 +40,17 @@
 #include "Common/Math.h"
 #include "Common/StringTools.h"
 #include "Serialization/SerializationTools.h"
-
 #include "CryptoNoteCore/CryptoNoteTools.h"
 #include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "CryptoNoteCore/TransactionExtra.h"
 
+#include "CurrencyAdapter.h"
 #include "Wallet/WalletRpcServerCommandsDefinitions.h"
 
 #include "NodeAdapter.h"
+
+#include <QThread>
+#include <QTimerEvent>
 
 using namespace Logging;
 using namespace CryptoNote;
@@ -54,15 +58,12 @@ using namespace CryptoNote;
 namespace WalletGui
 {
 
-  miner::miner(const Currency& currency, IMinerHandler& handler, Logging::ILogger& log, System::Dispatcher& dispatcher) :
-    m_currency(currency),
-    m_dispatcher(dispatcher),
-    logger(log, "miner"),
-    m_stop(true),
+  Miner::Miner(QObject* _parent) :
+    QObject(_parent),
+    m_stop_mining(true),
     m_template(boost::value_initialized<Block>()),
     m_template_no(0),
     m_diffic(0),
-    m_handler(handler),
     m_pausers_count(0),
     m_threads_total(0),
     m_starter_nonce(0),
@@ -70,16 +71,15 @@ namespace WalletGui
     m_hashes(0),
     m_do_mining(false),
     m_current_hash_rate(0),
-    m_update_block_template_interval(15),
-    m_update_merge_hr_interval(2)
-  {
+    m_update_block_template_interval(30),
+    m_update_merge_hr_interval(2) {
   }
   //-----------------------------------------------------------------------------------------------------
-  miner::~miner() {
+  Miner::~Miner() {
     stop();
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::set_block_template(const Block& bl, const difficulty_type& di) {
+  bool Miner::set_block_template(const Block& bl, const difficulty_type& di) {
     std::lock_guard<decltype(m_template_lock)> lk(m_template_lock);
 
     m_template = bl;
@@ -103,17 +103,17 @@ namespace WalletGui
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::on_block_chain_update() {
+  bool Miner::on_block_chain_update() {
     if (!is_mining()) {
       return true;
     }
 
-    return request_block_template(true, true);
+    return request_block_template(true);
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::request_block_template(bool wait_wallet_refresh, bool local_dispatcher) {
+  bool Miner::request_block_template(bool wait_wallet_refresh) {
     if (wait_wallet_refresh) {
-      logger(INFO) << "Give wallet some time to refresh...";
+      // Give wallet some time to refresh...
       std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     }
 
@@ -132,13 +132,13 @@ namespace WalletGui
 
     // get block template without coinbase tx
     if (!NodeAdapter::instance().prepareBlockTemplate(bl, fee, m_mine_address, di, height, extra_nonce, median_size, txs_size, already_generated_coins)) {
-      logger(ERROR) << "Failed to get_block_template(), stopping mining";
+      qDebug() << "Failed to get_block_template(), stopping mining";
       return false;
     }
 
     // get stake amount
     if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, height, di, median_size, already_generated_coins, txs_size, stake, reward)) {
-      logger(ERROR) << "Failed to getStake(), stopping mining";
+      qDebug() << "Failed to getStake(), stopping mining";
       return false;
     }
 
@@ -146,7 +146,7 @@ namespace WalletGui
     if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str, stake, reward, 0 /* TODO make mixin configurable*/,
                                                        height + CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW_V1,
                                                        "", bl.baseTransaction, stakeKey)) {
-      logger(ERROR) << "Failed to getStakeTransaction(), stopping mining";
+      qDebug() << "Failed to getStakeTransaction(), stopping mining";
       return false;
     }
 
@@ -154,11 +154,11 @@ namespace WalletGui
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::on_idle()
+  bool Miner::on_idle()
   {
     m_update_block_template_interval.call([&](){
       if (is_mining())
-        request_block_template(false, false);
+        request_block_template(false);
       return true;
     });
 
@@ -176,7 +176,7 @@ namespace WalletGui
   }
 
   //-----------------------------------------------------------------------------------------------------
-  void miner::merge_hr()
+  void Miner::merge_hr()
   {
     if(m_last_hr_merge_time && is_mining()) {
       m_current_hash_rate = m_hashes * 1000 / (millisecondsSinceEpoch() - m_last_hr_merge_time + 1);
@@ -186,8 +186,8 @@ namespace WalletGui
         m_last_hash_rates.pop_front();
 
       uint64_t total_hr = std::accumulate(m_last_hash_rates.begin(), m_last_hash_rates.end(), static_cast<uint64_t>(0));
-      //float hr = static_cast<float>(total_hr)/static_cast<float>(m_last_hash_rates.size())/static_cast<float>(1000);
-      // logger(INFO) << "Hashrate: " << std::setprecision(2) << std::fixed << hr << " kH/s";
+      float hr = static_cast<float>(total_hr)/static_cast<float>(m_last_hash_rates.size())/static_cast<float>(1000);
+      qDebug() << "Hashrate: " /*<< std::setprecision(2) << std::fixed*/ << hr << " kH/s";
     }
     
     m_last_hr_merge_time = millisecondsSinceEpoch();
@@ -195,54 +195,50 @@ namespace WalletGui
   }
 
   //-----------------------------------------------------------------------------------------------------
-  bool miner::is_mining()
+  bool Miner::is_mining()
   {
-    return !m_stop;
+    return !m_stop_mining;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::start(const std::string& address, size_t threads_count)
+  bool Miner::start(const std::string& address, size_t threads_count)
   {   
-    if (is_mining()) {
-      logger(ERROR) << "Starting miner but it's already started";
+    if (!m_stop_mining) {
+      qDebug() << "Starting miner but it's already started";
       return false;
     }
 
     std::lock_guard<std::mutex> lk(m_threads_lock);
 
     if(!m_threads.empty()) {
-      logger(ERROR) << "Unable to start miner because there are active mining threads";
+      qDebug() << "Unable to start miner because there are active mining threads";
       return false;
     }
 
-    AccountPublicAddress adr;
-    if (!m_currency.parseAccountAddressString(address, m_mine_address)) {
-      logger(ERROR) << "Target account address " << address << " has wrong format, starting daemon canceled";
-      return false;
-    }
+    m_mine_address = CurrencyAdapter::instance().internalAddress(QString::fromStdString(address));
     m_mine_address_str = address;
 
     m_threads_total = static_cast<uint32_t>(threads_count);
     m_starter_nonce = Random::randomValue<uint32_t>();
 
     // always request block template on start
-    if (!request_block_template(false, true)) {
-      logger(ERROR) << "Unable to start miner because block template request was unsuccessful";
+    if (!request_block_template(false)) {
+      qDebug() << "Unable to start miner because block template request was unsuccessful";
       return false;
     }
 
-    m_stop = false;
+    m_stop_mining = false;
     m_pausers_count = 0; // in case mining wasn't resumed after pause
 
     for (uint32_t i = 0; i != threads_count; i++) {
-      m_threads.push_back(std::thread(std::bind(&miner::worker_thread, this, i)));
+      m_threads.push_back(std::thread(std::bind(&Miner::worker_thread, this, i)));
     }
 
-    logger(INFO) << "Mining has started with " << threads_count << " threads, good luck!";
+    qDebug() << "Mining has started with " << threads_count << " threads, good luck!";
     return true;
   }
   
   //-----------------------------------------------------------------------------------------------------
-  uint64_t miner::get_speed()
+  uint64_t Miner::get_speed()
   {
     if(is_mining())
       return m_current_hash_rate;
@@ -251,13 +247,13 @@ namespace WalletGui
   }
   
   //-----------------------------------------------------------------------------------------------------
-  void miner::send_stop_signal() 
+  void Miner::send_stop_signal() 
   {
-    m_stop = true;
+    m_stop_mining = true;
   }
 
   //-----------------------------------------------------------------------------------------------------
-  bool miner::stop()
+  bool Miner::stop()
   {
     send_stop_signal();
 
@@ -268,48 +264,48 @@ namespace WalletGui
     }
 
     m_threads.clear();
-    logger(INFO) << "Mining has been stopped, " << m_threads.size() << " finished" ;
+    qDebug() << "Mining has been stopped, " << m_threads.size() << " finished" ;
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  void miner::on_synchronized()
+  void Miner::on_synchronized()
   {
     if(m_do_mining) {
       start(m_mine_address_str, m_threads_total);
     }
   }
   //-----------------------------------------------------------------------------------------------------
-  void miner::pause()
+  void Miner::pause()
   {
     std::lock_guard<std::mutex> lk(m_miners_count_lock);
     ++m_pausers_count;
     if(m_pausers_count == 1 && is_mining())
-      logger(TRACE) << "MINING PAUSED";
+      qDebug() << "MINING PAUSED";
   }
   //-----------------------------------------------------------------------------------------------------
-  void miner::resume()
+  void Miner::resume()
   {
     std::lock_guard<std::mutex> lk(m_miners_count_lock);
     --m_pausers_count;
     if(m_pausers_count < 0)
     {
       m_pausers_count = 0;
-      logger(ERROR) << "Unexpected miner::resume() called";
+      qDebug() << "Unexpected Miner::resume() called";
     }
     if(!m_pausers_count && is_mining())
-      logger(TRACE) << "MINING RESUMED";
+      qDebug() << "MINING RESUMED";
   }
   //-----------------------------------------------------------------------------------------------------
-  bool miner::worker_thread(uint32_t th_local_index)
+  bool Miner::worker_thread(uint32_t th_local_index)
   {
-    logger(INFO) << "Miner thread was started ["<< th_local_index << "]";
+    qDebug() << "Miner thread was started ["<< th_local_index << "]";
     uint32_t nonce = m_starter_nonce + th_local_index;
     difficulty_type local_diff = 0;
     uint32_t local_template_ver = 0;
     cn_pow_hash_v2 hash_ctx;
     Block b;
 
-    while(!m_stop)
+    while(!m_stop_mining)
     {
       if(m_pausers_count) //anti split workaround
       {
@@ -329,43 +325,35 @@ namespace WalletGui
 
       if(!local_template_ver)//no any set_block_template call
       {
-        logger(TRACE) << "Block template not set yet";
+        qDebug() << "Block template not set yet";
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         continue;
       }
 
       b.nonce = nonce;
       Crypto::Hash h;
-      if (!m_stop && !get_block_longhash(hash_ctx, b, h)) {
-        logger(ERROR) << "Failed to get block long hash";
-        m_stop = true;
+      if (!m_stop_mining && !get_block_longhash(hash_ctx, b, h)) {
+        qDebug() << "Failed to get block long hash";
+        m_stop_mining = true;
       }
 
-      if (!m_stop && check_hash(h, local_diff))
+      if (!m_stop_mining && check_hash(h, local_diff))
       {
         //we lucky!
 
-        logger(INFO, GREEN) << "Found block for difficulty: " 
-                            << local_diff << std::endl 
-                            << " pow: " << Common::podToHex(h);
+        qDebug() << "Found block for difficulty: " << local_diff;
 
-        Crypto::Hash id;
-        if (get_block_hash(b, id))
-          logger(INFO, GREEN) << "hash: " << Common::podToHex(id);
-
-        if(!m_handler.handle_block_found(b)) {
-
+        if(!NodeAdapter::instance().handleBlockFound(b)) {
+          qDebug() << "Failed to submit block";
         } else {
-          //success update, lets update config
-          Common::saveStringToFile(m_config_folder_path + "/" + CryptoNote::parameters::MINER_CONFIG_FILE_NAME, storeToJson(m_config));
+          // yay!
         }
       }
 
       nonce += m_threads_total;
       ++m_hashes;
     }
-    logger(INFO) << "Miner thread stopped ["<< th_local_index << "]";
+    qDebug() << "Miner thread stopped ["<< th_local_index << "]";
     return true;
   }
-  //-----------------------------------------------------------------------------------------------------
 }

@@ -64,6 +64,7 @@ public:
 
   bool getStake(uint8_t blockMajorVersion, uint64_t fee, uint32_t& height, CryptoNote::difficulty_type& next_diff, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward);
   bool prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins);
+  bool handleBlockFound(CryptoNote::Block& b);
 
 private:
   Node* m_node;
