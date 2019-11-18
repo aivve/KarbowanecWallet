@@ -33,6 +33,8 @@
 #include <CryptoNoteConfig.h>
 
 #include "crypto/crypto.h"
+#include "crypto/cn_slow_hash.hpp"
+#include "crypto/random.h"
 #include "Common/CommandLine.h"
 #include "Common/Math.h"
 #include "Common/StringTools.h"
@@ -95,7 +97,7 @@ namespace WalletGui
 
     m_diffic = di;
     ++m_template_no;
-    m_starter_nonce = Crypto::rand<uint32_t>();
+    m_starter_nonce = Random::randomValue<uint32_t>();
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
@@ -218,7 +220,7 @@ namespace WalletGui
     m_mine_address_str = address;
 
     m_threads_total = static_cast<uint32_t>(threads_count);
-    m_starter_nonce = Crypto::rand<uint32_t>();
+    m_starter_nonce = Random::randomValue<uint32_t>();
 
     // always request block template on start
     if (!request_block_template(false, true)) {
@@ -302,7 +304,7 @@ namespace WalletGui
     uint32_t nonce = m_starter_nonce + th_local_index;
     difficulty_type local_diff = 0;
     uint32_t local_template_ver = 0;
-    Crypto::cn_context context;
+    cn_pow_hash_v2 hash_ctx;
     Block b;
 
     while(!m_stop)
@@ -332,7 +334,7 @@ namespace WalletGui
 
       b.nonce = nonce;
       Crypto::Hash h;
-      if (!m_stop && !get_block_longhash(context, b, h)) {
+      if (!m_stop && !get_block_longhash(hash_ctx, b, h)) {
         logger(ERROR) << "Failed to get block long hash";
         m_stop = true;
       }
@@ -340,7 +342,6 @@ namespace WalletGui
       if (!m_stop && check_hash(h, local_diff))
       {
         //we lucky!
-        ++m_config.current_extra_message_index;
 
         logger(INFO, GREEN) << "Found block for difficulty: " 
                             << local_diff << std::endl 
@@ -351,7 +352,7 @@ namespace WalletGui
           logger(INFO, GREEN) << "hash: " << Common::podToHex(id);
 
         if(!m_handler.handle_block_found(b)) {
-          --m_config.current_extra_message_index;
+
         } else {
           //success update, lets update config
           Common::saveStringToFile(m_config_folder_path + "/" + CryptoNote::parameters::MINER_CONFIG_FILE_NAME, storeToJson(m_config));
