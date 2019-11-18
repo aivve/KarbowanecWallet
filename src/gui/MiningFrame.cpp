@@ -63,6 +63,7 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::enableSolo, Qt::QueuedConnection);
+  connect(&NodeAdapter::instance(), &NodeAdapter::localBlockchainUpdatedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
 }
 
 MiningFrame::~MiningFrame() {
@@ -205,4 +206,7 @@ void MiningFrame::setMiningThreads() {
   Settings::instance().setMiningThreads(m_ui->m_cpuCombo->currentText().toInt());
 }
 
+void MiningFrame::onBlockHeightUpdated() {
+  m_miner->on_block_chain_update();
+}
 }

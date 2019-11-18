@@ -56,6 +56,7 @@ private:
   Q_SLOT void startStopSoloClicked(QAbstractButton* _button);
   Q_SLOT void enableSolo();
   Q_SLOT void setMiningThreads();
+  Q_SLOT void onBlockHeightUpdated();
 };
 
 }
