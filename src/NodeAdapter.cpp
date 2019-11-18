@@ -307,6 +307,17 @@ quint64 NodeAdapter::getSpeed() const {
   return m_node->getSpeed();
 }
 
+bool NodeAdapter::getStake(uint8_t blockMajorVersion, uint64_t fee, uint32_t& height, CryptoNote::difficulty_type& next_diff, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
+  Q_CHECK_PTR(m_node);
+  return m_node->getStake(blockMajorVersion, fee, height, next_diff, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
+}
+
+bool NodeAdapter::prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {
+  Q_CHECK_PTR(m_node);
+  return m_node->prepareBlockTemplate(b, fee, adr, diffic, height, ex_nonce, median_size, txs_size, already_generated_coins);
+}
+
+
 bool NodeAdapter::initInProcessNode() {
   Q_ASSERT(m_node == nullptr);
   m_nodeInitializerThread.start();

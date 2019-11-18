@@ -46,6 +46,8 @@
 
 #include "Wallet/WalletRpcServerCommandsDefinitions.h"
 
+#include "NodeAdapter.h"
+
 using namespace Logging;
 using namespace CryptoNote;
 
@@ -108,7 +110,7 @@ namespace WalletGui
 
     return request_block_template(true, true);
   }
-   //-----------------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------------
   bool miner::request_block_template(bool wait_wallet_refresh, bool local_dispatcher) {
     if (wait_wallet_refresh) {
       logger(INFO) << "Give wallet some time to refresh...";
@@ -116,7 +118,7 @@ namespace WalletGui
     }
 
     Block bl = boost::value_initialized<Block>();
-    difficulty_type di = 0;
+    CryptoNote::difficulty_type di = 0;
     uint32_t height;
     CryptoNote::BinaryArray extra_nonce;
 
@@ -129,13 +131,13 @@ namespace WalletGui
     Crypto::SecretKey stakeKey;
 
     // get block template without coinbase tx
-    if (!m_handler.prepareBlockTemplate(bl, fee, m_mine_address, di, height, extra_nonce, median_size, txs_size, already_generated_coins)) {
+    if (!NodeAdapter::instance().prepareBlockTemplate(bl, fee, m_mine_address, di, height, extra_nonce, median_size, txs_size, already_generated_coins)) {
       logger(ERROR) << "Failed to get_block_template(), stopping mining";
       return false;
     }
 
     // get stake amount
-    if (!m_handler.getStake(bl.majorVersion, fee, height, di, median_size, already_generated_coins, txs_size, stake, reward)) {
+    if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, height, di, median_size, already_generated_coins, txs_size, stake, reward)) {
       logger(ERROR) << "Failed to getStake(), stopping mining";
       return false;
     }
