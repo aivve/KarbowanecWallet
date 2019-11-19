@@ -64,6 +64,7 @@ namespace WalletGui
     m_template(boost::value_initialized<Block>()),
     m_template_no(0),
     m_diffic(0),
+    m_stake_mixin(3),
     m_pausers_count(0),
     m_threads_total(0),
     m_starter_nonce(0),
@@ -150,7 +151,7 @@ namespace WalletGui
     }
 
     // now get stake tx from wallet
-    if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str, stake, reward, 0 /* TODO make mixin configurable*/,
+    if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str, stake, reward, m_stake_mixin,
                                                        height + CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW_V1,
                                                        "", bl.baseTransaction, stakeKey)) {
       qDebug() << "Failed to getStakeTransaction(), stopping mining";
@@ -363,4 +364,10 @@ namespace WalletGui
     qDebug() << "Miner thread stopped ["<< th_local_index << "]";
     return true;
   }
+
+  void Miner::stakeMixinChanged(int _mixin) {
+    m_stake_mixin = _mixin;
+    qDebug() << "Stake mixin changed to " << m_stake_mixin;
+  }
+
 }

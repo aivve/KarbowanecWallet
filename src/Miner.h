@@ -57,6 +57,7 @@ namespace WalletGui {
     void pause();
     void resume();
     void merge_hr();
+    void stakeMixinChanged(int _mixin);
 
   private:
     bool worker_thread(uint32_t th_local_index);
@@ -97,6 +98,7 @@ namespace WalletGui {
     std::mutex m_last_hash_rates_lock;
     std::list<uint64_t> m_last_hash_rates;
     bool m_do_mining;
+    int m_stake_mixin;
 
   };
 }
