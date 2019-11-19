@@ -307,6 +307,12 @@ quint64 NodeAdapter::getSpeed() const {
   return m_node->getSpeed();
 }
 
+quint64 NodeAdapter::getStake() const {
+  Q_CHECK_PTR(m_node);
+  quint64 stake;
+  return m_node->getStake(stake) ? stake : CryptoNote::parameters::STAKE_MAX_LIMIT;
+}
+
 bool NodeAdapter::getStake(uint8_t blockMajorVersion, uint64_t fee, uint32_t& height, CryptoNote::difficulty_type& next_diff, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
   Q_CHECK_PTR(m_node);
   return m_node->getStake(blockMajorVersion, fee, height, next_diff, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);

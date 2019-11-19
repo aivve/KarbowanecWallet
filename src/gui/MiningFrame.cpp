@@ -63,6 +63,7 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::enableSolo, Qt::QueuedConnection);
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &MiningFrame::updateBalance, Qt::QueuedConnection);
   connect(&NodeAdapter::instance(), &NodeAdapter::localBlockchainUpdatedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
 }
 
@@ -181,13 +182,13 @@ void MiningFrame::startSolo() {
 
 void MiningFrame::stopSolo() {
   if(m_solo_mining) {
-  killTimer(m_soloHashRateTimerId);
-  m_soloHashRateTimerId = -1;
-  killTimer(m_minerRoutineTimerId);
-  m_minerRoutineTimerId = -1;
-  m_miner->stop();
-  addPoint(QDateTime::currentDateTime().toTime_t(), 0);
-  m_ui->m_soloLabel->setText(tr("Stopped"));
+    killTimer(m_soloHashRateTimerId);
+    m_soloHashRateTimerId = -1;
+    killTimer(m_minerRoutineTimerId);
+    m_minerRoutineTimerId = -1;
+    m_miner->stop();
+    addPoint(QDateTime::currentDateTime().toTime_t(), 0);
+    m_ui->m_soloLabel->setText(tr("Stopped"));
   }
 }
 
@@ -209,4 +210,14 @@ void MiningFrame::setMiningThreads() {
 void MiningFrame::onBlockHeightUpdated() {
   m_miner->on_block_chain_update();
 }
+
+void MiningFrame::updateBalance(quint64 _balance) {
+  quint64 stake = NodeAdapter::instance().getStake();
+  if (_balance < stake) {
+    m_ui->m_startSolo->setEnabled(false);
+    stopSolo();
+    m_ui->m_soloLabel->setText(tr("Not enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
+  }
+}
+
 }

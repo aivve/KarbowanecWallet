@@ -130,6 +130,8 @@ namespace WalletGui
     uint64_t stake;
     Crypto::SecretKey stakeKey;
 
+    uint64_t actualBalance = WalletAdapter::instance().getActualBalance();
+
     // get block template without coinbase tx
     if (!NodeAdapter::instance().prepareBlockTemplate(bl, fee, m_mine_address, di, height, extra_nonce, median_size, txs_size, already_generated_coins)) {
       qDebug() << "Failed to get_block_template(), stopping mining";
@@ -139,6 +141,11 @@ namespace WalletGui
     // get stake amount
     if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, height, di, median_size, already_generated_coins, txs_size, stake, reward)) {
       qDebug() << "Failed to getStake(), stopping mining";
+      return false;
+    }
+
+    if (actualBalance < stake) {
+      qDebug() << "Not enough balance for stake";
       return false;
     }
 

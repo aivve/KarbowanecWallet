@@ -60,6 +60,7 @@ private:
   Q_SLOT void enableSolo();
   Q_SLOT void setMiningThreads();
   Q_SLOT void onBlockHeightUpdated();
+  Q_SLOT void updateBalance(quint64 _balance);
 };
 
 }
