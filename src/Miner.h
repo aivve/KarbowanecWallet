@@ -61,7 +61,7 @@ namespace WalletGui {
 
   private:
     bool worker_thread(uint32_t th_local_index);
-    bool request_block_template();
+    bool request_block_template(bool wait_wallet_refresh);
 
     struct miner_config
     {

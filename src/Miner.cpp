@@ -109,10 +109,15 @@ namespace WalletGui
       return true;
     }
 
-    return request_block_template();
+    return request_block_template(true);
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::request_block_template() {
+  bool Miner::request_block_template(bool wait_wallet_refresh) {
+    if (wait_wallet_refresh) {
+      // Give wallet some time to refresh...
+      std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    }
+
     Block bl = boost::value_initialized<Block>();
     CryptoNote::difficulty_type di = 0;
     uint32_t height;
@@ -161,7 +166,7 @@ namespace WalletGui
   {
     m_update_block_template_interval.call([&](){
       if (is_mining())
-        request_block_template();
+        request_block_template(false);
       return true;
     });
 
@@ -224,7 +229,7 @@ namespace WalletGui
     m_starter_nonce = Random::randomValue<uint32_t>();
 
     // always request block template on start
-    if (!request_block_template()) {
+    if (!request_block_template(false)) {
       qDebug() << "Unable to start miner because block template request was unsuccessful";
       return false;
     }
@@ -348,7 +353,6 @@ namespace WalletGui
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";
-          m_stop_mining = true; // stop mininig in this case
         } else {
           // yay!
         }
