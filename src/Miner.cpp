@@ -135,7 +135,7 @@ namespace WalletGui
     }
 
     // get stake amount
-    if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, height, di, median_size, already_generated_coins, txs_size, stake, reward)) {
+    if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, height, median_size, already_generated_coins, txs_size, stake, reward)) {
       qDebug() << "Failed to getStake(), stopping mining";
       return false;
     }
