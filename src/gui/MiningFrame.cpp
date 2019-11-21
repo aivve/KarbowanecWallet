@@ -79,6 +79,12 @@ void MiningFrame::addPoint(double x, double y)
 {
   m_hX.append(x);
   m_hY.append(y);
+
+  // scroll plot
+  if (m_hX.size() > 1000 || m_hY.size() > 1000) {
+    m_hX.pop_front();
+    m_hY.pop_front();
+  }
 }
 
 void MiningFrame::plot()
@@ -86,7 +92,7 @@ void MiningFrame::plot()
   m_maxHr = std::max<double>(m_maxHr, m_hY.at(m_hY.size()-1));
   m_ui->m_hashRateChart->graph(0)->setData(m_hX, m_hY);
   m_ui->m_hashRateChart->xAxis->setRange(m_hX.at(0), m_hX.at(m_hX.size()-1));
-  m_ui->m_hashRateChart->yAxis->setRange(m_hY.at(0), m_maxHr);
+  m_ui->m_hashRateChart->yAxis->setRange(0, m_maxHr);
   m_ui->m_hashRateChart->replot();
   m_ui->m_hashRateChart->update();
 }
