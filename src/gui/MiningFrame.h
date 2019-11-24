@@ -41,6 +41,7 @@ private:
   QString m_walletAddress;
   QVector<double> m_hX, m_hY;
   std::unique_ptr<Miner> m_miner;
+  QString m_miner_log;
 
   void initCpuCoreList();
   void startSolo();
@@ -63,6 +64,7 @@ private:
   Q_SLOT void updateBalance(quint64 _balance);
   Q_SLOT void updatePendingBalance(quint64 _balance);
   Q_SLOT void stakeMixinChanged(int _value);
+  Q_SLOT void updateMinerLog(const QString& _message);
 };
 
 }

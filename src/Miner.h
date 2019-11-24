@@ -100,5 +100,8 @@ namespace WalletGui {
     bool m_do_mining;
     int m_stake_mixin;
 
+  Q_SIGNALS:
+    void minerMessageSignal(const QString& _message);
+
   };
 }

@@ -136,17 +136,20 @@ namespace WalletGui
     // get block template without coinbase tx
     if (!NodeAdapter::instance().prepareBlockTemplate(bl, fee, m_mine_address, di, height, extra_nonce, median_size, txs_size, already_generated_coins)) {
       qDebug() << "Failed to get_block_template(), stopping mining";
+      Q_EMIT minerMessageSignal(QString("Failed to get_block_template()"));
       return false;
     }
 
     // get stake amount
     if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, median_size, already_generated_coins, txs_size, stake, reward)) {
       qDebug() << "Failed to getStake(), stopping mining";
+      Q_EMIT minerMessageSignal(QString("Failed to getStake()"));
       return false;
     }
 
     if (actualBalance < stake) {
       qDebug() << "Not enough balance for stake";
+      Q_EMIT minerMessageSignal(QString("Not enough balance for stake"));
       return false;
     }
 
@@ -155,6 +158,7 @@ namespace WalletGui
                                                        height + CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW_V1,
                                                        "", bl.baseTransaction, stakeKey)) {
       qDebug() << "Failed to getStakeTransaction(), stopping mining";
+      Q_EMIT minerMessageSignal(QString("Failed to getStakeTransaction()"));
       return false;
     }
 
@@ -242,6 +246,7 @@ namespace WalletGui
     }
 
     qDebug() << "Mining has started with " << threads_count << " threads, good luck!";
+    Q_EMIT minerMessageSignal(QString("Mining has started with %1 threads, good luck!").arg(threads_count));
     return true;
   }
   
@@ -273,6 +278,7 @@ namespace WalletGui
 
     m_threads.clear();
     qDebug() << "Mining has been stopped, " << m_threads.size() << " finished" ;
+    Q_EMIT minerMessageSignal(QString("Mining has been stopped, %1 finished").arg(m_threads.size()));
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
@@ -349,10 +355,15 @@ namespace WalletGui
       {
         //we lucky!
 
+        Crypto::Hash id;
+        get_block_hash(b, id);
+
         qDebug() << "Found block for difficulty: " << local_diff;
+        Q_EMIT minerMessageSignal(QString("Found block %1 for difficulty %2, POW %3").arg(QString::fromStdString(Common::podToHex(h))).arg(local_diff).arg(QString::fromStdString(Common::podToHex(id))));
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";
+          Q_EMIT minerMessageSignal(QString("Failed to submit block"));
         } else {
           // yay!
         }

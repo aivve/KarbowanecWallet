@@ -69,6 +69,7 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &MiningFrame::updateBalance, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletPendingBalanceUpdatedSignal, this, &MiningFrame::updatePendingBalance, Qt::QueuedConnection);
   connect(&NodeAdapter::instance(), &NodeAdapter::localBlockchainUpdatedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
+  connect(&*m_miner, &Miner::minerMessageSignal, this, &MiningFrame::updateMinerLog, Qt::QueuedConnection);
 }
 
 MiningFrame::~MiningFrame() {
@@ -250,6 +251,16 @@ void MiningFrame::updatePendingBalance(quint64 _balance) {
 void MiningFrame::stakeMixinChanged(int _value) {
   m_miner->stakeMixinChanged(_value);
   m_ui->m_mixinLabel->setText(QString::number(_value));
+}
+
+void MiningFrame::updateMinerLog(const QString& _message) {
+  QString message = _message + "\n";
+  m_miner_log += message;
+
+  m_ui->m_minerLog->setPlainText(m_miner_log);
+
+  QScrollBar *sb = m_ui->m_minerLog->verticalScrollBar();
+  sb->setValue(sb->maximum());
 }
 
 }
