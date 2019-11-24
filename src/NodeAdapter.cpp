@@ -313,9 +313,9 @@ quint64 NodeAdapter::getStake() const {
   return m_node->getStake(stake) ? stake : CryptoNote::parameters::STAKE_MAX_LIMIT;
 }
 
-bool NodeAdapter::getStake(uint8_t blockMajorVersion, uint64_t fee, uint32_t& height, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
+bool NodeAdapter::getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
   Q_CHECK_PTR(m_node);
-  return m_node->getStake(blockMajorVersion, fee, height, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
+  return m_node->getStake(blockMajorVersion, fee, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
 }
 
 bool NodeAdapter::prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {
