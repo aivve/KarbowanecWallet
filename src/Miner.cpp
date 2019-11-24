@@ -245,8 +245,8 @@ namespace WalletGui
       m_threads.push_back(std::thread(std::bind(&Miner::worker_thread, this, i)));
     }
 
-    qDebug() << "Mining has started with " << threads_count << " threads, good luck!";
-    Q_EMIT minerMessageSignal(QString("Mining has started with %1 threads, good luck!").arg(threads_count));
+    qDebug() << "Mining has started with " << threads_count << " thread(s), good luck!";
+    Q_EMIT minerMessageSignal(QString("Mining has started with %1 thread(s), good luck!").arg(threads_count));
     return true;
   }
   
@@ -277,8 +277,8 @@ namespace WalletGui
     }
 
     m_threads.clear();
-    qDebug() << "Mining has been stopped, " << m_threads.size() << " finished" ;
-    Q_EMIT minerMessageSignal(QString("Mining has been stopped, %1 finished").arg(m_threads.size()));
+    qDebug() << "Mining stopped, " << m_threads.size() << " finished" ;
+    Q_EMIT minerMessageSignal(QString("Mining stopped, %1 finished").arg(m_threads.size()));
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
@@ -356,10 +356,12 @@ namespace WalletGui
         //we lucky!
 
         Crypto::Hash id;
-        get_block_hash(b, id);
-
+        if (!get_block_hash(b, id)) {
+          qDebug() << "Failed to get mined block hash";
+        }
+ 
         qDebug() << "Found block for difficulty: " << local_diff;
-        Q_EMIT minerMessageSignal(QString("Found block %1 for difficulty %2, POW %3").arg(QString::fromStdString(Common::podToHex(h))).arg(local_diff).arg(QString::fromStdString(Common::podToHex(id))));
+        Q_EMIT minerMessageSignal(QString("Found block %1 for difficulty %2, POW %3").arg(QString::fromStdString(Common::podToHex(id))).arg(local_diff).arg(QString::fromStdString(Common::podToHex(h))));
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";
