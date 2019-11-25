@@ -109,13 +109,18 @@ namespace WalletGui
       return true;
     }
 
-    return request_block_template(true);
+    if (request_block_template(true)) {
+      resume();
+      return true;
+    }
+
+    return false;
   }
   //-----------------------------------------------------------------------------------------------------
   bool Miner::request_block_template(bool wait_wallet_refresh) {
     if (wait_wallet_refresh) {
       // Give wallet some time to refresh...
-      std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+      std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     }
 
     Block bl = boost::value_initialized<Block>();
@@ -163,6 +168,7 @@ namespace WalletGui
     }
 
     set_block_template(bl, di);
+
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
@@ -305,9 +311,11 @@ namespace WalletGui
     {
       m_pausers_count = 0;
       qDebug() << "Unexpected Miner::resume() called";
+      Q_EMIT minerMessageSignal(QString("Unexpected Miner::resume() called"));
     }
     if(!m_pausers_count && is_mining())
       qDebug() << "MINING RESUMED";
+      //Q_EMIT minerMessageSignal(QString("MINING RESUMED"));
   }
   //-----------------------------------------------------------------------------------------------------
   bool Miner::worker_thread(uint32_t th_local_index)
@@ -337,7 +345,7 @@ namespace WalletGui
         nonce = m_starter_nonce + th_local_index;
       }
 
-      if(!local_template_ver)//no any set_block_template call
+      if(!local_template_ver) //no any set_block_template call
       {
         qDebug() << "Block template not set yet";
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -355,6 +363,8 @@ namespace WalletGui
       {
         //we lucky!
 
+        pause();
+
         Crypto::Hash id;
         if (!get_block_hash(b, id)) {
           qDebug() << "Failed to get mined block hash";
@@ -368,6 +378,7 @@ namespace WalletGui
           Q_EMIT minerMessageSignal(QString("Failed to submit block"));
         } else {
           // yay!
+
         }
       }
 
