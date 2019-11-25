@@ -27,6 +27,10 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   m_ui->setupUi(this);
   initCpuCoreList();
 
+  QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+  fixedFont.setStyleHint(QFont::TypeWriter);
+  m_ui->m_minerLog->setFont(fixedFont);
+
   QString connection = Settings::instance().getConnection();
   if (connection.compare("remote") == 0) {
     m_ui->m_startSolo->setDisabled(true);
