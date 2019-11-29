@@ -37,6 +37,7 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   }
 
   m_ui->m_startSolo->setEnabled(false);
+  m_ui->m_stopSolo->setEnabled(false);
 
   m_ui->m_hashRateChart->addGraph();
   m_ui->m_hashRateChart->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
@@ -69,7 +70,6 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
 
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::enableSolo, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &MiningFrame::updateBalance, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletPendingBalanceUpdatedSignal, this, &MiningFrame::updatePendingBalance, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
@@ -100,19 +100,6 @@ void MiningFrame::plot()
   m_ui->m_hashRateChart->yAxis->setRange(0, m_maxHr);
   m_ui->m_hashRateChart->replot();
   m_ui->m_hashRateChart->update();
-}
-
-void MiningFrame::enableSolo() {
-  m_sychronized = true;
-  if (!m_solo_mining) {
-    m_ui->m_startSolo->setEnabled(true);
-    if(Settings::instance().isMiningOnLaunchEnabled() && m_sychronized) {
-      if (!m_solo_mining) {
-        startSolo();
-        m_ui->m_startSolo->setChecked(true);
-      }
-    }
-  }
 }
 
 void MiningFrame::timerEvent(QTimerEvent* _event) {
@@ -167,28 +154,11 @@ void MiningFrame::walletOpened() {
   m_ui->m_availableLabel->setText(CurrencyAdapter::instance().formatAmount(actualBalance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
   m_ui->m_lockedLabel->setText(CurrencyAdapter::instance().formatAmount(lockedBalance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
 
-  if(m_sychronized) {
-    if (actualBalance > stake) {
-      m_ui->m_stopSolo->isChecked();
-      m_ui->m_stopSolo->setEnabled(false);
-      m_ui->m_startSolo->setEnabled(true);
-    }
-  }
-
   m_walletAddress = WalletAdapter::instance().getAddress();
-
-  if(Settings::instance().isMiningOnLaunchEnabled() && m_sychronized) {
-    if (!m_solo_mining) {
-      startSolo();
-      m_ui->m_startSolo->setChecked(true);
-    }
-  }
 }
 
 void MiningFrame::walletClosed() {
-  // allow mining after wallet is closed to it's address
-  // but mining can't be started if there's no open wallet
-  // stopSolo();
+  stopSolo();
   m_wallet_closed = true;
   m_ui->m_startSolo->setEnabled(false);
   m_ui->m_stopSolo->isChecked();
@@ -200,6 +170,7 @@ void MiningFrame::startSolo() {
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
   m_minerRoutineTimerId = startTimer(MINER_ROUTINE_TIMER_INTERVAL);
   addPoint(QDateTime::currentDateTime().toTime_t(), 0);
+  m_ui->m_startSolo->setChecked(true);
   m_ui->m_startSolo->setEnabled(false);
   m_ui->m_stopSolo->setEnabled(true);
   m_solo_mining = true;
@@ -214,6 +185,20 @@ void MiningFrame::stopSolo() {
     m_miner->stop();
     addPoint(QDateTime::currentDateTime().toTime_t(), 0);
     m_ui->m_soloLabel->setText(tr("Stopped"));
+    m_ui->m_startSolo->setEnabled(true);
+    m_ui->m_stopSolo->setEnabled(false);
+    m_solo_mining = false;
+  }
+}
+
+void MiningFrame::enableSolo() {
+  m_sychronized = true;
+  if (!m_solo_mining) {
+    m_ui->m_startSolo->setEnabled(true);
+    m_ui->m_stopSolo->setEnabled(false);
+    if (Settings::instance().isMiningOnLaunchEnabled() && m_sychronized) {
+      startSolo();
+    }
   }
 }
 
@@ -240,9 +225,12 @@ void MiningFrame::onBlockHeightUpdated() {
 void MiningFrame::updateBalance(quint64 _balance) {
   quint64 stake = NodeAdapter::instance().getStake();
   if (_balance < stake) {
-    m_ui->m_startSolo->setEnabled(false);
-    stopSolo();
     m_ui->m_soloLabel->setText(tr("Not enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
+    stopSolo();
+  }
+  else {
+    m_ui->m_soloLabel->setText(tr("You have enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
+    enableSolo();
   }
   m_ui->m_availableLabel->setText(CurrencyAdapter::instance().formatAmount(_balance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
   m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
