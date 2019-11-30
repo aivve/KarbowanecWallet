@@ -19,6 +19,9 @@
 #include <QToolButton>
 #include <QPushButton>
 #include <QFontDatabase>
+
+#include "MainWindow.h"
+
 #include <Common/Base58.h>
 #include <Common/StringTools.h>
 #include <Common/Util.h>
@@ -38,7 +41,6 @@
 #include "CurrencyAdapter.h"
 #include "ExitWidget.h"
 #include "GetBalanceProofDialog.h"
-#include "MainWindow.h"
 #include "NewPasswordDialog.h"
 #include "NodeAdapter.h"
 #include "PasswordDialog.h"
@@ -981,6 +983,23 @@ void MainWindow::askForWalletPassword(bool _error) {
   if (dlg.exec() == QDialog::Accepted) {
     QString password = dlg.getPassword();
     WalletAdapter::instance().open(password);
+  }
+}
+
+void MainWindow::checkWalletPassword() {
+  bool keep_asking = true;
+  bool wrong_pass = false;
+  while (keep_asking) {
+    PasswordDialog dlg(wrong_pass, this);
+    if (dlg.exec() == QDialog::Accepted) {
+      QString password = dlg.getPassword();
+      keep_asking = WalletAdapter::instance().tryOpen(password);
+      wrong_pass = !keep_asking;
+    }
+    else {
+      keep_asking = false;
+      closeWallet();
+    }
   }
 }
 

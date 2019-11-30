@@ -135,6 +135,14 @@ void WalletAdapter::open(const QString& _password) {
   }
 }
 
+bool WalletAdapter::tryOpen(const QString& _password) {
+  Q_ASSERT(m_wallet != nullptr);
+  if (QFile::exists(Settings::instance().getWalletFile()) && m_wallet->tryLoadWallet(m_file, _password.toStdString())) {
+    return true;
+  }
+  return false;
+}
+
 void WalletAdapter::createWallet() {
   Q_ASSERT(m_wallet == nullptr);
   Settings::instance().setEncrypted(false);
