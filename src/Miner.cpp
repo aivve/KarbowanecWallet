@@ -306,7 +306,7 @@ namespace WalletGui
     {
       m_pausers_count = 0;
       qDebug() << "Unexpected Miner::resume() called";
-      Q_EMIT minerMessageSignal(QString("Unexpected Miner::resume() called"));
+      //Q_EMIT minerMessageSignal(QString("Unexpected Miner::resume() called"));
     }
     if(!m_pausers_count && is_mining())
       qDebug() << "MINING RESUMED";
