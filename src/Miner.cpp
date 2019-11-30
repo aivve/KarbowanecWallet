@@ -366,7 +366,7 @@ namespace WalletGui
         }
  
         qDebug() << "Found block for difficulty: " << local_diff;
-        Q_EMIT minerMessageSignal(QString("Found block %1 for difficulty %2, POW %3").arg(QString::fromStdString(Common::podToHex(id))).arg(local_diff).arg(QString::fromStdString(Common::podToHex(h))));
+        Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(id))).arg(b.blockIndex).arg(local_diff).arg(QString::fromStdString(Common::podToHex(h))));
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";
