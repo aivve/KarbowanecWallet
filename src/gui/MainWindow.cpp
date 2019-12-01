@@ -989,18 +989,18 @@ void MainWindow::askForWalletPassword(bool _error) {
 void MainWindow::checkWalletPassword() {
   bool keep_asking = true;
   bool wrong_pass = false;
-  while (keep_asking) {
+  do {
     PasswordDialog dlg(wrong_pass, this);
     if (dlg.exec() == QDialog::Accepted) {
       QString password = dlg.getPassword();
-      keep_asking = WalletAdapter::instance().tryOpen(password);
-      wrong_pass = !keep_asking;
+      keep_asking = !WalletAdapter::instance().tryOpen(password);
+      wrong_pass = keep_asking;
     }
     else {
-      keep_asking = false;
       closeWallet();
+      break;
     }
-  }
+  } while (keep_asking);
 }
 
 void MainWindow::encryptedFlagChanged(bool _encrypted) {
