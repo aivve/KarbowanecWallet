@@ -765,15 +765,7 @@ void MainWindow::openOptimizationSettings() {
 }
 
 void MainWindow::getBalanceProof() {
-  PasswordDialog pass_dlg(false, this);
-  if (pass_dlg.exec() == QDialog::Accepted) {
-    QString password = pass_dlg.getPassword();
-    if (!WalletAdapter::instance().tryOpen(password)) {
-      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
-      return;
-    }
-  }
-  else {
+  if (!confirmWithPassword()) {
     return;
   }
 
@@ -822,15 +814,7 @@ void MainWindow::openLogFile() {
 }
 
 void MainWindow::showPrivateKeys() {
-  PasswordDialog pass_dlg(false, this);
-  if (pass_dlg.exec() == QDialog::Accepted) {
-    QString password = pass_dlg.getPassword();
-    if (!WalletAdapter::instance().tryOpen(password)) {
-      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
-      return;
-    }
-  }
-  else {
+  if (!confirmWithPassword()) {
     return;
   }
 
@@ -840,15 +824,7 @@ void MainWindow::showPrivateKeys() {
 }
 
 void MainWindow::showMnemonicSeed() {
-  PasswordDialog pass_dlg(false, this);
-  if (pass_dlg.exec() == QDialog::Accepted) {
-    QString password = pass_dlg.getPassword();
-    if (!WalletAdapter::instance().tryOpen(password)) {
-      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
-      return;
-    }
-  }
-  else {
+  if (!confirmWithPassword()) {
     return;
   }
 
@@ -858,15 +834,7 @@ void MainWindow::showMnemonicSeed() {
 }
 
 void MainWindow::exportTrackingKey() {
-  PasswordDialog pass_dlg(false, this);
-  if (pass_dlg.exec() == QDialog::Accepted) {
-    QString password = pass_dlg.getPassword();
-    if (!WalletAdapter::instance().tryOpen(password)) {
-      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
-      return;
-    }
-  }
-  else {
+  if (!confirmWithPassword()) {
     return;
   }
 
@@ -876,15 +844,7 @@ void MainWindow::exportTrackingKey() {
 }
 
 void MainWindow::signMessage() {
-  PasswordDialog pass_dlg(false, this);
-  if (pass_dlg.exec() == QDialog::Accepted) {
-    QString password = pass_dlg.getPassword();
-    if (!WalletAdapter::instance().tryOpen(password)) {
-      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
-      return;
-    }
-  }
-  else {
+  if (!confirmWithPassword()) {
     return;
   }
 
@@ -1061,6 +1021,21 @@ void MainWindow::checkWalletPassword() {
       break;
     }
   } while (keep_asking);
+}
+
+bool MainWindow::confirmWithPassword() {
+  PasswordDialog dlg(false, this);
+  if (dlg.exec() == QDialog::Accepted) {
+    QString password = dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  return false;
 }
 
 void MainWindow::encryptedFlagChanged(bool _encrypted) {
