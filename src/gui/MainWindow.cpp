@@ -765,6 +765,18 @@ void MainWindow::openOptimizationSettings() {
 }
 
 void MainWindow::getBalanceProof() {
+  PasswordDialog pass_dlg(false, this);
+  if (pass_dlg.exec() == QDialog::Accepted) {
+    QString password = pass_dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
   GetBalanceProofDialog dlg(&MainWindow::instance());
   dlg.exec();
 }
@@ -864,6 +876,18 @@ void MainWindow::exportTrackingKey() {
 }
 
 void MainWindow::signMessage() {
+  PasswordDialog pass_dlg(false, this);
+  if (pass_dlg.exec() == QDialog::Accepted) {
+    QString password = pass_dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
   SignMessageDialog dlg(this);
   dlg.walletOpened();
   dlg.sign();
