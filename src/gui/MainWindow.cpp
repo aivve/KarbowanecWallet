@@ -810,18 +810,54 @@ void MainWindow::openLogFile() {
 }
 
 void MainWindow::showPrivateKeys() {
+  PasswordDialog pass_dlg(false, this);
+  if (pass_dlg.exec() == QDialog::Accepted) {
+    QString password = pass_dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
   PrivateKeysDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
 }
 
 void MainWindow::showMnemonicSeed() {
+  PasswordDialog pass_dlg(false, this);
+  if (pass_dlg.exec() == QDialog::Accepted) {
+    QString password = pass_dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
   MnemonicSeedDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
 }
 
 void MainWindow::exportTrackingKey() {
+  PasswordDialog pass_dlg(false, this);
+  if (pass_dlg.exec() == QDialog::Accepted) {
+    QString password = pass_dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
   ExportTrackingKeyDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
