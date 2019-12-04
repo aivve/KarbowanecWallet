@@ -1035,6 +1035,9 @@ void MainWindow::lockWalletWithPassword() {
 }
 
 bool MainWindow::confirmWithPassword() {
+  if (!Settings::instance().isEncrypted() && WalletAdapter::instance().tryOpen(""))
+    return true;
+
   PasswordDialog dlg(false, this);
   if (dlg.exec() == QDialog::Accepted) {
     QString password = dlg.getPassword();
@@ -1057,6 +1060,7 @@ void MainWindow::encryptedFlagChanged(bool _encrypted) {
   m_encryptionStateIconLabel->setPixmap(encryptionIcon);
   QString encryptionLabelTooltip = _encrypted ? tr("Encrypted") : tr("Not encrypted");
   m_encryptionStateIconLabel->setToolTip(encryptionLabelTooltip);
+  m_ui->m_lockWalletAction->setEnabled(_encrypted);
 }
 
 void MainWindow::peerCountUpdated(quint64 _peerCount) {
