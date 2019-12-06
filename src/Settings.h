@@ -64,6 +64,7 @@ public:
   bool isMiningOnLaunchEnabled() const;
   bool isTrackingMode() const;
   bool skipFusionTransactions() const;
+  bool hideEverythingOnLocked() const;
 
 #ifdef Q_OS_WIN
   bool isMinimizeToTrayEnabled() const;
@@ -95,6 +96,7 @@ public:
   void setOptimizationThreshold(quint64 _threshold);
   void setOptimizationMixin(quint64 _mixin);
   void setSkipFusionTransactions(bool _skip);
+  void setHideEverythingOnLocked(bool _hide);
 
 private:
   QJsonObject m_settings;

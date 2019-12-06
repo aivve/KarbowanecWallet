@@ -226,6 +226,7 @@
     <addaction name="menuRecent_wallets"/>
     <addaction name="m_backupWalletAction"/>
     <addaction name="m_closeWalletAction"/>
+    <addaction name="m_lockWalletAction"/>
     <addaction name="separator"/>
     <addaction name="m_openUriAction"/>
     <addaction name="m_openLogFileAction"/>
@@ -233,7 +234,6 @@
     <addaction name="m_signMessageAction"/>
     <addaction name="m_verifySignedMessageAction"/>
     <addaction name="separator"/>
-    <addaction name="m_lockWalletAction"/>
     <addaction name="m_exitAction"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
@@ -249,6 +249,7 @@
     <addaction name="m_connectionSettingsAction"/>
     <addaction name="m_optimizationAction"/>
     <addaction name="m_hideFusionTransactions"/>
+    <addaction name="m_hideEverythingOnLocked"/>
     <addaction name="separator"/>
     <addaction name="m_startOnLoginAction"/>
     <addaction name="m_minimizeToTrayAction"/>
@@ -681,6 +682,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="m_hideEverythingOnLocked">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hide everything when wallet is locked</string>
    </property>
   </action>
  </widget>
@@ -1362,6 +1371,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>m_hideEverythingOnLocked</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hideEverythingOnLocked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>createWallet()</slot>
@@ -1382,5 +1407,7 @@
   <slot>sweepUnmixable()</slot>
   <slot>getBalanceProof()</slot>
   <slot>lockWalletWithPassword()</slot>
+  <slot>hideFusionTransactions(bool)</slot>
+  <slot>hideEverythingOnLocked(bool)</slot>
  </slots>
 </ui>
