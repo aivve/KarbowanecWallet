@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2016 The Cryptonote developers
 // Copyright (c) 2015-2016 XDN developers
-// Copyright (c) 2016-2017 The Karbowanec developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -9,6 +9,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QLabel>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QMainWindow>
 #include <QSystemTrayIcon>
@@ -54,6 +55,7 @@ private:
   OptimizationManager* optimizationManager;
 
   QScopedPointer<Ui::MainWindow> m_ui;
+  QProgressBar* m_syncProgressBar;
   QPushButton* m_connectionStateIconLabel;
   QLabel* m_encryptionStateIconLabel;
   QLabel* m_synchronizationStateIconLabel;
@@ -66,6 +68,7 @@ private:
   bool m_isAboutToQuit;
   QList<QAction*> recentFileActionList;
   const int maxRecentFiles;
+  const uint32_t maxProgressBar;
 
   QTranslator m_translator; // contains the translations for this application
   QTranslator m_translatorQt; // contains the translations for qt
@@ -75,6 +78,8 @@ private:
   static MainWindow* m_instance;
 
   QMenu *trayIconMenu;
+
+  QString m_statusBarText;
 
   MainWindow();
   ~MainWindow();
@@ -92,7 +97,7 @@ private:
   bool confirmWithPassword();
   void encryptedFlagChanged(bool _encrypted);
   void peerCountUpdated(quint64 _peer_count);
-  void walletSynchronizationInProgress();
+  void walletSynchronizationInProgress(uint32_t _current, uint32_t _total);
   void walletSynchronized(int _error, const QString& _error_text);
   void walletOpened(bool _error, const QString& _error_text);
   void walletClosed();

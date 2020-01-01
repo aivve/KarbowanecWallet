@@ -402,6 +402,10 @@ Por favor aguarde...</translation>
         <source>Select folder</source>
         <translation>Selecione a pasta</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
+    </message>
 </context>
 <context>
     <name>ImportKeysDialog</name>
@@ -436,6 +440,10 @@ Por favor aguarde...</translation>
     <message>
         <source>Import private keys</source>
         <translation>Importar claves privadas</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
     </message>
 </context>
 <context>
@@ -475,6 +483,10 @@ Por favor aguarde...</translation>
     <message>
         <source>Select folder</source>
         <translation>Selecione a pasta</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
     </message>
 </context>
 <context>
@@ -526,6 +538,10 @@ Por favor aguarde...</translation>
     <message>
         <source>Close</source>
         <translation>Fechar</translation>
+    </message>
+    <message>
+        <source>Circulating supply</source>
+        <translation>Número de moedas em circulação</translation>
     </message>
 </context>
 <context>
@@ -1273,6 +1289,10 @@ Você quer ir à página de dowload?</translation>
         <source>Select folder</source>
         <translation>Selecione a pasta</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation type="unfinished">Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
+    </message>
 </context>
 <context>
     <name>SendFrame</name>
@@ -1747,6 +1767,53 @@ Você quer ir à página de dowload?</translation>
     </message>
 </context>
 <context>
+    <name>WalletGui::ConnectionsModel</name>
+    <message>
+        <source>Incoming</source>
+        <translation>Entrada</translation>
+    </message>
+    <message>
+        <source>Outgoing</source>
+        <translation>Сessante</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Estado</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation>Identidade</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Servidor</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Porta</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Começar</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versão</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>Altura</translation>
+    </message>
+    <message>
+        <source>Last resp. height</source>
+        <translation>A altura da última resposta</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -1818,6 +1885,18 @@ Você quer ir à página de dowload?</translation>
     <message>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>Copy &amp;address</source>
+        <translation type="unfinished">Copiar;endereço</translation>
+    </message>
+    <message>
+        <source>Copy &amp;Id</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2565,6 +2644,10 @@ quando a carteira vai terminar de sincronizar</translation>
             <numerusform>Transação de otimização de carteira, %n confirmações</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Canceled or failed transaction</source>
+        <translation>Transação cancelada ou com falha</translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::WalletAdapter</name>
@@ -2759,6 +2842,24 @@ quando a carteira vai terminar de sincronizar</translation>
     <message>
         <source>Failed to get the reserve proof.</source>
         <translation>Falha ao obter a prova da reserva.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n blocks per second</source>
+        <translation>
+            <numerusform>%n bloco por segundo</numerusform>
+            <numerusform>%n blocos por segundo</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>est. completion in</source>
+        <translation>conclusão prevista em</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n day(s) and</source>
+        <translation>
+            <numerusform>%n dia e</numerusform>
+            <numerusform>%n dias e</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

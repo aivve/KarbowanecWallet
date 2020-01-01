@@ -263,6 +263,7 @@
     <addaction name="m_aboutCryptonoteAction"/>
     <addaction name="m_aboutQtAction"/>
     <addaction name="actionHelp"/>
+    <addaction name="m_infoAction"/>
    </widget>
    <widget class="QMenu" name="menuWallet">
     <property name="title">
@@ -690,6 +691,11 @@
    </property>
    <property name="text">
     <string>Hide everything when wallet is locked</string>
+   </property>
+  </action>
+  <action name="m_infoAction">
+   <property name="text">
+    <string>Information</string>
    </property>
   </action>
  </widget>
@@ -1376,6 +1382,22 @@
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
    <slot>hideEverythingOnLocked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_infoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showStatusInfo()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

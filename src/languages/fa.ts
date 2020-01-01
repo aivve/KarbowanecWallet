@@ -386,6 +386,10 @@ Please wait...</source>
         <source>Select folder</source>
         <translation>انتخاب پوشه</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>هماهنگ سازی را از این ارتفاع شروع کنید (در صورت عدم اطمینان خالی بگذارید):</translation>
+    </message>
 </context>
 <context>
     <name>ImportKeysDialog</name>
@@ -416,6 +420,10 @@ Please wait...</source>
     <message>
         <source>Import private keys</source>
         <translation>درون ریزی کلید شخصی</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>هماهنگ سازی را از این ارتفاع شروع کنید (در صورت عدم اطمینان خالی بگذارید):</translation>
     </message>
 </context>
 <context>
@@ -455,6 +463,10 @@ Please wait...</source>
     <message>
         <source>Select folder</source>
         <translation>انتخاب پوشه</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>هماهنگ سازی را از این ارتفاع شروع کنید (در صورت عدم اطمینان خالی بگذارید):</translation>
     </message>
 </context>
 <context>
@@ -506,6 +518,10 @@ Please wait...</source>
     <message>
         <source>Close</source>
         <translation>بستن</translation>
+    </message>
+    <message>
+        <source>Circulating supply</source>
+        <translation>تعداد سکه در گردش</translation>
     </message>
 </context>
 <context>
@@ -1252,6 +1268,10 @@ Do you want to go to download page?</source>
         <source>Select folder</source>
         <translation>انتخاب پوشه</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>هماهنگ سازی را از این ارتفاع شروع کنید (در صورت عدم اطمینان خالی بگذارید):</translation>
+    </message>
 </context>
 <context>
     <name>SendFrame</name>
@@ -1726,6 +1746,53 @@ Do you want to go to download page?</source>
     </message>
 </context>
 <context>
+    <name>WalletGui::ConnectionsModel</name>
+    <message>
+        <source>Incoming</source>
+        <translation>در حال واریز</translation>
+    </message>
+    <message>
+        <source>Outgoing</source>
+        <translation>در حال ارسال</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>حالت</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation>شناسه</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>آدرس</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>پورت</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>شروع</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>نسخه</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>نوع</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>آخرین بلوک</translation>
+    </message>
+    <message>
+        <source>Last resp. height</source>
+        <translation>ارتفاع آخرین پاسخ</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -1797,6 +1864,18 @@ Do you want to go to download page?</source>
     <message>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>Copy &amp;address</source>
+        <translation type="unfinished">کپی &amp;آدرس</translation>
+    </message>
+    <message>
+        <source>Copy &amp;Id</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2537,6 +2616,10 @@ when the wallet is synchronized</source>
             <numerusform>معاملات بهینه سازی کیف پول ،,%n تاییدیه</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Canceled or failed transaction</source>
+        <translation>معامله لغو یا شکست خورده است</translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::WalletAdapter</name>
@@ -2731,6 +2814,22 @@ when the wallet is synchronized</source>
     <message>
         <source>Failed to get the reserve proof.</source>
         <translation>اثبات ذخیره ناموفق بود.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n blocks per second</source>
+        <translation>
+            <numerusform>%n بلوک در ثانیه</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>est. completion in</source>
+        <translation>تکمیل در</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n day(s) and</source>
+        <translation>
+            <numerusform>%n روز و</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

@@ -390,6 +390,10 @@ Please wait...</source>
         <source>Select folder</source>
         <translation>Выбраць каталог</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Пачніце сінхранізацыю з гэтай вышыні (пакіньце пустым, калі не ўпэўнены):</translation>
+    </message>
 </context>
 <context>
     <name>ImportKeysDialog</name>
@@ -424,6 +428,10 @@ Please wait...</source>
     <message>
         <source>Import private keys</source>
         <translation>Імпартаваць прыватня ключы</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Пачніце сінхранізацыю з гэтай вышыні (пакіньце пустым, калі не ўпэўнены):</translation>
     </message>
 </context>
 <context>
@@ -463,6 +471,10 @@ Please wait...</source>
     <message>
         <source>Select folder</source>
         <translation>Выбраць каталог</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Пачніце сінхранізацыю з гэтай вышыні (пакіньце пустым, калі не ўпэўнены):</translation>
     </message>
 </context>
 <context>
@@ -514,6 +526,10 @@ Please wait...</source>
     <message>
         <source>Close</source>
         <translation>Зачыніць</translation>
+    </message>
+    <message>
+        <source>Circulating supply</source>
+        <translation>Колькасьць манет у звароце</translation>
     </message>
 </context>
 <context>
@@ -1252,6 +1268,10 @@ Do you want to go to download page?</source>
         <source>Select folder</source>
         <translation>Выбраць каталог</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Пачніце сінхранізацыю з гэтай вышыні (пакіньце пустым, калі не ўпэўнены):</translation>
+    </message>
 </context>
 <context>
     <name>SendFrame</name>
@@ -1733,6 +1753,53 @@ Do you want to go to download page?</source>
     </message>
 </context>
 <context>
+    <name>WalletGui::ConnectionsModel</name>
+    <message>
+        <source>Incoming</source>
+        <translation>Уваходнае</translation>
+    </message>
+    <message>
+        <source>Outgoing</source>
+        <translation>Выходнае</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Стан</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation>Ідэнтыфікатар</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Адрас</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Пачатак</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Версія</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Тып</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>Вышыня</translation>
+    </message>
+    <message>
+        <source>Last resp. height</source>
+        <translation>Вышыня апошняга адказу</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -1804,6 +1871,18 @@ Do you want to go to download page?</source>
     <message>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>Copy &amp;address</source>
+        <translation type="unfinished">Капіяваць &amp;адрас</translation>
+    </message>
+    <message>
+        <source>Copy &amp;Id</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2566,6 +2645,10 @@ when the wallet is synchronized</source>
             <numerusform>Аптымізацыя гаманца,%n пацвярджэнняў</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Canceled or failed transaction</source>
+        <translation>Адмененая або няўдалая транзакцыя</translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::WalletAdapter</name>
@@ -2760,6 +2843,26 @@ when the wallet is synchronized</source>
     <message>
         <source>Failed to get the reserve proof.</source>
         <translation>Не атрымалася пацвердзіць рэзерв.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n blocks per second</source>
+        <translation>
+            <numerusform>%n блок у секунду</numerusform>
+            <numerusform>%n блокі у секунду</numerusform>
+            <numerusform>%n блокаў у секунду</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>est. completion in</source>
+        <translation>оц. завяршэнне ў</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n day(s) and</source>
+        <translation>
+            <numerusform>%n дзень і</numerusform>
+            <numerusform>%n дні і</numerusform>
+            <numerusform>%n  дзён і</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

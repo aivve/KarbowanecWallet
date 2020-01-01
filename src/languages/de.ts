@@ -391,6 +391,10 @@ Bitte warten...</translation>
         <source>Select folder</source>
         <translation>Ordner auswählen</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Starten Sie die Synchronisation von dieser Höhe aus (leer lassen, wenn unsicher):</translation>
+    </message>
 </context>
 <context>
     <name>ImportKeysDialog</name>
@@ -425,6 +429,10 @@ Bitte warten...</translation>
     <message>
         <source>Import private keys</source>
         <translation>Privaten Schlüssel importieren</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Starten Sie die Synchronisation von dieser Höhe aus (leer lassen, wenn unsicher):</translation>
     </message>
 </context>
 <context>
@@ -464,6 +472,10 @@ Bitte warten...</translation>
     <message>
         <source>Select folder</source>
         <translation>Ordner auswählen</translation>
+    </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Starten Sie die Synchronisation von dieser Höhe aus (leer lassen, wenn unsicher):</translation>
     </message>
 </context>
 <context>
@@ -515,6 +527,10 @@ Bitte warten...</translation>
     <message>
         <source>Close</source>
         <translation>Schliessen</translation>
+    </message>
+    <message>
+        <source>Circulating supply</source>
+        <translation>Die Anzahl der Münzen im Umlauf</translation>
     </message>
 </context>
 <context>
@@ -1261,6 +1277,10 @@ Möchten Sie die Download Seite besuchen?</translation>
         <source>Select folder</source>
         <translation>Ordner auswählen</translation>
     </message>
+    <message>
+        <source>Start synchronization from this height (leave empty if unsure):</source>
+        <translation>Starten Sie die Synchronisation von dieser Höhe aus (leer lassen, wenn unsicher):</translation>
+    </message>
 </context>
 <context>
     <name>SendFrame</name>
@@ -1738,6 +1758,53 @@ Externer Port für das P2P-Netzwerkprotokoll (wenn Portweiterleitung mit NAT ver
     </message>
 </context>
 <context>
+    <name>WalletGui::ConnectionsModel</name>
+    <message>
+        <source>Incoming</source>
+        <translation>Eingehend</translation>
+    </message>
+    <message>
+        <source>Outgoing</source>
+        <translation>Ausgehend</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Zustand</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation>Identifikator</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Host</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Anlauf</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Ausführung</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Art</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>Höhe</translation>
+    </message>
+    <message>
+        <source>Last resp. height</source>
+        <translation>Die Höhe der letzten Antwort</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -1809,6 +1876,18 @@ Externer Port für das P2P-Netzwerkprotokoll (wenn Portweiterleitung mit NAT ver
     <message>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>Copy &amp;address</source>
+        <translation type="unfinished">Kopieren &amp;Adresse</translation>
+    </message>
+    <message>
+        <source>Copy &amp;Id</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2560,6 +2639,10 @@ wenn die Brieftasche die Synchronisation beendet</translation>
             <numerusform>Wallet-Optimierungstransaktion,%n bestätigungen</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Canceled or failed transaction</source>
+        <translation>Abgebrochene oder fehlgeschlagene Transaktion</translation>
+    </message>
 </context>
 <context>
     <name>WalletGui::WalletAdapter</name>
@@ -2758,6 +2841,24 @@ Kann keinen neuen Schlüssel generieren</translation>
     <message>
         <source>Failed to get the reserve proof.</source>
         <translation>Der Nachweis der Reserve ist fehlgeschlagen.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n blocks per second</source>
+        <translation>
+            <numerusform>%n Blöck pro Sekunde</numerusform>
+            <numerusform>%n Blöcke pro Sekunde</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>est. completion in</source>
+        <translation>est. Fertigstellung</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n day(s) and</source>
+        <translation>
+            <numerusform>%n Tag und</numerusform>
+            <numerusform>%n Tage und</numerusform>
+        </translation>
     </message>
 </context>
 </TS>
