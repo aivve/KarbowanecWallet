@@ -84,7 +84,7 @@ MainWindow::MainWindow() : QMainWindow(),
   m_ui->setupUi(this);
   m_connectionStateIconLabel = new QPushButton();
   m_connectionStateIconLabel->setFlat(true); // Make the button look like a label, but clickable
-  m_connectionStateIconLabel->setStyleSheet(".QPushButton { background-color: rgba(255, 255, 255, 0);}");
+  m_connectionStateIconLabel->setStyleSheet(".QPushButton { background-color: rgba(255, 255, 255, 0); border: none;}");
   m_connectionStateIconLabel->setMaximumSize(16, 16);
   m_encryptionStateIconLabel = new QLabel(this);
   m_trackingModeIconLabel = new QLabel(this);
@@ -122,8 +122,6 @@ void MainWindow::connectToSignals() {
   connect(&WalletAdapter::instance(), &WalletAdapter::walletTransactionCreatedSignal, this, [this]() {
       QApplication::alert(this);
   });
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletUnmixableBalanceUpdatedSignal, this, &MainWindow::updateUnmixableBalance,
-    Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSendTransactionCompletedSignal, this, [this](CryptoNote::TransactionId _transactionId, int _error, const QString& _errorString) {
     if (_error == 0) {
       m_ui->m_transactionsAction->setChecked(true);
@@ -151,13 +149,12 @@ void MainWindow::initUi() {
   m_ui->accountToolBar->setAllowedAreas(Qt::TopToolBarArea);
 
   accountWidget = m_ui->accountToolBar->addWidget(m_ui->m_accountFrame);
-  m_ui->accountToolBar->setMovable(false);
   addToolBar(Qt::TopToolBarArea, m_ui->accountToolBar);
   addToolBarBreak();
-  addToolBar(Qt::LeftToolBarArea, m_ui->toolBar);
-  QToolButton button;
-  button.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-  button.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  addToolBar(Qt::TopToolBarArea, m_ui->toolBar);
+  addToolBarBreak();
+  m_ui->accountToolBar->setMovable(false);
+  m_ui->toolBar->setMovable(false);
 
   m_ui->m_aboutCryptonoteAction->setText(QString(tr("About %1 Wallet")).arg(CurrencyAdapter::instance().getCurrencyDisplayName()));
   m_ui->m_overviewFrame->hide();
@@ -636,7 +633,6 @@ void MainWindow::isTrackingMode() {
   m_ui->m_sendAction->setEnabled(false);
   m_ui->m_openUriAction->setEnabled(false);
   m_ui->m_showMnemonicSeedAction->setEnabled(false);
-  m_ui->m_sweepUnmixableAction->setEnabled(false);
   m_ui->m_optimizationAction->setEnabled(false);
   m_ui->m_proofBalanceAction->setEnabled(false);
   m_trackingModeIconLabel->show();
@@ -678,22 +674,6 @@ void MainWindow::restoreFromMnemonicSeed() {
       QMessageBox::critical(nullptr, tr("Mnemonic seed is not correct"), tr("There must be an error in mnemonic seed. Make sure you entered it correctly."), QMessageBox::Ok);
       return;
     }
-  }
-}
-
-void MainWindow::sweepUnmixable() {
-  quint64 dust = WalletAdapter::instance().getUnmixableBalance();
-  ConfirmSendDialog dlg(&MainWindow::instance());
-  dlg.showPasymentDetails(dust);
-  if (dlg.exec() == QDialog::Accepted) {
-    quint64 fee = CurrencyAdapter::instance().getMinimumFee();
-    std::vector<CryptoNote::WalletLegacyTransfer> walletTransfers;
-    CryptoNote::WalletLegacyTransfer walletTransfer;
-    walletTransfer.address = WalletAdapter::instance().getAddress().toStdString();
-    walletTransfer.amount = dust;
-    walletTransfers.push_back(walletTransfer);
-
-    WalletAdapter::instance().sweepDust(walletTransfers, fee, "", 0);
   }
 }
 
@@ -1172,7 +1152,6 @@ void MainWindow::walletOpened(bool _error, const QString& _error_text) {
     m_ui->m_showPrivateKey->setEnabled(true);
     m_ui->m_resetAction->setEnabled(true);
     m_ui->m_openUriAction->setEnabled(true);
-    m_ui->m_sweepUnmixableAction->setEnabled(true);
     m_ui->m_optimizationAction->setEnabled(true);
     m_ui->m_signMessageAction->setEnabled(true);
     m_ui->m_verifySignedMessageAction->setEnabled(true);
@@ -1217,7 +1196,6 @@ void MainWindow::walletClosed() {
   m_ui->m_showPrivateKey->setEnabled(false);
   m_ui->m_resetAction->setEnabled(false);
   m_ui->m_showMnemonicSeedAction->setEnabled(false);
-  m_ui->m_sweepUnmixableAction->setEnabled(false);
   m_ui->m_optimizationAction->setEnabled(false);
   m_ui->m_signMessageAction->setEnabled(false);
   m_ui->m_verifySignedMessageAction->setEnabled(false);
@@ -1252,14 +1230,6 @@ void MainWindow::checkTrackingMode() {
     Settings::instance().setTrackingMode(true);
   } else {
     Settings::instance().setTrackingMode(false);
-  }
-}
-
-void MainWindow::updateUnmixableBalance(quint64 _balance) {
-  if (_balance != 0) {
-      m_ui->m_sweepUnmixableAction->setEnabled(true);
-  } else {
-      m_ui->m_sweepUnmixableAction->setEnabled(false);
   }
 }
 

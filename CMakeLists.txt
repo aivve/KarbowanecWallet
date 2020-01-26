@@ -55,6 +55,7 @@ find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 
+set(Boost_NO_BOOST_CMAKE ON)
 set(Boost_USE_STATIC_LIBS ON)
 if(WIN32)
   set(Boost_USE_STATIC_RUNTIME OFF)
@@ -76,6 +77,7 @@ configure_file("src/CryptoNoteWalletConfig.h.in" "CryptoNoteWalletConfig.h")
 
 add_definitions(-DVERSION=\"${CN_VERSION}\")
 add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
+add_definitions(-DUPNP_STATIC -DMINIUPNP_STATICLIB -DUPNPC_BUILD_STATIC)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -83,12 +85,15 @@ set(CRYPTONOTE_SOURCES
   cryptonote/external/miniupnpc/connecthostport.c
   cryptonote/external/miniupnpc/igd_desc_parse.c
   cryptonote/external/miniupnpc/minisoap.c
+  cryptonote/external/miniupnpc/minissdpc.c
   cryptonote/external/miniupnpc/miniupnpc.c
   cryptonote/external/miniupnpc/miniwget.c
   cryptonote/external/miniupnpc/minixml.c
   cryptonote/external/miniupnpc/portlistingparse.c
   cryptonote/external/miniupnpc/receivedata.c
   cryptonote/external/miniupnpc/upnpcommands.c
+  cryptonote/external/miniupnpc/upnpdev.c
+  cryptonote/external/miniupnpc/upnperrors.c
   cryptonote/external/miniupnpc/upnpreplyparse.c
   cryptonote/src/Common/Base58.cpp
   cryptonote/src/Common/Base64.cpp
@@ -213,7 +218,9 @@ file(GLOB_RECURSE Mnemonics cryptonote/src/Mnemonics/*)
 file(GLOB_RECURSE QCustomPlot external/qcustomplot/*)
 file(GLOB TRANSLATION_FILES src/languages/*.ts)
 
-set(QRC src/resources.qrc)
+set(QRC
+	src/resources.qrc
+	src/qdarkstyle/style.qrc)
 set_source_files_properties(${TRANSLATION_FILES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/languages")
 
 qt5_wrap_ui(UIS ${FORMS})

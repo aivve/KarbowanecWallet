@@ -66,10 +66,21 @@ int main(int argc, char* argv[]) {
 
   setlocale(LC_ALL, "");
 
-  QFile File(":/skin/default.qss");
-  File.open(QFile::ReadOnly);
-  QString StyleSheet = QLatin1String(File.readAll());
-  qApp->setStyleSheet(StyleSheet);
+  QFile File1(":/qdarkstyle/style.qss");
+  File1.open(QFile::ReadOnly);
+  QString StyleSheet1 = QLatin1String(File1.readAll());
+
+  QFile File2(":/skin/dark.qss");
+  File2.open(QFile::ReadOnly);
+  QString StyleSheet2 = QLatin1String(File2.readAll());
+
+  // fix font sizes for MacOS
+  const char MAC_FIX_STYLE_SHEET[] = "QWidget{font-size:12px}";
+#ifdef Q_OS_MAC
+  qApp->setStyleSheet(MAC_FIX_STYLE_SHEET + StyleSheet1 + StyleSheet2);
+#else
+  qApp->setStyleSheet(StyleSheet1 + StyleSheet2);
+#endif
 
   if (PaymentServer::ipcSendCommandLine())
   exit(0);
