@@ -163,6 +163,8 @@ void MiningFrame::calculateAndSetParams(bool _init) {
   m_stake_amount = CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText());
   m_stake_term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, m_stake_amount);
 
+  m_miner->stakeAmountChanged(m_stake_amount);
+
   uint32_t minTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, actualBalance);
   m_ui->m_termSpin->setMinimum(minTerm);
   m_ui->m_termDial->setMinimum(minTerm);
@@ -274,7 +276,7 @@ void MiningFrame::updatePendingBalance(quint64 _balance) {
 }
 
 void MiningFrame::stakeAmountChanged(int _value) {
-  m_miner->stakeAmountChanged(_value);
+  m_miner->stakeAmountChanged((uint64_t)_value);
   uint64_t stake = CurrencyAdapter::instance().parseAmount(QString::number(_value));
   uint64_t term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, stake);
   m_ui->m_termSpin->setValue(term);

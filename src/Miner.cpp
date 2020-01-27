@@ -130,8 +130,7 @@ namespace WalletGui
     size_t txs_size = 0;
     uint64_t already_generated_coins = 0;
     uint64_t reward = 0;
-    int64_t emussion_change = 0;
-    uint64_t base_stake = 0;
+    int64_t emission_change = 0;
     Crypto::SecretKey stakeKey;
 
     uint64_t actualBalance = WalletAdapter::instance().getActualBalance();
@@ -143,22 +142,23 @@ namespace WalletGui
       return false;
     }
 
-    if (!NodeAdapter::instance().getBlockReward(bl.majorVersion, fee, median_size, already_generated_coins, txs_size, reward, emussion_change)) {
-      qDebug() << "Failed to getBlockReward(), stopping mining";
+    if (!CurrencyAdapter::instance().getCurrency().getBlockReward(bl.majorVersion, median_size, txs_size, already_generated_coins, fee, reward, emission_change)) {
+      qDebug() << "Failed to calculate block reward, stopping mining";
       Q_EMIT minerMessageSignal(QString("Failed to get block reward"));
       return false;
     }
 
     // get base stake amount
-    base_stake = NodeAdapter::instance().getBaseStake();
-
-
+    uint64_t base_stake = NodeAdapter::instance().getBaseStake();
 
     if (actualBalance < m_stake_amount) {
       qDebug() << "Not enough balance for stake";
       Q_EMIT minerMessageSignal(QString("Not enough balance for stake"));
       return false;
     }
+
+    // calculate term here
+    m_stake_term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(base_stake, m_stake_amount);
 
     // now get stake tx from wallet
     if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str,
@@ -174,7 +174,10 @@ namespace WalletGui
       return false;
     }
 
-    set_block_template(bl, di);
+    // adjust difficulty by stake
+    difficulty_type adj_d = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(di, base_stake, m_stake_amount);
+
+    set_block_template(bl, adj_d);
 
     return true;
   }
@@ -258,8 +261,8 @@ namespace WalletGui
       m_threads.push_back(std::thread(std::bind(&Miner::worker_thread, this, i)));
     }
 
-    qDebug() << "Mining has started with " << threads_count << " thread(s), good luck!";
-    Q_EMIT minerMessageSignal(QString("Mining has started with %1 thread(s), good luck!").arg(threads_count));
+    qDebug() << "Mining has started with " << threads_count << " thread(s), at difficulty " << m_diffic << " good luck!";
+    Q_EMIT minerMessageSignal(QString("Mining has started with %1 thread(s) at difficulty %2, good luck!").arg(threads_count).arg(m_diffic));
     return true;
   }
   
@@ -393,6 +396,11 @@ namespace WalletGui
     }
     qDebug() << "Miner thread stopped ["<< th_local_index << "]";
     return true;
+  }
+
+  void Miner::stakeAmountChanged(uint64_t _amount) {
+    m_stake_amount = _amount;
+    qDebug() << "Stake amount changed to " << m_stake_amount;
   }
 
   void Miner::stakeMixinChanged(int _mixin) {
