@@ -42,10 +42,16 @@ private:
   QVector<double> m_hX, m_hY;
   std::unique_ptr<Miner> m_miner;
   QString m_miner_log;
+  uint64_t m_available_balance;
+  uint64_t m_miner_diff;
+  uint64_t m_stake_amount;
+  uint32_t m_stake_term;
 
   void initCpuCoreList();
   void startSolo();
   void stopSolo();
+
+  void calculateAndSetParams(bool _init = false);
 
   bool m_wallet_closed = false;
   bool m_solo_mining = false;

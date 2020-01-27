@@ -4,6 +4,7 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <QDebug>
 #include <QThread>
 #include <QUrl>
 
@@ -142,21 +143,48 @@ void MiningFrame::initCpuCoreList() {
   m_ui->m_cpuDial->setMinimum(1);
 }
 
+void MiningFrame::calculateAndSetParams(bool _init) {
+  quint64 baseStake = NodeAdapter::instance().getBaseStake();
+  quint64 actualBalance = WalletAdapter::instance().getActualBalance();
+  quint64 lockedBalance = WalletAdapter::instance().getPendingBalance();
+  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(baseStake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+
+  quint64 baseReward = NodeAdapter::instance().getNextReward();
+  m_ui->m_stakeAmountSpin->setMinimum(CurrencyAdapter::instance().formatAmount(baseReward).toDouble());
+  m_ui->m_stakeAmountDial->setMinimum(CurrencyAdapter::instance().formatAmount(baseReward).toDouble());
+  m_ui->m_stakeAmountSpin->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(actualBalance, baseStake)).toDouble());
+  m_ui->m_stakeAmountDial->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(actualBalance, baseStake)).toDouble());
+
+  if (_init)
+    m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(std::max<uint64_t>(actualBalance, baseReward)).toDouble());
+
+  m_stake_amount = CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText());
+  m_stake_term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(baseStake, m_stake_amount);
+
+  m_ui->m_termSpin->setMinimum(10);
+  m_ui->m_termDial->setMinimum(10);
+  uint32_t maxTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(baseStake, baseReward);
+  m_ui->m_termSpin->setMaximum(maxTerm);
+  m_ui->m_termDial->setMaximum(maxTerm);
+
+  m_ui->m_termSpin->setValue(m_stake_term);
+
+  uint64_t baseDiff = NodeAdapter::instance().getDifficulty();
+  m_ui->m_baseDiff->setText(QString::number(baseDiff));
+
+  m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(baseDiff, baseStake, m_stake_amount);
+  m_ui->m_minerDiff->setText(QString::number(m_miner_diff));
+}
+
 void MiningFrame::walletOpened() {
   if(m_solo_mining)
     stopSolo();
 
   m_wallet_closed = false;
 
-  quint64 base_stake = NodeAdapter::instance().getBaseStake();
-  quint64 actualBalance = WalletAdapter::instance().getActualBalance();
-  quint64 lockedBalance = WalletAdapter::instance().getPendingBalance();
-  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(base_stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
-
-
-
-
   m_walletAddress = WalletAdapter::instance().getAddress();
+
+  calculateAndSetParams(true);
 }
 
 void MiningFrame::walletClosed() {
@@ -164,10 +192,12 @@ void MiningFrame::walletClosed() {
   m_wallet_closed = true;
   m_ui->m_startSolo->setEnabled(false);
   m_ui->m_stopSolo->isChecked();
+
+  // TODO: consider setting all dials to zeroes
 }
 
 void MiningFrame::startSolo() {
-  //m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->currentData().toUInt());
+  m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->m_cpuCoresSpin().value(), CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText());
   m_ui->m_soloLabel->setText(tr("Starting solo mining..."));
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
   m_minerRoutineTimerId = startTimer(MINER_ROUTINE_TIMER_INTERVAL);
