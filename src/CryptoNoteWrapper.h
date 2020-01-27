@@ -40,6 +40,7 @@ public:
   virtual uint64_t getLastLocalBlockTimestamp() const = 0;
   virtual uint64_t getPeerCount() = 0;
   virtual uint64_t getDifficulty() = 0;
+  virtual uint64_t getNextReward() = 0;
   virtual uint64_t getTxCount() = 0;
   virtual uint64_t getTxPoolSize() = 0;
   virtual uint64_t getAltBlocksCount() = 0;

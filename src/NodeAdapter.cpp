@@ -224,6 +224,11 @@ quint64 NodeAdapter::getDifficulty() {
   return m_node->getDifficulty();
 }
 
+quint64 NodeAdapter::getNextReward() {
+  Q_CHECK_PTR(m_node);
+  return m_node->getNextReward();
+}
+
 quint64 NodeAdapter::getTxCount() {
   Q_CHECK_PTR(m_node);
   return m_node->getTxCount();

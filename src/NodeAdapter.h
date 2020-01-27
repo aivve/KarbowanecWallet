@@ -44,6 +44,7 @@ public:
   quint64 getLastLocalBlockHeight() const;
   QDateTime getLastLocalBlockTimestamp() const;
   quint64 getDifficulty();
+  quint64 getNextReward();
   quint64 getTxCount();
   quint64 getTxPoolSize();
   quint64 getAltBlocksCount();

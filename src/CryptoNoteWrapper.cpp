@@ -204,6 +204,10 @@ public:
     return getLastLocalBlockHeaderInfo().majorVersion;
   }
 
+  uint64_t getNextReward() {
+    return m_node.getNextReward();
+  }
+
   uint64_t getBaseStake() {
     return m_node.getBaseStake();
   }
@@ -475,6 +479,10 @@ public:
 
   uint8_t getCurrentBlockMajorVersion() {
     return getLastLocalBlockHeaderInfo().majorVersion;
+  }
+
+  uint64_t getNextReward() {
+    return m_node.getNextReward();
   }
 
   uint64_t getBaseStake() {
