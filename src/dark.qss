@@ -105,5 +105,5 @@ QProgressBar {
 }
 
 #m_miningFrame #m_miningSplitter {
-  background-color: #32414B;
+  background-color: #19232D;
 }
