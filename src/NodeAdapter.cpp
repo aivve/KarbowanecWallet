@@ -304,17 +304,6 @@ void NodeAdapter::lastKnownBlockHeightUpdated(Node& _node, uint64_t _height) {
   Q_EMIT lastKnownBlockHeightUpdatedSignal(_height);
 }
 
-quint64 NodeAdapter::getStake() const {
-  Q_CHECK_PTR(m_node);
-  quint64 stake;
-  return m_node->getStake(stake) ? stake : CryptoNote::parameters::STAKE_MAX_LIMIT;
-}
-
-bool NodeAdapter::getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
-  Q_CHECK_PTR(m_node);
-  return m_node->getStake(blockMajorVersion, fee, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
-}
-
 bool NodeAdapter::prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {
   Q_CHECK_PTR(m_node);
   return m_node->prepareBlockTemplate(b, fee, adr, diffic, height, ex_nonce, median_size, txs_size, already_generated_coins);
@@ -323,6 +312,16 @@ bool NodeAdapter::prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, cons
 bool NodeAdapter::handleBlockFound(CryptoNote::Block& b) {
   Q_CHECK_PTR(m_node);
   return m_node->handleBlockFound(b);
+}
+
+quint64 NodeAdapter::getBaseStake() const {
+  Q_CHECK_PTR(m_node);
+  return m_node->getBaseStake();
+}
+
+bool NodeAdapter::getBlockReward(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, size_t currentBlockSize, uint64_t& alreadyGeneratedCoins, uint64_t& blockReward, int64_t& emissionChange) {
+  Q_CHECK_PTR(m_node);
+  return m_node->getBlockReward(blockMajorVersion, fee, medianSize, currentBlockSize, alreadyGeneratedCoins, blockReward, emissionChange);
 }
 
 bool NodeAdapter::initInProcessNode() {

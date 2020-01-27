@@ -42,15 +42,16 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   m_ui->m_hashRateChart->addGraph();
   m_ui->m_hashRateChart->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
   m_ui->m_hashRateChart->graph(0)->setLineStyle(QCPGraph::lsLine);
-  m_ui->m_hashRateChart->graph()->setPen(QPen(QRgb(0x34496d)));
-  m_ui->m_hashRateChart->graph()->setBrush(QBrush(QRgb(0xcbdef7)));
+  m_ui->m_hashRateChart->graph()->setPen(QPen(QRgb(0xe3e1e3)));
+  m_ui->m_hashRateChart->graph()->setBrush(QBrush(QRgb(0x0b1620)));
 
   QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
   dateTicker->setDateTimeFormat("hh:mm:ss");
   m_ui->m_hashRateChart->xAxis->setTicker(dateTicker);
-
   m_ui->m_hashRateChart->yAxis->setRange(0, m_maxHr);
   m_ui->m_hashRateChart->yAxis->setLabel("Hashrate");
+  m_ui->m_hashRateChart->xAxis->setTickPen(QPen(QRgb(0xe3e1e3)));
+  m_ui->m_hashRateChart->xAxis->setLabelColor(QRgb(0xe3e1e3));
 
   // make top and right axes visible but without ticks and labels
   m_ui->m_hashRateChart->xAxis2->setVisible(true);
@@ -60,13 +61,12 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   m_ui->m_hashRateChart->xAxis2->setTickLabels(false);
   m_ui->m_hashRateChart->yAxis2->setTickLabels(false);
 
-  m_ui->m_hashRateChart->setBackground(QBrush(QRgb(0xeef5fc)));
+  m_ui->m_hashRateChart->setBackground(QBrush(QRgb(0x19232d)));
 
   addPoint(QDateTime::currentDateTime().toTime_t(), 0);
   plot();
 
-  m_ui->m_stakeMixinSlider->setValue(3);
-  stakeMixinChanged(m_ui->m_stakeMixinSlider->value());
+  m_ui->m_mixinSpin->setValue(3);
 
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
@@ -130,15 +130,16 @@ void MiningFrame::initCpuCoreList() {
       cpuCoreCount = 2;
   }
 
-  for (int i = 0; i < cpuCoreCount; ++i) {
-    m_ui->m_cpuCombo->addItem(QString::number(i + 1), i + 1);
+  if (threads > 0) {
+    m_ui->m_cpuCoresSpin->setValue(threads);
+  } else {
+    m_ui->m_cpuCoresSpin->setValue((cpuCoreCount - 1) / 2);
   }
 
-  if (threads > 0) {
-    m_ui->m_cpuCombo->setCurrentIndex(m_ui->m_cpuCombo->findData(threads, Qt::DisplayRole));
-  } else {
-    m_ui->m_cpuCombo->setCurrentIndex((cpuCoreCount - 1) / 2);
-  }
+  m_ui->m_cpuCoresSpin->setMaximum(cpuCoreCount);
+  m_ui->m_cpuCoresSpin->setMinimum(1);
+  m_ui->m_cpuDial->setMaximum(cpuCoreCount);
+  m_ui->m_cpuDial->setMinimum(1);
 }
 
 void MiningFrame::walletOpened() {
@@ -147,12 +148,13 @@ void MiningFrame::walletOpened() {
 
   m_wallet_closed = false;
 
-  quint64 stake = NodeAdapter::instance().getStake();
+  quint64 base_stake = NodeAdapter::instance().getBaseStake();
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   quint64 lockedBalance = WalletAdapter::instance().getPendingBalance();
-  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
-  m_ui->m_availableLabel->setText(CurrencyAdapter::instance().formatAmount(actualBalance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
-  m_ui->m_lockedLabel->setText(CurrencyAdapter::instance().formatAmount(lockedBalance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(base_stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+
+
+
 
   m_walletAddress = WalletAdapter::instance().getAddress();
 }
@@ -165,7 +167,7 @@ void MiningFrame::walletClosed() {
 }
 
 void MiningFrame::startSolo() {
-  m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->currentData().toUInt());
+  //m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->currentData().toUInt());
   m_ui->m_soloLabel->setText(tr("Starting solo mining..."));
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
   m_minerRoutineTimerId = startTimer(MINER_ROUTINE_TIMER_INTERVAL);
@@ -214,35 +216,41 @@ void MiningFrame::startStopSoloClicked(QAbstractButton* _button) {
 }
 
 void MiningFrame::setMiningThreads() {
-  Settings::instance().setMiningThreads(m_ui->m_cpuCombo->currentText().toInt());
+  //Settings::instance().setMiningThreads(m_ui->m_cpuCombo->currentText().toInt());
 }
 
 void MiningFrame::onBlockHeightUpdated() {
   m_miner->on_block_chain_update();
-  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(NodeAdapter::instance().getStake()).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+  //m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(NodeAdapter::instance().getStake()).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
 }
 
 void MiningFrame::updateBalance(quint64 _balance) {
-  quint64 stake = NodeAdapter::instance().getStake();
-  if (_balance < stake) {
-    m_ui->m_soloLabel->setText(tr("Not enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
-    stopSolo();
-  }
-  else {
-    m_ui->m_soloLabel->setText(tr("You have enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
-    enableSolo();
-  }
-  m_ui->m_availableLabel->setText(CurrencyAdapter::instance().formatAmount(_balance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
-  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+  //quint64 stake = NodeAdapter::instance().getStake();
+  //if (_balance < stake) {
+  //  m_ui->m_soloLabel->setText(tr("Not enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
+  //  stopSolo();
+  //}
+  //else {
+  //  m_ui->m_soloLabel->setText(tr("You have enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
+  //  enableSolo();
+  //}
 }
 
 void MiningFrame::updatePendingBalance(quint64 _balance) {
-  m_ui->m_lockedLabel->setText(CurrencyAdapter::instance().formatAmount(_balance).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+
+}
+
+void MiningFrame::stakeAmountChanged(quint64 _value) {
+
 }
 
 void MiningFrame::stakeMixinChanged(int _value) {
   m_miner->stakeMixinChanged(_value);
-  m_ui->m_mixinLabel->setText(QString::number(_value));
+  //m_ui->m_mixinLabel->setText(QString::number(_value));
+}
+
+void MiningFrame::stakeTermChanged(quint32 _value) {
+
 }
 
 void MiningFrame::updateMinerLog(const QString& _message) {

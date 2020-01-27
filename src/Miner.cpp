@@ -64,7 +64,9 @@ namespace WalletGui
     m_template(boost::value_initialized<Block>()),
     m_template_no(0),
     m_diffic(0),
+    m_stake_amount(0),
     m_stake_mixin(3),
+    m_stake_term(0),
     m_pausers_count(0),
     m_threads_total(0),
     m_starter_nonce(0),
@@ -123,12 +125,13 @@ namespace WalletGui
     uint32_t height;
     CryptoNote::BinaryArray extra_nonce;
 
-    uint64_t fee;
-    size_t median_size;
-    size_t txs_size;
-    uint64_t already_generated_coins;
-    uint64_t reward;
-    uint64_t stake;
+    uint64_t fee = 0;
+    size_t median_size = 0;
+    size_t txs_size = 0;
+    uint64_t already_generated_coins = 0;
+    uint64_t reward = 0;
+    int64_t emussion_change = 0;
+    uint64_t base_stake = 0;
     Crypto::SecretKey stakeKey;
 
     uint64_t actualBalance = WalletAdapter::instance().getActualBalance();
@@ -140,23 +143,32 @@ namespace WalletGui
       return false;
     }
 
-    // get stake amount
-    if (!NodeAdapter::instance().getStake(bl.majorVersion, fee, median_size, already_generated_coins, txs_size, stake, reward)) {
-      qDebug() << "Failed to getStake(), stopping mining";
-      Q_EMIT minerMessageSignal(QString("Failed to getStake()"));
+    if (!NodeAdapter::instance().getBlockReward(bl.majorVersion, fee, median_size, already_generated_coins, txs_size, reward, emussion_change)) {
+      qDebug() << "Failed to getBlockReward(), stopping mining";
+      Q_EMIT minerMessageSignal(QString("Failed to get block reward"));
       return false;
     }
 
-    if (actualBalance < stake) {
+    // get base stake amount
+    base_stake = NodeAdapter::instance().getBaseStake();
+
+
+
+    if (actualBalance < m_stake_amount) {
       qDebug() << "Not enough balance for stake";
       Q_EMIT minerMessageSignal(QString("Not enough balance for stake"));
       return false;
     }
 
     // now get stake tx from wallet
-    if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str, stake, reward, m_stake_mixin,
-                                                       height + CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW_V1,
-                                                       "", bl.baseTransaction, stakeKey)) {
+    if (!WalletAdapter::instance().getStakeTransaction(m_mine_address_str,
+                                                       m_stake_amount,
+                                                       reward,
+                                                       m_stake_mixin,
+                                                       height + m_stake_term,
+                                                       "",
+                                                       bl.baseTransaction,
+                                                       stakeKey)) {
       qDebug() << "Failed to getStakeTransaction(), stopping mining";
       Q_EMIT minerMessageSignal(QString("Failed to getStakeTransaction()"));
       return false;
@@ -213,7 +225,7 @@ namespace WalletGui
     return !m_stop_mining;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::start(const std::string& address, size_t threads_count)
+  bool Miner::start(const std::string& address, size_t threads_count, uint64_t stake)
   {   
     if (!m_stop_mining) {
       qDebug() << "Starting miner but it's already started";
@@ -286,7 +298,7 @@ namespace WalletGui
   void Miner::on_synchronized()
   {
     if(m_do_mining) {
-      start(m_mine_address_str, m_threads_total);
+      start(m_mine_address_str, m_threads_total, m_stake_amount);
     }
   }
   //-----------------------------------------------------------------------------------------------------

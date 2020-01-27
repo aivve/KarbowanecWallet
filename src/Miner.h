@@ -47,7 +47,7 @@ namespace WalletGui {
 
     bool set_block_template(const Block& bl, const difficulty_type& diffic);
     bool on_block_chain_update();
-    bool start(const std::string& address, size_t threads_count);
+    bool start(const std::string& address, size_t threads_count, uint64_t stake);
     uint64_t get_speed();
     void send_stop_signal();
     bool stop();
@@ -57,7 +57,9 @@ namespace WalletGui {
     void pause();
     void resume();
     void merge_hr();
+    void stakeAmountChanged(uint64_t _stake);
     void stakeMixinChanged(int _mixin);
+    void stakeTermChanged(uint32_t _term);
 
   private:
     bool worker_thread(uint32_t th_local_index);
@@ -77,6 +79,9 @@ namespace WalletGui {
     std::atomic<uint32_t> m_template_no;
     std::atomic<uint32_t> m_starter_nonce;
     difficulty_type m_diffic;
+    uint64_t m_stake_amount;
+    uint32_t m_stake_term;
+    int m_stake_mixin;
 
     std::atomic<uint32_t> m_threads_total;
     std::atomic<int32_t> m_pausers_count;
@@ -98,7 +103,6 @@ namespace WalletGui {
     std::mutex m_last_hash_rates_lock;
     std::list<uint64_t> m_last_hash_rates;
     bool m_do_mining;
-    int m_stake_mixin;
 
   Q_SIGNALS:
     void minerMessageSignal(const QString& _message);

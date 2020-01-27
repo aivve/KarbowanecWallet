@@ -204,12 +204,25 @@ public:
     return getLastLocalBlockHeaderInfo().majorVersion;
   }
 
-  bool getStake(uint64_t& stake) {
-    return m_node.getStake(stake);
+  uint64_t getBaseStake() {
+    return m_node.getBaseStake();
   }
 
-  bool getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
-    return m_node.getStake(blockMajorVersion, fee, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
+  bool getBlockReward(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, size_t currentBlockSize, uint64_t& alreadyGeneratedCoins, uint64_t& blockReward, int64_t& emissionChange) {
+    auto getBlockRewardCompleted = std::promise<std::error_code>();
+    auto getBlockRewardWaitFuture = getBlockRewardCompleted.get_future();
+
+    m_node.getBlockReward(blockMajorVersion, fee, medianSize, currentBlockSize, alreadyGeneratedCoins, std::ref(blockReward), std::ref(emissionChange),
+      [&getBlockRewardCompleted](std::error_code ec) {
+      auto detachedPromise = std::move(getBlockRewardCompleted);
+      detachedPromise.set_value(ec);
+    });
+
+    std::error_code ec = getBlockRewardWaitFuture.get();
+
+    if (ec) {
+      //qDebug() << "Failed to get block reward: " << ec << ", " << ec.message();
+    }
   }
 
   bool prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {
@@ -464,12 +477,12 @@ public:
     return getLastLocalBlockHeaderInfo().majorVersion;
   }
 
-  bool getStake(uint64_t& stake) {
-    return m_core.getStake(stake);
+  uint64_t getBaseStake() {
+    return m_core.getBaseStake();
   }
 
-  bool getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) {
-    return m_core.getStake(blockMajorVersion, fee, medianSize, alreadyGeneratedCoins, currentBlockSize, stake, blockReward);
+  bool getBlockReward(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, size_t currentBlockSize, uint64_t& alreadyGeneratedCoins, uint64_t& blockReward, int64_t& emissionChange) {
+    return m_core.getBlockReward(blockMajorVersion, medianSize, currentBlockSize, alreadyGeneratedCoins, fee, blockReward, emissionChange);
   }
 
   bool prepareBlockTemplate(CryptoNote::Block& b, uint64_t& fee, const CryptoNote::AccountPublicAddress& adr, CryptoNote::difficulty_type& diffic, uint32_t& height, const CryptoNote::BinaryArray& ex_nonce, size_t& median_size, size_t& txs_size, uint64_t& already_generated_coins) {

@@ -63,7 +63,9 @@ private:
   Q_SLOT void onBlockHeightUpdated();
   Q_SLOT void updateBalance(quint64 _balance);
   Q_SLOT void updatePendingBalance(quint64 _balance);
+  Q_SLOT void stakeAmountChanged(quint64 _value);
   Q_SLOT void stakeMixinChanged(int _value);
+  Q_SLOT void stakeTermChanged(quint32 _value);
   Q_SLOT void updateMinerLog(const QString& _message);
 };
 
