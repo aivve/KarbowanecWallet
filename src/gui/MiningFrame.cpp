@@ -69,6 +69,8 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
 
   m_ui->m_mixinSpin->setValue(3);
 
+  m_ui->m_stakeAmountSpin->setSuffix(" " + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &MiningFrame::updateBalance, Qt::QueuedConnection);
@@ -197,7 +199,7 @@ void MiningFrame::walletClosed() {
 }
 
 void MiningFrame::startSolo() {
-  m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCombo->m_cpuCoresSpin().value(), CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText());
+  m_miner->start(m_walletAddress.toStdString(), m_ui->m_cpuCoresSpin->value(), CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText()));
   m_ui->m_soloLabel->setText(tr("Starting solo mining..."));
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
   m_minerRoutineTimerId = startTimer(MINER_ROUTINE_TIMER_INTERVAL);
@@ -246,24 +248,22 @@ void MiningFrame::startStopSoloClicked(QAbstractButton* _button) {
 }
 
 void MiningFrame::setMiningThreads() {
-  //Settings::instance().setMiningThreads(m_ui->m_cpuCombo->currentText().toInt());
+  Settings::instance().setMiningThreads(m_ui->m_cpuCoresSpin->value());
 }
 
 void MiningFrame::onBlockHeightUpdated() {
   m_miner->on_block_chain_update();
-  //m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(NodeAdapter::instance().getStake()).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+  m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(NodeAdapter::instance().getBaseStake()).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
 }
 
 void MiningFrame::updateBalance(quint64 _balance) {
-  //quint64 stake = NodeAdapter::instance().getStake();
-  //if (_balance < stake) {
-  //  m_ui->m_soloLabel->setText(tr("Not enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
-  //  stopSolo();
-  //}
-  //else {
-  //  m_ui->m_soloLabel->setText(tr("You have enough balance for mining with stake %1").arg(CurrencyAdapter::instance().formatAmount(stake)));
-  //  enableSolo();
-  //}
+  quint64 actualBalance = WalletAdapter::instance().getActualBalance();
+  quint64 baseReward = NodeAdapter::instance().getNextReward();
+  if (baseReward < actualBalance) {
+    enableSolo();
+  } else {
+    stopSolo();
+  }
 }
 
 void MiningFrame::updatePendingBalance(quint64 _balance) {
@@ -271,7 +271,15 @@ void MiningFrame::updatePendingBalance(quint64 _balance) {
 }
 
 void MiningFrame::stakeAmountChanged(quint64 _value) {
+  //m_miner->stakeAmountChanged(_value);
+}
 
+void MiningFrame::stakeAmountDialChanged(double _value) {
+  m_ui->m_stakeAmountSpin->setValue(_value);
+}
+
+void MiningFrame::stakeAmountSpinChanged(double _value) {
+  m_ui->m_stakeAmountDial->setValue(_value);
 }
 
 void MiningFrame::stakeMixinChanged(int _value) {
