@@ -120,6 +120,7 @@ namespace WalletGui
   }
   //-----------------------------------------------------------------------------------------------------
   bool Miner::request_block_template() {
+    qDebug() << "Requesting block template";
     Block bl = boost::value_initialized<Block>();
     CryptoNote::difficulty_type di = 0;
     uint32_t height;
@@ -401,6 +402,10 @@ namespace WalletGui
   void Miner::stakeAmountChanged(uint64_t _amount) {
     m_stake_amount = _amount;
     qDebug() << "Stake amount changed to " << m_stake_amount;
+
+    uint64_t base_stake = NodeAdapter::instance().getBaseStake();
+    difficulty_type baseDiff = NodeAdapter::instance().getDifficulty();
+    m_diffic = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(baseDiff, base_stake, m_stake_amount);
   }
 
   void Miner::stakeMixinChanged(int _mixin) {
