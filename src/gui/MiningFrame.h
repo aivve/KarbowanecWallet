@@ -43,6 +43,7 @@ private:
   std::unique_ptr<Miner> m_miner;
   QString m_miner_log;
   uint64_t m_available_balance;
+  uint64_t m_base_stake;
   uint64_t m_miner_diff;
   uint64_t m_stake_amount;
   uint32_t m_stake_term;
@@ -69,11 +70,9 @@ private:
   Q_SLOT void onBlockHeightUpdated();
   Q_SLOT void updateBalance(quint64 _balance);
   Q_SLOT void updatePendingBalance(quint64 _balance);
-  Q_SLOT void stakeAmountDialChanged(double _value);
-  Q_SLOT void stakeAmountSpinChanged(double _value);
-  Q_SLOT void stakeAmountChanged(quint64 _value);
+  Q_SLOT void stakeAmountChanged(int _value);
   Q_SLOT void stakeMixinChanged(int _value);
-  Q_SLOT void stakeTermChanged(quint32 _value);
+  Q_SLOT void stakeTermChanged(int _value);
   Q_SLOT void updateMinerLog(const QString& _message);
 };
 

@@ -229,15 +229,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="m_stakeAmountSpin">
+          <widget class="QSpinBox" name="m_stakeAmountSpin">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
-           </property>
-           <property name="decimals">
-            <number>12</number>
-           </property>
-           <property name="maximum">
-            <double>999999.99999999999</double>
            </property>
           </widget>
          </item>
@@ -565,11 +559,76 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>m_stakeAmountDial</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_stakeAmountSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>560</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_stakeAmountSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_stakeAmountDial</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>560</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_stakeAmountSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MiningFrame</receiver>
+   <slot>stakeAmountChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>560</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>379</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_termSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MiningFrame</receiver>
+   <slot>stakeTermChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>681</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>379</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>startStopClicked(QAbstractButton*)</slot>
   <slot>startStopSoloClicked(QAbstractButton*)</slot>
-  <slot>addPoolClicked()</slot>
+  <slot>stakeAmountChanged(int)</slot>
+  <slot>stakeTermChanged(int)</slot>
   <slot>stakeMixinChanged(int)</slot>
  </slots>
  <buttongroups>
