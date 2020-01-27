@@ -54,10 +54,6 @@ public:
   virtual CryptoNote::BlockHeaderInfo getLastLocalBlockHeaderInfo() = 0;
 
   virtual std::vector<CryptoNote::p2pConnection> getConnections() = 0;
-
-  virtual void startMining(const std::string& address, size_t threads_count) = 0;
-  virtual void stopMining() = 0;
-  virtual uint64_t getSpeed() = 0;
   
   virtual bool getStake(uint64_t& stake) = 0;
   virtual bool getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward) = 0;

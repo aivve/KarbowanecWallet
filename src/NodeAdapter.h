@@ -60,9 +60,6 @@ public:
   void peerCountUpdated(Node& _node, size_t _count) Q_DECL_OVERRIDE;
   void localBlockchainUpdated(Node& _node, uint64_t _height) Q_DECL_OVERRIDE;
   void lastKnownBlockHeightUpdated(Node& _node, uint64_t _height) Q_DECL_OVERRIDE;
-  void startSoloMining(QString _address, size_t _threads_count);
-  void stopSoloMining();
-  quint64 getSpeed() const;
 
   quint64 NodeAdapter::getStake() const;
   bool getStake(uint8_t blockMajorVersion, uint64_t fee, size_t& medianSize, uint64_t& alreadyGeneratedCoins, size_t currentBlockSize, uint64_t& stake, uint64_t& blockReward);
