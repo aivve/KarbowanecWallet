@@ -148,44 +148,44 @@ void MiningFrame::initCpuCoreList() {
 
 void MiningFrame::calculateAndSetParams(bool _init) {
   m_base_stake = NodeAdapter::instance().getBaseStake();
-  quint64 actualBalance = WalletAdapter::instance().getActualBalance();
+  quint64 m_available_balance = WalletAdapter::instance().getActualBalance();
   quint64 lockedBalance = WalletAdapter::instance().getPendingBalance();
   m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(m_base_stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
 
-  quint64 baseReward = NodeAdapter::instance().getNextReward();
-  m_ui->m_stakeAmountSpin->setMinimum(CurrencyAdapter::instance().formatAmount(baseReward).toDouble());
-  m_ui->m_stakeAmountDial->setMinimum(CurrencyAdapter::instance().formatAmount(baseReward).toDouble());
-  m_ui->m_stakeAmountSpin->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(actualBalance, m_base_stake)).toDouble());
-  m_ui->m_stakeAmountDial->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(actualBalance, m_base_stake)).toDouble());
+  m_base_reward = NodeAdapter::instance().getNextReward();
+  m_ui->m_stakeAmountSpin->setMinimum(CurrencyAdapter::instance().formatAmount(m_base_reward).toDouble());
+  m_ui->m_stakeAmountDial->setMinimum(CurrencyAdapter::instance().formatAmount(m_base_reward).toDouble());
+  m_ui->m_stakeAmountSpin->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(m_available_balance, m_base_stake)).toDouble());
+  m_ui->m_stakeAmountDial->setMaximum(CurrencyAdapter::instance().formatAmount(std::min<uint64_t>(m_available_balance, m_base_stake)).toDouble());
 
   if (_init) {
-    m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(std::max<uint64_t>(actualBalance, baseReward)).toDouble());
+    m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(std::max<uint64_t>(m_available_balance, m_base_reward)).toDouble());
   } else {
-    if (actualBalance >= m_stake_amount) {
+    if (m_available_balance >= m_stake_amount) {
       m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(m_stake_amount).toDouble());
     } else {
-      m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(baseReward).toDouble());
+      m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(m_base_reward).toDouble());
     }
   }
 
   m_stake_amount = CurrencyAdapter::instance().parseAmount(m_ui->m_stakeAmountSpin->cleanText());
   m_stake_term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, m_stake_amount);
 
-  uint32_t minTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, actualBalance);
+  uint32_t minTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, m_available_balance);
   m_ui->m_termSpin->setMinimum(minTerm);
   m_ui->m_termDial->setMinimum(minTerm);
 
-  uint32_t maxTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, baseReward);
+  uint32_t maxTerm = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, m_base_reward);
   m_ui->m_termSpin->setMaximum(maxTerm);
   m_ui->m_termDial->setMaximum(maxTerm);
 
   m_ui->m_termSpin->setValue(m_stake_term);
 
-  uint64_t baseDiff = NodeAdapter::instance().getDifficulty();
-  m_ui->m_baseDiff->setText(QString::number(baseDiff));
+  m_base_diff = NodeAdapter::instance().getDifficulty();
+  m_ui->m_baseDiff->setText(QString::number(m_base_diff));
 
-  m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(baseDiff, m_base_stake, m_stake_amount);
-  m_ui->m_minerDiff->setText(m_stake_amount >= baseReward ? QString::number(m_miner_diff) : "∞");
+  m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(m_base_diff, m_base_stake, m_stake_amount);
+  m_ui->m_minerDiff->setText(m_stake_amount >= m_base_reward ? QString::number(m_miner_diff) : "∞");
 
   m_miner->stakeAmountChanged(m_stake_amount);
 }
@@ -266,7 +266,6 @@ void MiningFrame::setMiningThreads() {
 
 void MiningFrame::onBlockHeightUpdated() {
   calculateAndSetParams(false);
-  m_base_stake = NodeAdapter::instance().getBaseStake();
   m_miner->on_block_chain_update();
   m_ui->m_stakeLabel->setText(CurrencyAdapter::instance().formatAmount(m_base_stake).remove(',') + ' ' + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
 }
@@ -286,12 +285,14 @@ void MiningFrame::updatePendingBalance(quint64 _balance) {
 }
 
 void MiningFrame::stakeAmountChanged(int _value) {
-  uint64_t stake = CurrencyAdapter::instance().parseAmount(QString::number(_value));
-  uint64_t term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, stake);
-  m_ui->m_termSpin->setValue(term);
-  m_stake_term = term;
+  m_stake_amount = CurrencyAdapter::instance().parseAmount(QString::number(_value));
+  m_stake_term = CurrencyAdapter::instance().getCurrency().calculateStakeDepositTerm(m_base_stake, m_stake_amount);
+  m_ui->m_termSpin->setValue(m_stake_term);
 
-  m_miner->stakeAmountChanged(stake);
+  m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(m_base_diff, m_base_stake, m_stake_amount);
+  m_ui->m_minerDiff->setText(m_stake_amount >= m_base_reward ? QString::number(m_miner_diff) : "∞");
+
+  m_miner->stakeAmountChanged(m_stake_amount);
 }
 
 void MiningFrame::stakeTermChanged(int _value) {
