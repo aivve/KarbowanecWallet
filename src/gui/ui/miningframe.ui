@@ -33,13 +33,6 @@
        <string>State</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="1">
-        <widget class="QLabel" name="m_minerDiff">
-         <property name="text">
-          <string>0</string>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="1">
         <widget class="QPushButton" name="m_stopSolo">
          <property name="enabled">
@@ -57,13 +50,6 @@
          <attribute name="buttonGroup">
           <string notr="true">m_soloButtonGroup</string>
          </attribute>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="m_baseDiff">
-         <property name="text">
-          <string>0</string>
-         </property>
         </widget>
        </item>
        <item row="3" column="0">
@@ -120,7 +106,7 @@
        <item row="0" column="1">
         <widget class="QLabel" name="m_stakeLabel">
          <property name="text">
-          <string>0</string>
+          <string notr="true">0</string>
          </property>
         </widget>
        </item>
@@ -135,6 +121,32 @@
         <widget class="QLabel" name="m_soloLabel">
          <property name="text">
           <string>Stopped</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QProgressBar" name="m_baseDiff">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+         <property name="format">
+          <string notr="true">%v</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QProgressBar" name="m_minerDiff">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+         <property name="format">
+          <string notr="true">%v</string>
          </property>
         </widget>
        </item>
@@ -303,6 +315,12 @@
          </item>
          <item>
           <widget class="QSpinBox" name="m_termSpin">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>

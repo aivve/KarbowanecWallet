@@ -46,9 +46,12 @@ private:
   uint64_t m_base_stake;
   uint64_t m_base_reward;
   uint64_t m_base_diff;
+  uint64_t m_max_diff;
   uint64_t m_miner_diff;
   uint64_t m_stake_amount;
   uint32_t m_stake_term;
+  QString m_baseDiffText;
+  QString m_minerDiffText;
 
   void initCpuCoreList();
   void startSolo();

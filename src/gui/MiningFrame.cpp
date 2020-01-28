@@ -68,8 +68,13 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   plot();
 
   m_ui->m_mixinSpin->setValue(3);
-
   m_ui->m_stakeAmountSpin->setSuffix(" " + CurrencyAdapter::instance().getCurrencyTicker().toUpper());
+  m_ui->m_baseDiff->setMinimum(0);
+  m_ui->m_minerDiff->setMinimum(0);
+  m_ui->m_baseDiff->setMaximum(100);
+  m_ui->m_minerDiff->setMaximum(100);
+  m_ui->m_baseDiff->setFormat(m_baseDiffText);
+  m_ui->m_minerDiff->setFormat(m_minerDiffText);
 
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &MiningFrame::walletClosed, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
@@ -182,10 +187,17 @@ void MiningFrame::calculateAndSetParams(bool _init) {
   m_ui->m_termSpin->setValue(m_stake_term);
 
   m_base_diff = NodeAdapter::instance().getDifficulty();
-  m_ui->m_baseDiff->setText(QString::number(m_base_diff));
-
+  m_max_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(m_base_diff, m_base_stake, m_base_reward);
   m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(m_base_diff, m_base_stake, m_stake_amount);
-  m_ui->m_minerDiff->setText(m_stake_amount >= m_base_reward ? QString::number(m_miner_diff) : "∞");
+
+  int baseDiffVal = std::max<int>(1,(int)((double)m_base_diff * 100 / (double)m_max_diff));
+  int minrDiffVal = (int)((double)m_miner_diff * 100 / (double)m_max_diff);
+  m_ui->m_baseDiff->setValue(baseDiffVal);
+  m_ui->m_minerDiff->setValue(minrDiffVal);
+  m_baseDiffText = QString::number(m_base_diff);
+  m_minerDiffText = QString::number(m_miner_diff);
+  m_ui->m_baseDiff->setFormat(m_baseDiffText);
+  m_ui->m_minerDiff->setFormat(m_minerDiffText);
 
   m_miner->stakeAmountChanged(m_stake_amount);
 }
@@ -290,7 +302,10 @@ void MiningFrame::stakeAmountChanged(int _value) {
   m_ui->m_termSpin->setValue(m_stake_term);
 
   m_miner_diff = CurrencyAdapter::instance().getCurrency().calculateStakeDifficulty(m_base_diff, m_base_stake, m_stake_amount);
-  m_ui->m_minerDiff->setText(m_stake_amount >= m_base_reward ? QString::number(m_miner_diff) : "∞");
+  int minrDiffVal = (int)((double)m_miner_diff * 100 / (double)m_max_diff);
+  m_ui->m_minerDiff->setValue(minrDiffVal);
+  m_minerDiffText = QString::number(m_miner_diff);
+  m_ui->m_minerDiff->setFormat(m_minerDiffText);
 
   m_miner->stakeAmountChanged(m_stake_amount);
 }

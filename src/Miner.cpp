@@ -401,7 +401,7 @@ namespace WalletGui
 
   void Miner::stakeAmountChanged(uint64_t _amount) {
     m_stake_amount = _amount;
-    qDebug() << "Stake amount changed to " << m_stake_amount;
+    //qDebug() << "Stake amount changed to " << m_stake_amount;
 
     uint64_t base_stake = NodeAdapter::instance().getBaseStake();
     difficulty_type baseDiff = NodeAdapter::instance().getDifficulty();
