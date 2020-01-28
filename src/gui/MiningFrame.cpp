@@ -299,6 +299,7 @@ void MiningFrame::stakeTermChanged(int _value) {
   quint64 actualTerm = (quint64)_value;
   quint64 amount = CurrencyAdapter::instance().getCurrency().calculateStakeDepositAmount(m_base_stake, actualTerm);
   m_ui->m_stakeAmountSpin->setValue(CurrencyAdapter::instance().formatAmount(amount).toDouble());
+  m_ui->m_termSpin->setSuffix(QString(tr(" ~ %1 day(s)")).arg(QString::number((double)actualTerm / (double)CurrencyAdapter::instance().getCurrency().expectedNumberOfBlocksPerDay(), 'f', 2)));
 }
 
 void MiningFrame::stakeMixinChanged(int _value) {
