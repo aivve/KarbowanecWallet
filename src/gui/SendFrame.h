@@ -63,6 +63,7 @@ private:
   Q_SLOT void openUriClicked();
   Q_SLOT void generatePaymentIdClicked();
   Q_SLOT void advancedClicked(bool _show);
+  Q_SLOT void overtToggled(bool _overt);
 
 Q_SIGNALS:
   void uriOpenSignal();

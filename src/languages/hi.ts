@@ -787,47 +787,47 @@ Please wait...</source>
         <translation>प्राइवेट की इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="616"/>
+        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sign message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="621"/>
+        <location filename="../gui/ui/mainwindow.ui" line="616"/>
         <source>Verify signed message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="626"/>
+        <location filename="../gui/ui/mainwindow.ui" line="621"/>
         <source>Optimization</source>
         <translation type="unfinished">अनुकूलन</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="631"/>
+        <location filename="../gui/ui/mainwindow.ui" line="626"/>
         <source>Get proof of balance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="636"/>
+        <location filename="../gui/ui/mainwindow.ui" line="631"/>
         <source>Import keys</source>
         <translation>की इम्पोर्ट हो रही हैं</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="644"/>
+        <location filename="../gui/ui/mainwindow.ui" line="639"/>
         <source>Don&apos;t show wallet optimization transactions</source>
         <translation>वॉलेट अनुकूलन लेनदेन न दिखाएं</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="649"/>
+        <location filename="../gui/ui/mainwindow.ui" line="644"/>
         <source>Lock wallet</source>
         <translation>बटुआ बंद करो</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="652"/>
+        <location filename="../gui/ui/mainwindow.ui" line="647"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="660"/>
+        <location filename="../gui/ui/mainwindow.ui" line="655"/>
         <source>Hide everything when wallet is locked</source>
         <translation>वॉलेट लॉक होने पर सब कुछ छिपाएं</translation>
     </message>
@@ -887,7 +887,7 @@ Please wait...</source>
     </message>
     <message>
         <location filename="../gui/ui/mainwindow.ui" line="583"/>
-        <location filename="../gui/ui/mainwindow.ui" line="665"/>
+        <location filename="../gui/ui/mainwindow.ui" line="660"/>
         <source>Information</source>
         <translation>जानकारी</translation>
     </message>
@@ -916,9 +916,8 @@ Please wait...</source>
         <translation type="vanished">पूल माइनिंग स्वतः शुरू करें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sweep unmixable</source>
-        <translation>मिक्स नहीं होने वालों को स्वीप करें</translation>
+        <translation type="vanished">मिक्स नहीं होने वालों को स्वीप करें</translation>
     </message>
 </context>
 <context>
@@ -1482,8 +1481,8 @@ Do you want to go to download page?</source>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="167"/>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>विकास कोष में 0.1% दान करें:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>विकास कोष में 0.1% दान करें</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -1514,47 +1513,57 @@ Do you want to go to download page?</source>
         <translation>गुमनाम स्तर:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
+        <source>Donate 0.1%:</source>
+        <translation>0.1% दान करें:</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="192"/>
         <source>Priority:</source>
-        <translation type="unfinished"></translation>
+        <translation>प्राथमिकता:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="389"/>
+        <location filename="../gui/ui/sendframe.ui" line="376"/>
         <source>Manual fee override:</source>
-        <translation type="unfinished"></translation>
+        <translation>मैनुअल शुल्क ओवरराइड:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="383"/>
+        <source>Send overt transaction</source>
+        <translation>सार्वजनिक लेनदेन भेजें</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="421"/>
         <source>Send</source>
         <translation>भेजें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="435"/>
         <source>Send All</source>
-        <translation type="unfinished"></translation>
+        <translation>सब भेजें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="446"/>
         <source>Clear All</source>
         <translation>सभी हटायें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="457"/>
         <source>Add Recipient</source>
         <translation>प्राप्तकर्ता को जोड़ें</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="468"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>उन्नत</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="501"/>
         <source>Wallet is connected through remote node. Additional 0.25% fee will be applied.</source>
         <translation>वॉलेट रिमोट नोड के माध्यम से जुड़ा हुआ है। अतिरिक्त 0.25% शुल्क लागू किया जाएगा।</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="504"/>
         <source>Remote mode</source>
         <translation>रिमोट नोड मोड</translation>
     </message>
@@ -2646,53 +2655,64 @@ Are you sure?</source>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
-        <location filename="../gui/SendFrame.cpp" line="332"/>
+        <location filename="../gui/SendFrame.cpp" line="349"/>
         <source>Invalid recipient address</source>
         <translation>अमान्य प्राप्तकर्ता पता</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="296"/>
-        <location filename="../gui/SendFrame.cpp" line="446"/>
+        <location filename="../gui/SendFrame.cpp" line="292"/>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="293"/>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="313"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Incorrect password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Wrong password.</source>
         <translation>गलत पासवर्ड।</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="371"/>
+        <location filename="../gui/SendFrame.cpp" line="388"/>
         <source>Incorrect fee value</source>
         <translation>गलत शुल्क मूल्य</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Insufficient balance</source>
         <translation>अपर्याप्त बैलेंस</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>उपलब्ध बैलेंस इस लेनदेन को भेजने के लिए अपर्याप्त है। क्या आपने शुल्क हटा लिया है?</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="404"/>
         <source>Invalid payment ID</source>
         <translation>अमान्य भुगतान आईडी</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="451"/>
+        <location filename="../gui/SendFrame.cpp" line="468"/>
         <source>Sweep unmixable dust</source>
         <translation>मिक्स नहीं होने वालों को स्वीप करें</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="469"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>आपके पास गैर-मिश्रित सिक्के हैं जो केवल शून्य गोपनीयता स्तर के साथ खर्च किए जा सकते हैं।

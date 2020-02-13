@@ -772,7 +772,7 @@ Por favor aguarde...</translation>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Limpar não-misturável</translation>
+        <translation type="vanished">Limpar não-misturável</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1365,8 +1365,8 @@ Você quer ir à página de dowload?</translation>
         <translation>Identificador de pagamento emitido pelo destinatário (bolsa de valores, loja ou outra instituição)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Faça uma contribuição de 0,1% para o desenvolvimento:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Faça uma contribuição de 0,1% para o desenvolvimento</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1411,6 +1411,14 @@ Você quer ir à página de dowload?</translation>
     <message>
         <source>Send All</source>
         <translation>Enviar tudo</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Doe 0.1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Transação aberta</translation>
     </message>
 </context>
 <context>
@@ -2386,6 +2394,15 @@ Você tem certeza?</translation>
  Shall we continue with zero privacy?</source>
         <translation>Você tem moedas não misturáveis que só podem ser gastas com nível de privacidade zero.
 Devemos continuar com zero privacidade?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1226,7 +1226,7 @@ Do you want to go to download page?</source>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="128"/>
-        <source>Donate 0.1% to development fund:</source>
+        <source>Donate 0.1% to development fund</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

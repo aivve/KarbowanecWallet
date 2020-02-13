@@ -752,7 +752,7 @@ Proszę czekać...</translation>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Zmieszaj nieosiągalne wyjścia</translation>
+        <translation type="vanished">Zmieszaj nieosiągalne wyjścia</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1340,8 +1340,8 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
         <translation>Identyfikator płatności wydany przez odbiorcę (giełdę, sklep czy inną jednostkę)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Wpłać 0,1% do funduszu rozwoju:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Wpłać 0,1% do funduszu rozwoju</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1386,6 +1386,14 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     <message>
         <source>Send All</source>
         <translation>Wyślij wszystko</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Datek 0.1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Otwarta transakcja</translation>
     </message>
 </context>
 <context>
@@ -2377,6 +2385,15 @@ Jesteś pewien?</translation>
  Shall we continue with zero privacy?</source>
         <translation>Masz nie mieszające się monety, które można wydać tylko przy zerowym poziomie prywatności.
 Czy kontynuować bez prywatności?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

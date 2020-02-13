@@ -748,7 +748,7 @@ Please wait...</source>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>ارز غیر قابل ارسال را بازگردانی کن</translation>
+        <translation type="vanished">ارز غیر قابل ارسال را بازگردانی کن</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1344,10 +1344,6 @@ Do you want to go to download page?</source>
         <translation>شناسه پرداخت که باید توسط گیرنده قبل از واریز برای شما ارسال شود. معمولا برای ارسال به صرافی ها مورد استفاده قرار میگیرد</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>ارسال 0.1% برای برنامه نویسان پروژه جهت ارتقا آن</translation>
-    </message>
-    <message>
         <source>Generate Payment ID</source>
         <translation>ایجاد شناسه پرداخت</translation>
     </message>
@@ -1390,6 +1386,18 @@ Do you want to go to download page?</source>
     <message>
         <source>Send All</source>
         <translation>ارسال همه</translation>
+    </message>
+    <message>
+        <source>Donate 0.1% to development fund</source>
+        <translation>ارسال 0.1% برای برنامه نویسان پروژه جهت ارتقا آن</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>اهدا 0.1٪:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>ارسال معامله آشکار</translation>
     </message>
 </context>
 <context>
@@ -2126,7 +2134,7 @@ Are you sure?</source>
     </message>
     <message>
         <source>Karbo Wallet %2</source>
-        <translation>کیف پول کربو %2</translation>
+        <translation type="vanished">کیف پول کربو %2</translation>
     </message>
     <message>
         <source>Recent wallet file not found</source>
@@ -2368,6 +2376,15 @@ Are you sure?</source>
  Shall we continue with zero privacy?</source>
         <translation>شما سکه های غیر قابل مخلوطی دارید که فقط با سطح حریم شخصی صفر می توانید هزینه کنید.
 آیا ما با حریم صفر ادامه خواهیم داد؟</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

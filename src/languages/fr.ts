@@ -768,7 +768,7 @@ S&apos;il vous plaît, patientez...</translation>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Balayer Non Mélangeables</translation>
+        <translation type="vanished">Balayer Non Mélangeables</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1364,8 +1364,8 @@ Voulez-vous aller à la page de téléchargement?</translation>
         <translation>Identifiant de paiement émis par le bénéficiaire (échange, magasin ou autre entité)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Faire un don de 0,1% au fonds de développement:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Faire un don de 0,1% au fonds de développement</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1414,6 +1414,14 @@ Voulez-vous aller à la page de téléchargement?</translation>
     <message>
         <source>Send All</source>
         <translation>Envoyer tout</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Donnez 0.1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Transaction ouverte</translation>
     </message>
 </context>
 <context>
@@ -2385,6 +2393,15 @@ Are you sure?</source>
  Shall we continue with zero privacy?</source>
         <translation>Vous avez des pièces incassables qui ne peuvent être dépensées qu&apos;avec un niveau de confidentialité nul.
 Pouvons-nous continuer sans aucune confidentialité?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

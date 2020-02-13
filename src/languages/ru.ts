@@ -752,7 +752,7 @@ Please wait...</source>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Убрать несмешиваемые</translation>
+        <translation type="vanished">Убрать несмешиваемые</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1340,8 +1340,8 @@ Do you want to go to download page?</source>
         <translation>Идентификатор платежа выданный получателем (биржей, магазином или другим учреждением)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Пожертвуйте 0,1% в фонд разработки:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Пожертвуйте 0,1% в фонд разработки</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1386,6 +1386,14 @@ Do you want to go to download page?</source>
     <message>
         <source>Send All</source>
         <translation>Послать все</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Пожертвуйте 0.1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Откровенная транзакция</translation>
     </message>
 </context>
 <context>
@@ -2370,6 +2378,15 @@ Are you sure?</source>
  Shall we continue with zero privacy?</source>
         <translation>У вас есть несмешиваемые монеты, которые можно потратить только с нулевым уровнем конфиденциальности.
 Продолжать с нулевой приватностью?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

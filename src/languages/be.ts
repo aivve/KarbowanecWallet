@@ -756,7 +756,7 @@ Please wait...</source>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Прыбраць нязмешвальных</translation>
+        <translation type="vanished">Прыбраць нязмешвальных</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1344,8 +1344,8 @@ Do you want to go to download page?</source>
         <translation>Ідэнтыфікатар плацяжу выдадзены атрымальнікам (біржай, крамай ці іншы)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Ахвяруйце 0,1% у фонд развіцця:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Ахвяруйце 0,1% у фонд развіцця</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1390,6 +1390,14 @@ Do you want to go to download page?</source>
     <message>
         <source>Send All</source>
         <translation>Выслаць усе</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Ахвяруйце 0,1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Адкрытая транзакцыя</translation>
     </message>
 </context>
 <context>
@@ -2381,6 +2389,15 @@ Are you sure?</source>
  Shall we continue with zero privacy?</source>
         <translation>У вас ёсць нязмешвальныя монеты, якія можна выдаткаваць толькі з нулевым узроўнем канфідэнцыяльнасці.
 Працягваць з нулевай прыватнасцю?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

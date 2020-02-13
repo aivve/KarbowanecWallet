@@ -758,7 +758,7 @@ Por favor, espera...</translation>
     </message>
     <message>
         <source>Sweep unmixable</source>
-        <translation>Barrer no-mezclables</translation>
+        <translation type="vanished">Barrer no-mezclables</translation>
     </message>
     <message>
         <source>Sign message</source>
@@ -1358,8 +1358,8 @@ Do you want to go to download page?</source>
         <translation>Identificador de pago emitido por beneficiario (bolsa, tienda u otra entidad)</translation>
     </message>
     <message>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Donar 0.1% al fondo de desarrollo:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Donar 0.1% al fondo de desarrollo</translation>
     </message>
     <message>
         <source>Generate Payment ID</source>
@@ -1404,6 +1404,14 @@ Do you want to go to download page?</source>
     <message>
         <source>Send All</source>
         <translation>Enviar todo</translation>
+    </message>
+    <message>
+        <source>Donate 0.1%:</source>
+        <translation>Done 0.1%:</translation>
+    </message>
+    <message>
+        <source>Send overt transaction</source>
+        <translation>Transacción abierta</translation>
     </message>
 </context>
 <context>
@@ -2377,6 +2385,15 @@ Are you sure?</source>
  Shall we continue with zero privacy?</source>
         <translation>Tiene monedas no mezclables que solo se pueden gastar con un nivel de privacidad cero.
 ¿Continuamos con cero privacidad?</translation>
+    </message>
+    <message>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -791,47 +791,47 @@ Please wait...</source>
         <translation>개인 키 불러오기</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="616"/>
+        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sign message</source>
         <translation>메시지에 서명</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="621"/>
+        <location filename="../gui/ui/mainwindow.ui" line="616"/>
         <source>Verify signed message</source>
         <translation>서명 된 메시지 확인</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="626"/>
+        <location filename="../gui/ui/mainwindow.ui" line="621"/>
         <source>Optimization</source>
         <translation>최적화</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="631"/>
+        <location filename="../gui/ui/mainwindow.ui" line="626"/>
         <source>Get proof of balance</source>
         <translation>잔액 확인</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="636"/>
+        <location filename="../gui/ui/mainwindow.ui" line="631"/>
         <source>Import keys</source>
         <translation>키 불러오는 중</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="644"/>
+        <location filename="../gui/ui/mainwindow.ui" line="639"/>
         <source>Don&apos;t show wallet optimization transactions</source>
         <translation>지갑 최적화 거래를 표시하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="649"/>
+        <location filename="../gui/ui/mainwindow.ui" line="644"/>
         <source>Lock wallet</source>
         <translation>지갑 잠금</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="652"/>
+        <location filename="../gui/ui/mainwindow.ui" line="647"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="660"/>
+        <location filename="../gui/ui/mainwindow.ui" line="655"/>
         <source>Hide everything when wallet is locked</source>
         <translation>지갑이 잠겨있을 때 모든 것을 숨기기</translation>
     </message>
@@ -891,7 +891,7 @@ Please wait...</source>
     </message>
     <message>
         <location filename="../gui/ui/mainwindow.ui" line="583"/>
-        <location filename="../gui/ui/mainwindow.ui" line="665"/>
+        <location filename="../gui/ui/mainwindow.ui" line="660"/>
         <source>Information</source>
         <translation>정보</translation>
     </message>
@@ -920,9 +920,8 @@ Please wait...</source>
         <translation type="vanished">자동 풀 마이닝 시작</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sweep unmixable</source>
-        <translation>혼합불가 제거</translation>
+        <translation type="vanished">혼합불가 제거</translation>
     </message>
 </context>
 <context>
@@ -1506,8 +1505,8 @@ Do you want to go to download page?</source>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="167"/>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>개발 자금에 0.1% 기부:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>개발 자금에 0.1% 기부</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -1530,40 +1529,50 @@ Do you want to go to download page?</source>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="92"/>
         <source>Payment ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>결제 ID:</translation>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="160"/>
         <source>Anonymity:</source>
-        <translation type="unfinished"></translation>
+        <translation>익명:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
+        <source>Donate 0.1%:</source>
+        <translation>0.1% 기부:</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="192"/>
         <source>Priority:</source>
-        <translation type="unfinished"></translation>
+        <translation>우선 순위:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="389"/>
+        <location filename="../gui/ui/sendframe.ui" line="376"/>
         <source>Manual fee override:</source>
-        <translation type="unfinished"></translation>
+        <translation>수동 수수료 무시:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="383"/>
+        <source>Send overt transaction</source>
+        <translation>공공 거래</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="421"/>
         <source>Send</source>
         <translation>전송</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="435"/>
         <source>Send All</source>
-        <translation type="unfinished"></translation>
+        <translation>모두 보내기</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="446"/>
         <source>Clear All</source>
         <translation>모두 삭제</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="457"/>
         <source>Add Recipient</source>
         <translation>
 
@@ -1593,17 +1602,17 @@ Do you want to go to download page?</source>
 </translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="468"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="501"/>
         <source>Wallet is connected through remote node. Additional 0.25% fee will be applied.</source>
         <translation>지갑은 원격 노드를 통해 연결되었습니다. 추가 0.25% 수수료가 부과됩니다.</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="504"/>
         <source>Remote mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2698,53 +2707,64 @@ Are you sure?</source>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
-        <location filename="../gui/SendFrame.cpp" line="332"/>
+        <location filename="../gui/SendFrame.cpp" line="349"/>
         <source>Invalid recipient address</source>
         <translation>유효하지 않은 수신자 주소</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="296"/>
-        <location filename="../gui/SendFrame.cpp" line="446"/>
+        <location filename="../gui/SendFrame.cpp" line="292"/>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="293"/>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="313"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
         <translation>잔액 불충분.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Incorrect password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Wrong password.</source>
         <translation>잘못된 비밀번호.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="371"/>
+        <location filename="../gui/SendFrame.cpp" line="388"/>
         <source>Incorrect fee value</source>
         <translation>유효하지 않은 비용값</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Insufficient balance</source>
         <translation>잔액 부족</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>사용 가능한 잔액으로 이 거래를 보낼 수 없습니다. 수수료를 제외했습니까?</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="404"/>
         <source>Invalid payment ID</source>
         <translation>유효하지 않은 지불 ID</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="451"/>
+        <location filename="../gui/SendFrame.cpp" line="468"/>
         <source>Sweep unmixable dust</source>
         <translation>혼합불가 제거</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="469"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>개인 정보 보호 수준이 0 인 경우에만 사용할 수있는 혼합 불가능한 동전이 있습니다.

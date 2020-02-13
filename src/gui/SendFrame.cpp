@@ -288,6 +288,23 @@ void SendFrame::parsePaymentRequest(QString _request) {
     }
 }
 
+void SendFrame::overtToggled(bool _overt) {
+    int ret = QMessageBox::question(nullptr, tr("Overt transaction"),
+                                    tr("You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.\n Do you really want to send overt transaction?"),
+                                    QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    switch (ret) {
+      case QMessageBox::Yes:
+          m_ui->m_overtCheckBox->setCheckState(Qt::Checked);
+          break;
+      case QMessageBox::No:
+          m_ui->m_overtCheckBox->setCheckState(Qt::Unchecked);
+          return;
+      default:
+          // should never be reached
+          break;
+    }
+}
+
 void SendFrame::sendClicked() {
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   if (actualBalance < NodeAdapter::instance().getMinimalFee()) {
@@ -388,7 +405,7 @@ void SendFrame::sendClicked() {
         return;
       }
 
-      WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+      WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value(), m_ui->m_overtCheckBox->isChecked());
     }
   }
 }

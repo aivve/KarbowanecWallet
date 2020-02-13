@@ -806,47 +806,47 @@ Please wait...</source>
         <translation>استيراد المفتاح الخاص</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="616"/>
+        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sign message</source>
         <translation type="unfinished">العنوان</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="621"/>
+        <location filename="../gui/ui/mainwindow.ui" line="616"/>
         <source>Verify signed message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="626"/>
+        <location filename="../gui/ui/mainwindow.ui" line="621"/>
         <source>Optimization</source>
         <translation>الاقوي</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="631"/>
+        <location filename="../gui/ui/mainwindow.ui" line="626"/>
         <source>Get proof of balance</source>
         <translation>تأكيد التوازن</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="636"/>
+        <location filename="../gui/ui/mainwindow.ui" line="631"/>
         <source>Import keys</source>
         <translation>استيراد المفاتيح</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="644"/>
+        <location filename="../gui/ui/mainwindow.ui" line="639"/>
         <source>Don&apos;t show wallet optimization transactions</source>
         <translation>لا تُظهر معاملات تحسين المحفظة</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="649"/>
+        <location filename="../gui/ui/mainwindow.ui" line="644"/>
         <source>Lock wallet</source>
         <translation>قفل المحفظة</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="652"/>
+        <location filename="../gui/ui/mainwindow.ui" line="647"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="660"/>
+        <location filename="../gui/ui/mainwindow.ui" line="655"/>
         <source>Hide everything when wallet is locked</source>
         <translation>إخفاء كل شيء عندما يتم تأمين المحفظة</translation>
     </message>
@@ -906,7 +906,7 @@ Please wait...</source>
     </message>
     <message>
         <location filename="../gui/ui/mainwindow.ui" line="583"/>
-        <location filename="../gui/ui/mainwindow.ui" line="665"/>
+        <location filename="../gui/ui/mainwindow.ui" line="660"/>
         <source>Information</source>
         <translation>معلومات</translation>
     </message>
@@ -935,9 +935,8 @@ Please wait...</source>
         <translation type="vanished">بدء التعدين الجماعي تلقائياً</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sweep unmixable</source>
-        <translation>زر الدفعات القديمة</translation>
+        <translation type="vanished">زر الدفعات القديمة</translation>
     </message>
 </context>
 <context>
@@ -1522,8 +1521,8 @@ Do you want to go to download page?</source>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="167"/>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>تبرع 0.1% لصندوق التطوير:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>تبرع 0.1% لصندوق التطوير</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -1554,47 +1553,57 @@ Do you want to go to download page?</source>
         <translation>مستوى سرية الهوية:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
+        <source>Donate 0.1%:</source>
+        <translation>تبرع 0.1 ٪:</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="192"/>
         <source>Priority:</source>
-        <translation type="unfinished"></translation>
+        <translation>أفضلية:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="389"/>
+        <location filename="../gui/ui/sendframe.ui" line="376"/>
         <source>Manual fee override:</source>
-        <translation type="unfinished"></translation>
+        <translation>تجاوز الرسوم اليدوية:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="383"/>
+        <source>Send overt transaction</source>
+        <translation>الصفقة العلنية</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="421"/>
         <source>Send</source>
         <translation>إرسال</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="435"/>
         <source>Send All</source>
-        <translation type="unfinished"></translation>
+        <translation>إرسال الكل</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="446"/>
         <source>Clear All</source>
         <translation>مسح الكل</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="457"/>
         <source>Add Recipient</source>
         <translation>إضافة مستلم</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="468"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="501"/>
         <source>Wallet is connected through remote node. Additional 0.25% fee will be applied.</source>
         <translation>المحفظة متصلة من خلال وحدة بعيدة. سيتم تطبيق رسوم إضافية بقيمة 0.25٪.</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="504"/>
         <source>Remote mode</source>
         <translation>وضع الوحدة البعيدة</translation>
     </message>
@@ -2698,53 +2707,64 @@ Are you sure?</source>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
-        <location filename="../gui/SendFrame.cpp" line="332"/>
+        <location filename="../gui/SendFrame.cpp" line="349"/>
         <source>Invalid recipient address</source>
         <translation>عنوان المستلم غير صالح</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="296"/>
-        <location filename="../gui/SendFrame.cpp" line="446"/>
+        <location filename="../gui/SendFrame.cpp" line="292"/>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="293"/>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="313"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Incorrect password</source>
         <translation>كلمة سر خاطئة</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Wrong password.</source>
         <translation>كلمة مرور خاطئة.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="371"/>
+        <location filename="../gui/SendFrame.cpp" line="388"/>
         <source>Incorrect fee value</source>
         <translation>قيمة رسوم غير صحيحة</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Insufficient balance</source>
         <translation>رصيد غير كافٍ</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>الرصيد المتاح غير كاف لإرسال هذه المعاملة. هل استثنيت الرسوم؟</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="404"/>
         <source>Invalid payment ID</source>
         <translation>رقم دفع غير صالح</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="451"/>
+        <location filename="../gui/SendFrame.cpp" line="468"/>
         <source>Sweep unmixable dust</source>
         <translation>زر الدفعات القديمة</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="469"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>لديك عملات غير قابلة للخلط لا يمكن إنفاقها إلا بمستوى خصوصية صفري.

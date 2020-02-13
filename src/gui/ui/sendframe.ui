@@ -163,8 +163,11 @@
           </item>
           <item row="1" column="4">
            <widget class="QCheckBox" name="donateCheckBox">
+            <property name="toolTip">
+             <string>Donate 0.1% to development fund</string>
+            </property>
             <property name="text">
-             <string>Donate 0.1% to development fund:</string>
+             <string>Donate 0.1%:</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -313,22 +316,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>100</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="1">
            <layout class="QGridLayout" name="m_priorityGridLayout">
             <property name="verticalSpacing">
@@ -389,6 +376,29 @@
              <string>Manual fee override:</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QCheckBox" name="m_overtCheckBox">
+            <property name="text">
+             <string>Send overt transaction</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>100</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -663,6 +673,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>m_overtCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SendFrame</receiver>
+   <slot>overtToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>401</x>
+     <y>522</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>sendClicked()</slot>
@@ -672,5 +698,6 @@
   <slot>mixinValueChanged(int)</slot>
   <slot>priorityValueChanged(int)</slot>
   <slot>advancedClicked(bool)</slot>
+  <slot>overtToggled(bool)</slot>
  </slots>
 </ui>

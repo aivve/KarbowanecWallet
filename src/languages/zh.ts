@@ -795,47 +795,47 @@ Please wait...</source>
         <translation>导入私钥</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="616"/>
+        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sign message</source>
         <translation>签名消息</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="621"/>
+        <location filename="../gui/ui/mainwindow.ui" line="616"/>
         <source>Verify signed message</source>
         <translation>验证已签名的邮件</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="626"/>
+        <location filename="../gui/ui/mainwindow.ui" line="621"/>
         <source>Optimization</source>
         <translation>优化</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="631"/>
+        <location filename="../gui/ui/mainwindow.ui" line="626"/>
         <source>Get proof of balance</source>
         <translation>余额确认</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="636"/>
+        <location filename="../gui/ui/mainwindow.ui" line="631"/>
         <source>Import keys</source>
         <translation>正在导入密钥</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="644"/>
+        <location filename="../gui/ui/mainwindow.ui" line="639"/>
         <source>Don&apos;t show wallet optimization transactions</source>
         <translation>不显示钱包优化交易</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="649"/>
+        <location filename="../gui/ui/mainwindow.ui" line="644"/>
         <source>Lock wallet</source>
         <translation>锁钱包</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="652"/>
+        <location filename="../gui/ui/mainwindow.ui" line="647"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="660"/>
+        <location filename="../gui/ui/mainwindow.ui" line="655"/>
         <source>Hide everything when wallet is locked</source>
         <translation>钱包被锁定时隐藏所有内容</translation>
     </message>
@@ -895,7 +895,7 @@ Please wait...</source>
     </message>
     <message>
         <location filename="../gui/ui/mainwindow.ui" line="583"/>
-        <location filename="../gui/ui/mainwindow.ui" line="665"/>
+        <location filename="../gui/ui/mainwindow.ui" line="660"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
@@ -924,9 +924,8 @@ Please wait...</source>
         <translation type="vanished">自动开始从矿池挖矿</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sweep unmixable</source>
-        <translation>扫除不可混合的金额</translation>
+        <translation type="vanished">扫除不可混合的金额</translation>
     </message>
 </context>
 <context>
@@ -1510,8 +1509,8 @@ Do you want to go to download page?</source>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="167"/>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>向开发基金捐赠0.1%:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>向开发基金捐赠0.1%</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -1542,47 +1541,57 @@ Do you want to go to download page?</source>
         <translation>匿名级别</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
+        <source>Donate 0.1%:</source>
+        <translation>捐赠0.1％：</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="192"/>
         <source>Priority:</source>
         <translation>优先</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="389"/>
+        <location filename="../gui/ui/sendframe.ui" line="376"/>
         <source>Manual fee override:</source>
         <translation>手动费用覆盖</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="383"/>
+        <source>Send overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="421"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="435"/>
         <source>Send All</source>
         <translation>全部发送</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="446"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="457"/>
         <source>Add Recipient</source>
         <translation>添加收件人</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="468"/>
         <source>Advanced</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="501"/>
         <source>Wallet is connected through remote node. Additional 0.25% fee will be applied.</source>
         <translation>钱包通过远程节点连接，将收取0.25％的额外费用。</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="504"/>
         <source>Remote mode</source>
         <translation>远程节点模式</translation>
     </message>
@@ -2686,53 +2695,64 @@ Are you sure?</source>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
-        <location filename="../gui/SendFrame.cpp" line="332"/>
+        <location filename="../gui/SendFrame.cpp" line="349"/>
         <source>Invalid recipient address</source>
         <translation>收件人地址无效</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="296"/>
-        <location filename="../gui/SendFrame.cpp" line="446"/>
+        <location filename="../gui/SendFrame.cpp" line="292"/>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="293"/>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="313"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
         <translation>余额不足。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Incorrect password</source>
         <translation>密码错误</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Wrong password.</source>
         <translation>密码错误。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="371"/>
+        <location filename="../gui/SendFrame.cpp" line="388"/>
         <source>Incorrect fee value</source>
         <translation>费用数值不正确</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Insufficient balance</source>
         <translation>余额不足</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>可用余额不足，无法发送本次交易。您是否已包括交易手续费在内？</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="404"/>
         <source>Invalid payment ID</source>
         <translation>付款ID无效</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="451"/>
+        <location filename="../gui/SendFrame.cpp" line="468"/>
         <source>Sweep unmixable dust</source>
         <translation>扫除不可混合的金额</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="469"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>您有不可混合使用的硬币，只能在零隐私级别下使用。

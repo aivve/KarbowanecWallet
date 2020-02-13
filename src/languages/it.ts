@@ -761,47 +761,47 @@ Attendere prego…
         <translation>Importa la chiave privata</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="616"/>
+        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sign message</source>
         <translation>Firmare un messaggio</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="621"/>
+        <location filename="../gui/ui/mainwindow.ui" line="616"/>
         <source>Verify signed message</source>
         <translation>Verifica messaggio firmato</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="626"/>
+        <location filename="../gui/ui/mainwindow.ui" line="621"/>
         <source>Optimization</source>
         <translation>Ottimizzazione</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="631"/>
+        <location filename="../gui/ui/mainwindow.ui" line="626"/>
         <source>Get proof of balance</source>
         <translation>Conferma dell&apos;equilibrio</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="636"/>
+        <location filename="../gui/ui/mainwindow.ui" line="631"/>
         <source>Import keys</source>
         <translation>Importa chiavi</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="644"/>
+        <location filename="../gui/ui/mainwindow.ui" line="639"/>
         <source>Don&apos;t show wallet optimization transactions</source>
         <translation>Non mostrare le transazioni di ottimizzazione del portafoglio</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="649"/>
+        <location filename="../gui/ui/mainwindow.ui" line="644"/>
         <source>Lock wallet</source>
         <translation>Blocca il portafoglio</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="652"/>
+        <location filename="../gui/ui/mainwindow.ui" line="647"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="660"/>
+        <location filename="../gui/ui/mainwindow.ui" line="655"/>
         <source>Hide everything when wallet is locked</source>
         <translation>Nascondi tutto quando il portafoglio è bloccato</translation>
     </message>
@@ -853,7 +853,7 @@ Attendere prego…
     </message>
     <message>
         <location filename="../gui/ui/mainwindow.ui" line="583"/>
-        <location filename="../gui/ui/mainwindow.ui" line="665"/>
+        <location filename="../gui/ui/mainwindow.ui" line="660"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
@@ -882,9 +882,8 @@ Attendere prego…
         <translation type="vanished">Inizia il mining pool automaticamente</translation>
     </message>
     <message>
-        <location filename="../gui/ui/mainwindow.ui" line="611"/>
         <source>Sweep unmixable</source>
-        <translation>Sweep unmixable</translation>
+        <translation type="vanished">Sweep unmixable</translation>
     </message>
 </context>
 <context>
@@ -1469,8 +1468,8 @@ Vuoi andare alla pagina dei download?</translation>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="167"/>
-        <source>Donate 0.1% to development fund:</source>
-        <translation>Dona lo 0,1% al fondo per lo sviluppo:</translation>
+        <source>Donate 0.1% to development fund</source>
+        <translation>Dona lo 0,1% al fondo per lo sviluppo</translation>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="127"/>
@@ -1493,47 +1492,57 @@ Vuoi andare alla pagina dei download?</translation>
         <translation>Anonimato:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
+        <source>Donate 0.1%:</source>
+        <translation>Dona 0.1%:</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="192"/>
         <source>Priority:</source>
         <translation>Priorità:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="389"/>
+        <location filename="../gui/ui/sendframe.ui" line="376"/>
         <source>Manual fee override:</source>
         <translation>Override commissione manuale:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="383"/>
+        <source>Send overt transaction</source>
+        <translation>Invia transazione aperta</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="421"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="435"/>
         <source>Send All</source>
         <translation>Invia tutto</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="446"/>
         <source>Clear All</source>
         <translation>Elimina tutto</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="457"/>
         <source>Add Recipient</source>
         <translation>Aggiungi destinatario</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="468"/>
         <source>Advanced</source>
         <translation>Avanzate</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="501"/>
         <source>Wallet is connected through remote node. Additional 0.25% fee will be applied.</source>
         <translation>Il portafoglio è connesso tramite un nodo remoto. Sarà addebitata una commissione aggiuntiva dello 0,25%.</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="504"/>
         <source>Remote mode</source>
         <translation>Modalità in nodo remoto</translation>
     </message>
@@ -2618,53 +2627,64 @@ Are you sure?</source>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
-        <location filename="../gui/SendFrame.cpp" line="332"/>
+        <location filename="../gui/SendFrame.cpp" line="349"/>
         <source>Invalid recipient address</source>
         <translation>Indirizzo del destinatario non valido</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="296"/>
-        <location filename="../gui/SendFrame.cpp" line="446"/>
+        <location filename="../gui/SendFrame.cpp" line="292"/>
+        <source>Overt transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="293"/>
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+ Do you really want to send overt transaction?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/SendFrame.cpp" line="313"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
         <translation>Il saldo insufficiente.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Incorrect password</source>
         <translation>Password errata</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="305"/>
+        <location filename="../gui/SendFrame.cpp" line="322"/>
         <source>Wrong password.</source>
         <translation>Password errata.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="371"/>
+        <location filename="../gui/SendFrame.cpp" line="388"/>
         <source>Incorrect fee value</source>
         <translation>Valore di commissione errato</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Insufficient balance</source>
         <translation>Saldo insufficiente</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="380"/>
+        <location filename="../gui/SendFrame.cpp" line="397"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>Il Saldo disponibile non è sufficiente per inviare questa transazione. Hai escluso la commissione?</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="404"/>
         <source>Invalid payment ID</source>
         <translation>ID di pagamento non valido</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="451"/>
+        <location filename="../gui/SendFrame.cpp" line="468"/>
         <source>Sweep unmixable dust</source>
         <translation>Sweep unmixable</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="469"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>Hai monete non mescolabili che possono essere spese solo con un livello di privacy pari a zero.
