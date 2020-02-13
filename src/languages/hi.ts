@@ -2626,32 +2626,32 @@ Are you sure?</source>
     <message>
         <location filename="../gui/SendFrame.cpp" line="59"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>कम</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="60"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>साधारण</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="61"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>उच्च</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="62"/>
         <source>Highest</source>
-        <translation type="unfinished"></translation>
+        <translation>उच्चतम</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="219"/>
         <source>Node fee: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>नोड शुल्क: %1 %2</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="252"/>
         <source>Payment request should start with karbowanec:</source>
-        <translation>भुगतान अनुरोध karbowanec के साथ शुरू होना चाहिए:</translation>
+        <translation>भुगतान अनुरोध karbowanec: के साथ शुरू होना चाहिए</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="266"/>
@@ -2662,11 +2662,11 @@ Are you sure?</source>
     <message>
         <location filename="../gui/SendFrame.cpp" line="292"/>
         <source>Overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>लेन-देन से पीछे हटें</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="293"/>
-        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2674,7 +2674,7 @@ Are you sure?</source>
         <location filename="../gui/SendFrame.cpp" line="313"/>
         <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>Insufficient balance.</source>
-        <translation></translation>
+        <translation>अपर्याप्त शेष।</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="322"/>

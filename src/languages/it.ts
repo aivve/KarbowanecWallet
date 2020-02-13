@@ -1509,7 +1509,7 @@ Vuoi andare alla pagina dei download?</translation>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="383"/>
         <source>Send overt transaction</source>
-        <translation>Invia transazione aperta</translation>
+        <translation>Transazione aperta</translation>
     </message>
     <message>
         <location filename="../gui/ui/sendframe.ui" line="421"/>
@@ -2634,11 +2634,11 @@ Are you sure?</source>
     <message>
         <location filename="../gui/SendFrame.cpp" line="292"/>
         <source>Overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Transazione aperta</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="293"/>
-        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
         <translation type="unfinished"></translation>
     </message>

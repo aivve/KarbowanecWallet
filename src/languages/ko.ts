@@ -2714,11 +2714,11 @@ Are you sure?</source>
     <message>
         <location filename="../gui/SendFrame.cpp" line="292"/>
         <source>Overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>공공 거래</translation>
     </message>
     <message>
         <location filename="../gui/SendFrame.cpp" line="293"/>
-        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
         <translation type="unfinished"></translation>
     </message>

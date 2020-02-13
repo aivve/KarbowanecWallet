@@ -2392,12 +2392,13 @@ Are you sure?</source>
     </message>
     <message>
         <source>Overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрытая транзакцыя</translation>
     </message>
     <message>
-        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы збіраецеся адправіць адкрытую (публічную, неприватную) транзакцыю, у якой будуць пазначаны ваш адрас і адрасы атрымальнікаў, а таксама адпраўленая сума.
+ Вы сапраўды хочаце адправіць адкрытую транзакцыю?</translation>
     </message>
 </context>
 <context>

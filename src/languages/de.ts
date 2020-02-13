@@ -1402,7 +1402,7 @@ Möchten Sie die Download Seite besuchen?</translation>
     </message>
     <message>
         <source>Send All</source>
-        <translation>Sende alles</translation>
+        <translation>Alles senden</translation>
     </message>
     <message>
         <source>Donate 0.1%:</source>
@@ -1410,7 +1410,7 @@ Möchten Sie die Download Seite besuchen?</translation>
     </message>
     <message>
         <source>Send overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffentliche Transaktion</translation>
     </message>
 </context>
 <context>
@@ -2392,12 +2392,13 @@ Sollen wir mit null Privatsphäre weitermachen?</translation>
     </message>
     <message>
         <source>Overt transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffentliche Transaktion</translation>
     </message>
     <message>
-        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recepients addresses and amount sent.
+        <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
-        <translation type="unfinished"></translation>
+        <translation>Du bist dabei eine Overt (Öffentliche, keine Anonyme) Transaktion zu senden. Die Transaktion ist Öffentlich. Dies beudeutet das die Adresse vom Sender und Empfänger sowie der Betrag öffentlich sichtbar ist.
+ Möchten Sie wirklich eine Overt Transaktion durchführen?</translation>
     </message>
 </context>
 <context>
