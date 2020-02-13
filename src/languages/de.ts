@@ -2397,8 +2397,8 @@ Sollen wir mit null Privatsphäre weitermachen?</translation>
     <message>
         <source>You are going to send an overt (public, non-private) transaction that will disclose your and recipients' addresses and amount sent.
  Do you really want to send overt transaction?</source>
-        <translation>Du bist dabei eine Overt (Öffentliche, keine Anonyme) Transaktion zu senden. Die Transaktion ist Öffentlich. Dies beudeutet das die Adresse vom Sender und Empfänger sowie der Betrag öffentlich sichtbar ist.
- Möchten Sie wirklich eine Overt Transaktion durchführen?</translation>
+        <translation>Du bist dabei eine offene (öffentlich, nicht anonym) Transaktion zu senden. Dies bedeutet, dass die Adresse vom Empfänger als auch des Senders, sowie der Betrag öffentlich einsehbar wird.
+ Möchtest du wirklich eine offene Transaktion durchführen?</translation>
     </message>
 </context>
 <context>
