@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2015 The Cryptonote developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,7 +12,9 @@
 
 namespace WalletGui {
 
-enum class TransactionType : quint8 {MINED, INPUT, OUTPUT, INOUT};
+enum class TransactionType : quint8 {MINED, INPUT, OUTPUT, INOUT, FUSION};
+
+enum class TransactionState : quint8 {ACTIVE, DELETED, SENDING, CANCELLED, FAILED};
 
 typedef QPair<CryptoNote::TransactionId, CryptoNote::TransferId> TransactionTransferId;
 
@@ -21,14 +24,14 @@ class TransactionsModel : public QAbstractItemModel {
   Q_ENUMS(Roles)
 
 public:
-  enum Columns{
-    COLUMN_STATE = 0, COLUMN_DATE, COLUMN_AMOUNT, COLUMN_ADDRESS, COLUMN_PAYMENT_ID, COLUMN_HASH, COLUMN_FEE,
+  enum Columns {
+    COLUMN_STATE = 0, COLUMN_DATE, COLUMN_AMOUNT, COLUMN_FEE, COLUMN_ADDRESS, COLUMN_PAYMENT_ID, COLUMN_HASH,
     COLUMN_HEIGHT, COLUMN_TYPE, COLUMN_SECRET_KEY
   };
 
-  enum Roles{
+  enum Roles {
     ROLE_DATE = Qt::UserRole, ROLE_TYPE, ROLE_HASH, ROLE_ADDRESS, ROLE_AMOUNT, ROLE_PAYMENT_ID, ROLE_ICON,
-    ROLE_TRANSACTION_ID, ROLE_HEIGHT, ROLE_FEE, ROLE_NUMBER_OF_CONFIRMATIONS, ROLE_SECRET_KEY, ROLE_COLUMN, ROLE_ROW
+    ROLE_TRANSACTION_ID, ROLE_HEIGHT, ROLE_FEE, ROLE_NUMBER_OF_CONFIRMATIONS, ROLE_SECRET_KEY, ROLE_COLUMN, ROLE_ROW, ROLE_STATE
   };
 
   static TransactionsModel& instance();
@@ -43,6 +46,8 @@ public:
   QModelIndex parent(const QModelIndex& _index) const Q_DECL_OVERRIDE;
 
   QByteArray toCsv() const;
+
+  void reloadWalletTransactions();
 
 private:
   QVector<TransactionTransferId> m_transfers;
@@ -59,7 +64,6 @@ private:
   QVariant getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionId _transactionId, CryptoNote::WalletLegacyTransaction& _transaction,
     CryptoNote::TransferId _transferId, CryptoNote::WalletLegacyTransfer& _transfer) const;
 
-  void reloadWalletTransactions();
   void appendTransaction(CryptoNote::TransactionId _id, quint32& _row_count);
   void appendTransaction(CryptoNote::TransactionId _id);
   void updateWalletTransaction(CryptoNote::TransactionId _id);

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2016 The Cryptonote developers
 // Copyright (c) 2011-2013 The Bitcoin Core developers
 // Copyright (c) 2015-2016 XDN developers
-// Copyright (c) 2016-2018 The Karbowanec developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,6 +19,9 @@
 #include <QToolButton>
 #include <QPushButton>
 #include <QFontDatabase>
+
+#include "MainWindow.h"
+
 #include <Common/Base58.h>
 #include <Common/StringTools.h>
 #include <Common/Util.h>
@@ -29,15 +32,15 @@
 #include "ConnectionSettings.h"
 #include "OptimizationSettings.h"
 #include "PrivateKeysDialog.h"
+#include "ImportKeyDialog.h"
+#include "ImportKeysDialog.h"
 #include "ExportTrackingKeyDialog.h"
 #include "ImportTrackingKeyDialog.h"
+#include "RestoreFromMnemonicSeedDialog.h"
 #include "SignMessageDialog.h"
 #include "CurrencyAdapter.h"
 #include "ExitWidget.h"
-#include "ImportKeyDialog.h"
-#include "RestoreFromMnemonicSeedDialog.h"
 #include "GetBalanceProofDialog.h"
-#include "MainWindow.h"
 #include "NewPasswordDialog.h"
 #include "NodeAdapter.h"
 #include "PasswordDialog.h"
@@ -75,16 +78,18 @@ MainWindow& MainWindow::instance() {
   return *m_instance;
 }
 
-MainWindow::MainWindow() : QMainWindow(), m_ui(new Ui::MainWindow), m_trayIcon(nullptr), m_tabActionGroup(new QActionGroup(this)),
-  m_isAboutToQuit(false), paymentServer(0), optimizationManager(nullptr), maxRecentFiles(10), trayIconMenu(0), toggleHideAction(0) {
+MainWindow::MainWindow() : QMainWindow(),
+  m_ui(new Ui::MainWindow), m_trayIcon(nullptr), m_tabActionGroup(new QActionGroup(this)), m_isAboutToQuit(false), paymentServer(0),
+  optimizationManager(nullptr), maxRecentFiles(10), trayIconMenu(0), toggleHideAction(0), maxProgressBar(100), m_statusBarText("") {
   m_ui->setupUi(this);
   m_connectionStateIconLabel = new QPushButton();
   m_connectionStateIconLabel->setFlat(true); // Make the button look like a label, but clickable
-  m_connectionStateIconLabel->setStyleSheet(".QPushButton { background-color: rgba(255, 255, 255, 0);}");
+  m_connectionStateIconLabel->setStyleSheet(".QPushButton { background-color: rgba(255, 255, 255, 0); border: none;}");
   m_connectionStateIconLabel->setMaximumSize(16, 16);
   m_encryptionStateIconLabel = new QLabel(this);
   m_trackingModeIconLabel = new QLabel(this);
   m_remoteModeIconLabel = new QLabel(this);
+  m_syncProgressBar = new QProgressBar();
   m_synchronizationStateIconLabel = new AnimatedLabel(this);
   connectToSignals();
   createLanguageMenu();
@@ -117,8 +122,6 @@ void MainWindow::connectToSignals() {
   connect(&WalletAdapter::instance(), &WalletAdapter::walletTransactionCreatedSignal, this, [this]() {
       QApplication::alert(this);
   });
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletUnmixableBalanceUpdatedSignal, this, &MainWindow::updateUnmixableBalance,
-    Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSendTransactionCompletedSignal, this, [this](CryptoNote::TransactionId _transactionId, int _error, const QString& _errorString) {
     if (_error == 0) {
       m_ui->m_transactionsAction->setChecked(true);
@@ -146,13 +149,12 @@ void MainWindow::initUi() {
   m_ui->accountToolBar->setAllowedAreas(Qt::TopToolBarArea);
 
   accountWidget = m_ui->accountToolBar->addWidget(m_ui->m_accountFrame);
-  m_ui->accountToolBar->setMovable(false);
   addToolBar(Qt::TopToolBarArea, m_ui->accountToolBar);
   addToolBarBreak();
-  addToolBar(Qt::LeftToolBarArea, m_ui->toolBar);
-  QToolButton button;
-  button.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-  button.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  addToolBar(Qt::TopToolBarArea, m_ui->toolBar);
+  addToolBarBreak();
+  m_ui->accountToolBar->setMovable(false);
+  m_ui->toolBar->setMovable(false);
 
   m_ui->m_aboutCryptonoteAction->setText(QString(tr("About %1 Wallet")).arg(CurrencyAdapter::instance().getCurrencyDisplayName()));
   m_ui->m_overviewFrame->hide();
@@ -168,20 +170,31 @@ void MainWindow::initUi() {
   m_tabActionGroup->addAction(m_ui->m_transactionsAction);
   m_tabActionGroup->addAction(m_ui->m_addressBookAction);
 
-  m_ui->m_overviewAction->toggle();
-  encryptedFlagChanged(false);
+  m_syncProgressBar->setMaximum(maxProgressBar);
+  m_syncProgressBar->setMinimum(0);
+  m_syncProgressBar->setValue(0);
+  m_syncProgressBar->setFormat(m_statusBarText);
+  m_syncProgressBar->setTextVisible(true);
+  m_syncProgressBar->setMaximumHeight(30);
+  m_syncProgressBar->hide();
+
+  statusBar()->addPermanentWidget(m_syncProgressBar, 1);
   statusBar()->addPermanentWidget(m_trackingModeIconLabel);
   statusBar()->addPermanentWidget(m_remoteModeIconLabel);
   statusBar()->addPermanentWidget(m_connectionStateIconLabel);
   statusBar()->addPermanentWidget(m_encryptionStateIconLabel);
   statusBar()->addPermanentWidget(m_synchronizationStateIconLabel);
+  
+  m_ui->m_overviewAction->toggle();
+  encryptedFlagChanged(false);
+  
   qobject_cast<AnimatedLabel*>(m_synchronizationStateIconLabel)->setSprite(QPixmap(":icons/sync_sprite"), QSize(16, 16), 5, 24);
   m_connectionStateIconLabel->setIcon(QPixmap(":icons/disconnected").scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
   m_trackingModeIconLabel->setPixmap(QPixmap(":icons/tracking").scaledToHeight(16, Qt::SmoothTransformation));
   m_remoteModeIconLabel->hide();
   m_trackingModeIconLabel->hide();
-  m_trackingModeIconLabel->setToolTip(tr("Tracking wallet. Spending unawailable"));
-  m_remoteModeIconLabel->setToolTip(tr("Connected through remote node"));
+  m_trackingModeIconLabel->setToolTip(tr("Tracking wallet. Spending unavailable"));
+  m_remoteModeIconLabel->setToolTip(tr("Wallet is connected through remote node. Additional fee may be applied."));
 
   QString connection = Settings::instance().getConnection();
   if(connection.compare("remote") == 0) {
@@ -192,6 +205,9 @@ void MainWindow::initUi() {
   m_ui->m_showMnemonicSeedAction->setEnabled(false);
 
   m_ui->m_startOnLoginAction->setChecked(Settings::instance().isStartOnLoginEnabled());
+  m_ui->m_hideFusionTransactions->setChecked(Settings::instance().skipFusionTransactions());
+  m_ui->m_hideEverythingOnLocked->setChecked(Settings::instance().hideEverythingOnLocked());
+  m_ui->m_lockWalletAction->setEnabled(false);
 
   m_ui->menuRecent_wallets->setVisible(false);
   QAction* recentWalletAction = 0;
@@ -266,7 +282,7 @@ void MainWindow::closeEvent(QCloseEvent* _event) {
     QApplication::quit();
     return;
   }
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
   if (!m_isAboutToQuit) {
     QApplication::quit();
     return;
@@ -422,12 +438,14 @@ void MainWindow::openRecent(){
   QAction *action = qobject_cast<QAction *>(sender());
   if (action) {
     QString filePath = action->data().toString();
-    if (!filePath.isEmpty()) {
+    if (!filePath.isEmpty() && QFile::exists(filePath)) {
       if (WalletAdapter::instance().isOpen()) {
           WalletAdapter::instance().close();
       }
       WalletAdapter::instance().setWalletFile(filePath);
       WalletAdapter::instance().open("");
+    } else {
+       QMessageBox::warning(this, tr("Recent wallet file not found"), tr("The recent wallet file is missing. Probably it was removed."), QMessageBox::Ok);
     }
   }
 }
@@ -455,9 +473,70 @@ void MainWindow::importKey() {
         WalletAdapter::instance().close();
       }
       WalletAdapter::instance().setWalletFile(filePath);
-      WalletAdapter::instance().createWithKeys(keys);
+
+      quint32 syncHeight = dlg.getSyncHeight();
+      if (syncHeight != 0) {
+        WalletAdapter::instance().createWithKeys(keys, syncHeight);
+      } else {
+        WalletAdapter::instance().createWithKeys(keys);
+      }
+
     } else {
       QMessageBox::warning(this, tr("Wallet keys are not valid"), tr("The private keys you entered are not valid."), QMessageBox::Ok);
+    }
+  }
+}
+
+void MainWindow::importKeys() {
+  ImportKeysDialog dlg(this);
+  if (dlg.exec() == QDialog::Accepted) {
+    QString viewKeyString = dlg.getViewKeyString().trimmed();
+    QString spendKeyString = dlg.getSpendKeyString().trimmed();
+    QString filePath = dlg.getFilePath();
+    if (viewKeyString.isEmpty() || spendKeyString.isEmpty() || filePath.isEmpty()) {
+      return;
+    }
+
+    if (!filePath.endsWith(".wallet")) {
+      filePath.append(".wallet");
+    }
+
+    uint64_t addressPrefix;
+    std::string data;
+    CryptoNote::AccountKeys keys;
+
+    std::string private_spend_key_string = spendKeyString.toStdString();
+    std::string private_view_key_string = viewKeyString.toStdString();
+
+    Crypto::Hash private_spend_key_hash;
+    Crypto::Hash private_view_key_hash;
+
+    size_t size;
+    if (!Common::fromHex(private_spend_key_string, &private_spend_key_hash, sizeof(private_spend_key_hash), size) || size != sizeof(private_spend_key_hash)) {
+      QMessageBox::warning(this, tr("Key is not valid"), tr("The private spend key you entered is not valid."), QMessageBox::Ok);
+      return;
+    }
+    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_view_key_hash)) {
+      QMessageBox::warning(this, tr("Key is not valid"), tr("The private view key you entered is not valid."), QMessageBox::Ok);
+      return;
+    }
+
+    keys.spendSecretKey = *(struct Crypto::SecretKey *) &private_spend_key_hash;
+    keys.viewSecretKey = *(struct Crypto::SecretKey *) &private_view_key_hash;
+
+    Crypto::secret_key_to_public_key(keys.spendSecretKey, keys.address.spendPublicKey);
+    Crypto::secret_key_to_public_key(keys.viewSecretKey, keys.address.viewPublicKey);
+
+    if (WalletAdapter::instance().isOpen()) {
+        WalletAdapter::instance().close();
+    }
+    WalletAdapter::instance().setWalletFile(filePath);
+
+    quint32 syncHeight = dlg.getSyncHeight();
+    if (syncHeight != 0) {
+      WalletAdapter::instance().createWithKeys(keys, syncHeight);
+    } else {
+      WalletAdapter::instance().createWithKeys(keys);
     }
   }
 }
@@ -513,7 +592,7 @@ void MainWindow::importTrackingKey() {
       QMessageBox::warning(this, tr("Key is not valid"), tr("The private spend key you entered is not valid."), QMessageBox::Ok);
       return;
     }
-    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_spend_key_hash)) {
+    if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_view_key_hash)) {
       QMessageBox::warning(this, tr("Key is not valid"), tr("The private view key you entered is not valid."), QMessageBox::Ok);
       return;
     }
@@ -533,7 +612,14 @@ void MainWindow::importTrackingKey() {
       }
       Settings::instance().setTrackingMode(true);
       WalletAdapter::instance().setWalletFile(filePath);
-      WalletAdapter::instance().createWithKeys(keys);
+
+      quint32 syncHeight = dlg.getSyncHeight();
+      if (syncHeight != 0) {
+        WalletAdapter::instance().createWithKeys(keys, syncHeight);
+      } else {
+        WalletAdapter::instance().createWithKeys(keys);
+      }
+
    // }
   }
 }
@@ -544,7 +630,6 @@ void MainWindow::isTrackingMode() {
   m_ui->m_sendAction->setEnabled(false);
   m_ui->m_openUriAction->setEnabled(false);
   m_ui->m_showMnemonicSeedAction->setEnabled(false);
-  m_ui->m_sweepUnmixableAction->setEnabled(false);
   m_ui->m_optimizationAction->setEnabled(false);
   m_ui->m_proofBalanceAction->setEnabled(false);
   m_trackingModeIconLabel->show();
@@ -575,27 +660,17 @@ void MainWindow::restoreFromMnemonicSeed() {
         WalletAdapter::instance().close();
       }
       WalletAdapter::instance().setWalletFile(filePath);
-      WalletAdapter::instance().createWithKeys(keys);
+
+      quint32 syncHeight = dlg.getSyncHeight();
+      if (syncHeight != 0) {
+        WalletAdapter::instance().createWithKeys(keys, syncHeight);
+      } else {
+        WalletAdapter::instance().createWithKeys(keys);
+      }
     } else {
       QMessageBox::critical(nullptr, tr("Mnemonic seed is not correct"), tr("There must be an error in mnemonic seed. Make sure you entered it correctly."), QMessageBox::Ok);
       return;
     }
-  }
-}
-
-void MainWindow::sweepUnmixable() {
-  quint64 dust = WalletAdapter::instance().getUnmixableBalance();
-  ConfirmSendDialog dlg(&MainWindow::instance());
-  dlg.showPasymentDetails(dust);
-  if (dlg.exec() == QDialog::Accepted) {
-    quint64 fee = CurrencyAdapter::instance().getMinimumFee();
-    std::vector<CryptoNote::WalletLegacyTransfer> walletTransfers;
-    CryptoNote::WalletLegacyTransfer walletTransfer;
-    walletTransfer.address = WalletAdapter::instance().getAddress().toStdString();
-    walletTransfer.amount = dust;
-    walletTransfers.push_back(walletTransfer);
-
-    WalletAdapter::instance().sweepDust(walletTransfers, fee, "", 0);
   }
 }
 
@@ -615,6 +690,8 @@ void MainWindow::createLanguageMenu(void)
 #elif defined(Q_OS_MAC)
   m_langPath = QApplication::applicationDirPath();
   m_langPath = m_langPath + "/../Resources/languages/";
+#elif defined(__FreeBSD__)
+  m_langPath = "/usr/local/share/karbo/karbowallet/languages";
 #else
   m_langPath = "/opt/karbo/languages";
 #endif
@@ -660,7 +737,7 @@ void MainWindow::loadLanguage(const QString& rLanguage)
     //TranslatorManager::instance()->switchTranslator(m_translator, QString("%1.qm").arg(rLanguage));
     //TranslatorManager::instance()->switchTranslator(m_translatorQt, QString("qt_%1.qm").arg(rLanguage));
     Settings::instance().setLanguage((m_currLang));
-    m_ui->statusBar->showMessage(tr("Language changed to %1").arg(languageName));
+    setStatusBarText(QString(tr("Language changed to %1").arg(languageName)));
     QMessageBox::information(this, tr("Language was changed"),
        tr("Language changed to %1. The change will take effect after restarting the wallet.").arg(languageName), QMessageBox::Ok);
   }
@@ -707,6 +784,10 @@ void MainWindow::openOptimizationSettings() {
 }
 
 void MainWindow::getBalanceProof() {
+  if (!confirmWithPassword()) {
+    return;
+  }
+
   GetBalanceProofDialog dlg(&MainWindow::instance());
   dlg.exec();
 }
@@ -752,24 +833,40 @@ void MainWindow::openLogFile() {
 }
 
 void MainWindow::showPrivateKeys() {
+  if (!confirmWithPassword()) {
+    return;
+  }
+
   PrivateKeysDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
 }
 
 void MainWindow::showMnemonicSeed() {
+  if (!confirmWithPassword()) {
+    return;
+  }
+
   MnemonicSeedDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
 }
 
 void MainWindow::exportTrackingKey() {
+  if (!confirmWithPassword()) {
+    return;
+  }
+
   ExportTrackingKeyDialog dlg(this);
   dlg.walletOpened();
   dlg.exec();
 }
 
 void MainWindow::signMessage() {
+  if (!confirmWithPassword()) {
+    return;
+  }
+
   SignMessageDialog dlg(this);
   dlg.walletOpened();
   dlg.sign();
@@ -886,13 +983,32 @@ void MainWindow::setCloseToTray(bool _on) {
 #endif
 }
 
+void MainWindow::setHideFusionTransactions(bool _on) {
+  Settings::instance().setSkipFusionTransactions(_on);
+  m_ui->m_hideFusionTransactions->setChecked(Settings::instance().skipFusionTransactions());
+  m_ui->m_transactionsFrame->reloadTransactions();
+  m_ui->m_overviewFrame->reloadTransactions();
+}
+
+void MainWindow::hideEverythingOnLocked(bool _on) {
+  Settings::instance().setHideEverythingOnLocked(_on);
+  m_ui->m_hideEverythingOnLocked->setChecked(Settings::instance().hideEverythingOnLocked());
+}
+
 void MainWindow::about() {
   AboutDialog dlg(this);
   dlg.exec();
 }
 
 void MainWindow::setStatusBarText(const QString& _text) {
-  statusBar()->showMessage(_text);
+  m_statusBarText = _text;
+  if (m_syncProgressBar->isHidden()) {
+    statusBar()->showMessage(m_statusBarText);
+  } else {
+    // TODO: not the best indent, but it is very simple and works
+    m_syncProgressBar->setFormat(QString("  ") + m_statusBarText);
+    statusBar()->clearMessage();
+  }
 }
 
 void MainWindow::showMessage(const QString& _text, QtMsgType _type) {
@@ -916,6 +1032,56 @@ void MainWindow::askForWalletPassword(bool _error) {
   }
 }
 
+void MainWindow::lockWalletWithPassword() {
+  bool hide = Settings::instance().hideEverythingOnLocked();
+
+  if (hide) {
+    accountWidget->setVisible(false);
+    m_ui->m_overviewFrame->hide();
+    m_ui->m_receiveFrame->hide();
+    m_ui->m_sendFrame->hide();
+    m_ui->m_transactionsFrame->hide();
+    m_ui->m_addressBookFrame->hide();
+  }
+  bool keep_asking = true;
+  bool wrong_pass = false;
+  do {
+    PasswordDialog dlg(wrong_pass, this);
+    if (dlg.exec() == QDialog::Accepted) {
+      QString password = dlg.getPassword();
+      keep_asking = !WalletAdapter::instance().tryOpen(password);
+      wrong_pass = keep_asking;
+    }
+    else {
+      closeWallet();
+      return;
+    }
+  } while (keep_asking);
+
+  if (hide) {
+    accountWidget->setVisible(true);
+    m_ui->m_overviewFrame->show();
+  }
+}
+
+bool MainWindow::confirmWithPassword() {
+  if (!Settings::instance().isEncrypted() && WalletAdapter::instance().tryOpen(""))
+    return true;
+
+  PasswordDialog dlg(false, this);
+  if (dlg.exec() == QDialog::Accepted) {
+    QString password = dlg.getPassword();
+    if (!WalletAdapter::instance().tryOpen(password)) {
+      QMessageBox::critical(nullptr, tr("Incorrect password"), tr("Wrong password."), QMessageBox::Ok);
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 void MainWindow::encryptedFlagChanged(bool _encrypted) {
   m_ui->m_encryptWalletAction->setEnabled(!_encrypted);
   m_ui->m_changePasswordAction->setEnabled(_encrypted);
@@ -924,6 +1090,7 @@ void MainWindow::encryptedFlagChanged(bool _encrypted) {
   m_encryptionStateIconLabel->setPixmap(encryptionIcon);
   QString encryptionLabelTooltip = _encrypted ? tr("Encrypted") : tr("Not encrypted");
   m_encryptionStateIconLabel->setToolTip(encryptionLabelTooltip);
+  m_ui->m_lockWalletAction->setEnabled(_encrypted);
 }
 
 void MainWindow::peerCountUpdated(quint64 _peerCount) {
@@ -933,9 +1100,22 @@ void MainWindow::peerCountUpdated(quint64 _peerCount) {
   m_connectionStateIconLabel->setToolTip(QString(tr("%n active connection(s)", "", _peerCount)));
 }
 
-void MainWindow::walletSynchronizationInProgress() {
+void MainWindow::walletSynchronizationInProgress(uint32_t _current, uint32_t _total) {
+  const uint32_t progressActOffset = 500;
+  bool progressAct = false;
+  uint32_t syncProgress = 0;
   qobject_cast<AnimatedLabel*>(m_synchronizationStateIconLabel)->startAnimation();
   m_synchronizationStateIconLabel->setToolTip(tr("Synchronization in progress"));
+  if (_total > 0 && _current <= _total) {
+    syncProgress = static_cast<uint32_t>(static_cast<float>(_current) /
+                   static_cast<float>(_total) *
+                   static_cast<float>(maxProgressBar));
+    if (_total > progressActOffset && _total - _current > progressActOffset) progressAct = true;
+  } else {
+    syncProgress = maxProgressBar;
+  }
+  if (m_syncProgressBar->isHidden() && progressAct) m_syncProgressBar->show();
+  m_syncProgressBar->setValue(syncProgress);
   m_ui->m_proofBalanceAction->setEnabled(false);
 }
 
@@ -945,15 +1125,17 @@ void MainWindow::walletSynchronized(int _error, const QString& _error_text) {
   m_synchronizationStateIconLabel->setPixmap(syncIcon);
   QString syncLabelTooltip = _error > 0 ? tr("Not synchronized") : tr("Synchronized");
   m_synchronizationStateIconLabel->setToolTip(syncLabelTooltip);
-  if (WalletAdapter::instance().getActualBalance() > 0) {
+  if (WalletAdapter::instance().getActualBalance() > 0 && !(Settings::instance().isTrackingMode())) {
     m_ui->m_proofBalanceAction->setEnabled(true);
   }
+  statusBar()->showMessage(m_statusBarText);
+  m_syncProgressBar->hide();
 }
 
 void MainWindow::walletOpened(bool _error, const QString& _error_text) {
   if (!_error) {
     m_ui->m_noWalletFrame->hide();
-	m_ui->accountToolBar->show();
+    m_ui->accountToolBar->show();
     m_ui->m_closeWalletAction->setEnabled(true);
     m_ui->m_exportTrackingKeyAction->setEnabled(true);
     m_encryptionStateIconLabel->show();
@@ -962,7 +1144,6 @@ void MainWindow::walletOpened(bool _error, const QString& _error_text) {
     m_ui->m_showPrivateKey->setEnabled(true);
     m_ui->m_resetAction->setEnabled(true);
     m_ui->m_openUriAction->setEnabled(true);
-    m_ui->m_sweepUnmixableAction->setEnabled(true);
     m_ui->m_optimizationAction->setEnabled(true);
     m_ui->m_signMessageAction->setEnabled(true);
     m_ui->m_verifySignedMessageAction->setEnabled(true);
@@ -1007,11 +1188,11 @@ void MainWindow::walletClosed() {
   m_ui->m_showPrivateKey->setEnabled(false);
   m_ui->m_resetAction->setEnabled(false);
   m_ui->m_showMnemonicSeedAction->setEnabled(false);
-  m_ui->m_sweepUnmixableAction->setEnabled(false);
   m_ui->m_optimizationAction->setEnabled(false);
   m_ui->m_signMessageAction->setEnabled(false);
   m_ui->m_verifySignedMessageAction->setEnabled(false);
   m_ui->m_proofBalanceAction->setEnabled(false);
+  m_ui->m_lockWalletAction->setEnabled(false);
   m_ui->m_overviewFrame->hide();
   accountWidget->setVisible(false);
   m_ui->m_receiveFrame->hide();
@@ -1023,7 +1204,7 @@ void MainWindow::walletClosed() {
   m_trackingModeIconLabel->hide();
   m_synchronizationStateIconLabel->hide();
 
-  setWindowTitle(QString(tr("Karbo Wallet %1 Core 2")).arg(Settings::instance().getVersion()));
+  setWindowTitle(QString(tr("Karbo Wallet %1")).arg(Settings::instance().getVersion()));
 
   QList<QAction*> tabActions = m_tabActionGroup->actions();
   Q_FOREACH(auto action, tabActions) {
@@ -1043,19 +1224,11 @@ void MainWindow::checkTrackingMode() {
   }
 }
 
-void MainWindow::updateUnmixableBalance(quint64 _balance) {
-  if (_balance != 0) {
-      m_ui->m_sweepUnmixableAction->setEnabled(true);
-  } else {
-      m_ui->m_sweepUnmixableAction->setEnabled(false);
-  }
-}
-
 void MainWindow::createTrayIcon()
 {
 #ifdef Q_OS_WIN
     m_trayIcon = new QSystemTrayIcon(QPixmap(":images/cryptonote"), this);
-    QString toolTip = QString(tr("Karbo Wallet %1 Core 2")).arg(Settings::instance().getVersion());
+    QString toolTip = QString(tr("Karbo Wallet %1")).arg(Settings::instance().getVersion());
     m_trayIcon->setToolTip(toolTip);
     m_trayIcon->show();
 #endif

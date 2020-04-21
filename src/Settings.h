@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Cryptonote developers
-// Copyright (c) 2016 Karbowanec developers
+// Copyright (c) 2016-2019 Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -57,9 +57,13 @@ public:
   quint64 getOptimizationThreshold() const;
   quint64 getOptimizationMixin() const;
 
+  quint32 getRollBack() const;
+
   bool isEncrypted() const;
   bool isStartOnLoginEnabled() const;
   bool isTrackingMode() const;
+  bool skipFusionTransactions() const;
+  bool hideEverythingOnLocked() const;
 
 #ifdef Q_OS_WIN
   bool isMinimizeToTrayEnabled() const;
@@ -88,6 +92,8 @@ public:
   void setOptimizationInterval(quint64 _interval);
   void setOptimizationThreshold(quint64 _threshold);
   void setOptimizationMixin(quint64 _mixin);
+  void setSkipFusionTransactions(bool _skip);
+  void setHideEverythingOnLocked(bool _hide);
 
 private:
   QJsonObject m_settings;

@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2016 The Cryptonote developers
 // Copyright (c) 2015-2016 XDN developers
-// Copyright (c) 2016-2017 The Karbowanec developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,17 +8,20 @@
 
 #include <QMutex>
 #include <QObject>
+#include <QTime>
 #include <QTimer>
 #include <QPushButton>
 
 #include <list>
+#include <vector>
 #include <atomic>
 #include <fstream>
 
 #include <IWalletLegacy.h>
-#include <ITransfersContainer.h>
 
 namespace WalletGui {
+
+class ITransfersContainer;
 
 class WalletAdapter : public QObject, public CryptoNote::IWalletLegacyObserver {
   Q_OBJECT
@@ -31,6 +34,7 @@ public:
   void createWallet();
   void createNonDeterministic();
   void createWithKeys(const CryptoNote::AccountKeys& _keys);
+  void createWithKeys(const CryptoNote::AccountKeys& _keys, const quint32 _sync_heigth);
   void close();
   bool save(bool _details, bool _cache);
   void backup(const QString& _file);
@@ -51,7 +55,6 @@ public:
   size_t getUnlockedOutputsCount();
   bool isOpen() const;
   void sendTransaction(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, quint64 _fee, const QString& _payment_id, quint64 _mixin);
-  void sweepDust(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, quint64 _fee, const QString& _payment_id, quint64 _mixin);
   bool changePassword(const QString& _old_pass, const QString& _new_pass);
   void setWalletFile(const QString& _path);
   Crypto::SecretKey getTxKey(Crypto::Hash& txid);
@@ -59,6 +62,7 @@ public:
   quint64 estimateFusion(quint64 _threshold);
   std::list<CryptoNote::TransactionOutputInformation> getFusionTransfersToSend(quint64 _threshold, size_t _min_input_count, size_t _max_input_count);
   void sendFusionTransaction(const std::list<CryptoNote::TransactionOutputInformation>& _fusion_inputs, quint64 _fee, const QString& _extra, quint64 _mixin);
+  bool isFusionTransaction(const CryptoNote::WalletLegacyTransaction& walletTx) const;
 
   void initCompleted(std::error_code _result) Q_DECL_OVERRIDE;
   void saveCompleted(std::error_code _result) Q_DECL_OVERRIDE;
@@ -75,6 +79,7 @@ public:
   bool isDeterministic(CryptoNote::AccountKeys& _keys) const;
   QString getMnemonicSeed(QString _language) const;
   CryptoNote::AccountKeys getKeysFromMnemonicSeed(QString& _seed) const;
+  bool tryOpen(const QString& _password);
 
 private:
   std::fstream m_file;
@@ -85,6 +90,11 @@ private:
   std::atomic<quint64> m_lastWalletTransactionId;
   QTimer m_newTransactionsNotificationTimer;
   QPushButton* m_closeButton;
+
+  uint32_t m_syncSpeed;
+  uint32_t m_syncPeriod;
+  struct PerfType { uint32_t height; QTime time; };
+  std::vector<PerfType> m_perfData;
 
   WalletAdapter();
   ~WalletAdapter();

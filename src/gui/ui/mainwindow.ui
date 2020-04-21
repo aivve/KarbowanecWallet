@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
-    <height>550</height>
+    <width>840</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,14 +18,20 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>0</width>
-    <height>0</height>
+    <width>840</width>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
     <height>16777215</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>840</width>
+    <height>600</height>
    </size>
   </property>
   <property name="font">
@@ -42,7 +48,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -97,7 +103,7 @@
     <item row="1" column="3">
      <widget class="WalletGui::TransactionsFrame" name="m_transactionsFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -113,7 +119,7 @@
     <item row="1" column="0">
      <widget class="WalletGui::OverviewFrame" name="m_overviewFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -129,7 +135,7 @@
     <item row="1" column="5">
      <widget class="WalletGui::NoWalletFrame" name="m_noWalletFrame" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -139,7 +145,7 @@
     <item row="1" column="4">
      <widget class="WalletGui::AddressBookFrame" name="m_addressBookFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -155,7 +161,7 @@
     <item row="1" column="1">
      <widget class="WalletGui::SendFrame" name="m_sendFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -171,7 +177,7 @@
     <item row="1" column="2">
      <widget class="WalletGui::ReceiveFrame" name="m_receiveFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -191,7 +197,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>980</width>
+     <width>840</width>
      <height>21</height>
     </rect>
    </property>
@@ -210,6 +216,7 @@
     <addaction name="menuRecent_wallets"/>
     <addaction name="m_backupWalletAction"/>
     <addaction name="m_closeWalletAction"/>
+    <addaction name="m_lockWalletAction"/>
     <addaction name="separator"/>
     <addaction name="m_openUriAction"/>
     <addaction name="m_openLogFileAction"/>
@@ -231,6 +238,8 @@
     <addaction name="menuLanguage"/>
     <addaction name="m_connectionSettingsAction"/>
     <addaction name="m_optimizationAction"/>
+    <addaction name="m_hideFusionTransactions"/>
+    <addaction name="m_hideEverythingOnLocked"/>
     <addaction name="separator"/>
     <addaction name="m_startOnLoginAction"/>
     <addaction name="m_minimizeToTrayAction"/>
@@ -243,6 +252,7 @@
     <addaction name="m_aboutCryptonoteAction"/>
     <addaction name="m_aboutQtAction"/>
     <addaction name="actionHelp"/>
+    <addaction name="m_infoAction"/>
    </widget>
    <widget class="QMenu" name="menuWallet">
     <property name="title">
@@ -250,7 +260,6 @@
     </property>
     <addaction name="m_encryptWalletAction"/>
     <addaction name="m_changePasswordAction"/>
-    <addaction name="m_sweepUnmixableAction"/>
     <addaction name="m_proofBalanceAction"/>
     <addaction name="separator"/>
     <addaction name="m_showMnemonicSeedAction"/>
@@ -258,6 +267,7 @@
     <addaction name="m_exportTrackingKeyAction"/>
     <addaction name="separator"/>
     <addaction name="m_restoreFromMnemonicSeedAction"/>
+    <addaction name="m_importKeysAction"/>
     <addaction name="m_importKeyAction"/>
     <addaction name="m_importTrackingKeyAction"/>
     <addaction name="separator"/>
@@ -270,7 +280,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -283,14 +293,14 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>150</width>
-     <height>16777215</height>
+     <width>16777215</width>
+     <height>50</height>
     </size>
    </property>
    <property name="baseSize">
     <size>
-     <width>150</width>
-     <height>0</height>
+     <width>-1</width>
+     <height>50</height>
     </size>
    </property>
    <property name="font">
@@ -302,25 +312,25 @@
     <string>toolBar</string>
    </property>
    <property name="movable">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea|Qt::TopToolBarArea</set>
+    <set>Qt::TopToolBarArea</set>
    </property>
    <property name="orientation">
-    <enum>Qt::Vertical</enum>
+    <enum>Qt::Horizontal</enum>
    </property>
    <property name="iconSize">
     <size>
-     <width>20</width>
-     <height>20</height>
+     <width>38</width>
+     <height>30</height>
     </size>
    </property>
    <property name="toolButtonStyle">
     <enum>Qt::ToolButtonTextBesideIcon</enum>
    </property>
    <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
+    <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
@@ -340,7 +350,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <action name="m_overviewAction">
@@ -596,11 +606,6 @@
     <string>Create nondeterministic wallet</string>
    </property>
   </action>
-  <action name="m_sweepUnmixableAction">
-   <property name="text">
-    <string>Sweep unmixable</string>
-   </property>
-  </action>
   <action name="m_signMessageAction">
    <property name="text">
     <string>Sign message</string>
@@ -619,6 +624,40 @@
   <action name="m_proofBalanceAction">
    <property name="text">
     <string>Get proof of balance</string>
+   </property>
+  </action>
+  <action name="m_importKeysAction">
+   <property name="text">
+    <string>Import keys</string>
+   </property>
+  </action>
+  <action name="m_hideFusionTransactions">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Don't show wallet optimization transactions</string>
+   </property>
+  </action>
+  <action name="m_lockWalletAction">
+   <property name="text">
+    <string>Lock wallet</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="m_hideEverythingOnLocked">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hide everything when wallet is locked</string>
+   </property>
+  </action>
+  <action name="m_infoAction">
+   <property name="text">
+    <string>Information</string>
    </property>
   </action>
  </widget>
@@ -1151,22 +1190,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>m_sweepUnmixableAction</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sweepUnmixable()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>489</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>m_optimizationAction</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -1198,6 +1221,86 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>m_importKeysAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>importKeys()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_hideFusionTransactions</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setHideFusionTransactions(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_lockWalletAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>lockWalletWithPassword()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_hideEverythingOnLocked</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hideEverythingOnLocked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_infoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showStatusInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>createWallet()</slot>
@@ -1215,7 +1318,9 @@
   <slot>openConnectionSettings()</slot>
   <slot>openOptimizationSettings()</slot>
   <slot>showStatusInfo()</slot>
-  <slot>sweepUnmixable()</slot>
   <slot>getBalanceProof()</slot>
+  <slot>lockWalletWithPassword()</slot>
+  <slot>hideFusionTransactions(bool)</slot>
+  <slot>hideEverythingOnLocked(bool)</slot>
  </slots>
 </ui>

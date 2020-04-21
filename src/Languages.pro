@@ -35,6 +35,7 @@ gui/AnimatedLabel.cpp \
 gui/ChangePasswordDialog.cpp \
 gui/ExitWidget.cpp \
 gui/ImportKeyDialog.cpp \
+gui/ImportKeysDialog.cpp \
 gui/MainWindow.cpp \
 gui/MiningFrame.cpp \
 gui/NewAddressDialog.cpp \
@@ -64,6 +65,7 @@ gui/ConfirmSendDialog.cpp \
 gui/ExportTrackingKeyDialog.cpp \
 gui/ImportTrackingKeyDialog.cpp \
 gui/InfoDialog.cpp \
+gui/ConnectionsModel.cpp \
 gui/MnemonicSeedDialog.cpp \
 gui/RestoreFromMnemonicSeedDialog.cpp \
 gui/VerifyMnemonicSeedDialog.cpp \
@@ -95,6 +97,7 @@ gui/AnimatedLabel.h \
 gui/ChangePasswordDialog.h \
 gui/ExitWidget.h \
 gui/ImportKeyDialog.h \
+gui/ImportKeysDialog.h \
 gui/MainWindow.h \
 gui/MiningFrame.h \
 gui/NewAddressDialog.h \
@@ -125,6 +128,7 @@ gui/ConfirmSendDialog.h \
 gui/ExportTrackingKeyDialog.h \
 gui/ImportTrackingKeyDialog.h \
 gui/InfoDialog.h \
+gui/ConnectionsModel.h \
 gui/MnemonicSeedDialog.h \
 gui/RestoreFromMnemonicSeedDialog.h \
 gui/VerifyMnemonicSeedDialog.h \
@@ -141,6 +145,7 @@ gui/ui/addressbookframe.ui \
 gui/ui/changepassworddialog.ui \
 gui/ui/exitwidget.ui \
 gui/ui/importkeydialog.ui \
+gui/ui/importkeysdialog.ui \
 gui/ui/mainwindow.ui \
 gui/ui/miningframe.ui \
 gui/ui/newaddressdialog.ui \

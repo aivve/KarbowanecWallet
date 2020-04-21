@@ -22,6 +22,8 @@ TranslatorManager::TranslatorManager()
 #elif defined(Q_OS_MAC)
   m_langPath = QApplication::applicationDirPath();
   m_langPath = m_langPath + "/../Resources/languages/";
+#elif defined(__FreeBSD__)
+  m_langPath = "/usr/local/share/karbo/karbowallet/languages";
 #else
   m_langPath = "/opt/karbo/languages";
 #endif
@@ -44,22 +46,38 @@ TranslatorManager::TranslatorManager()
             }
         }
     }
-    QStringList resourcesQt = dir.entryList(QStringList("qt_??.qm"));
+    QString langPathSys;
+#if !defined(_MSC_VER) && !defined(Q_OS_MAC)
+#if defined(__FreeBSD__)
+    langPathSys = "/usr/local/share/qt5/translations";
+#else
+    langPathSys = "/usr/share/qt5/translations";
+#endif
+    QDir dirSys(langPathSys);
+    QStringList Listfilter;
+    Listfilter << "qt_??.qm" << "qtbase_??.qm" << "qtscript_??.qm" << "qtscript_??.qm";
+    Listfilter << "qtquick1_??.qm" << "qtmultimedia_??.qm" << "qtxmlpatterns_??.qm";
+    QStringList resourcesQt = dirSys.entryList(Listfilter);
+#else
+    langPathSys = m_langPath;
+    QDir dirSys(langPathSys);
+    QStringList resourcesQt = dirSys.entryList(QStringList("qt_??.qm"));
+#endif
     for (int j = 0; j < resourcesQt.size(); j++)
     {
+        const int langLen = 2;
         QString locale = resourcesQt[j];
         locale.truncate(locale.lastIndexOf('.'));
         QString l = locale;
-        l.remove(0,3);
+        l.remove(0, l.length() - langLen);
         if (l == lang)
         {
             QTranslator* qTranslator = new QTranslator;
-            if (qTranslator->load(resourcesQt[j], m_langPath))
+            if (qTranslator->load(resourcesQt[j], langPathSys))
             {
                 qApp->installTranslator(qTranslator);
                 m_keyLang = locale;
                 m_translators.insert(locale, qTranslator);
-                break;
             }
         }
     }

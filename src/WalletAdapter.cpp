@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2016 The Cryptonote developers
 // Copyright (c) 2015-2016 XDN developers
-// Copyright (c) 2016-2017 The Karbowanec developers
+// Copyright (c) 2016-2019 The Karbowanec developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,18 +13,20 @@
 #include <QVector>
 #include <QDebug>
 
+#include "WalletAdapter.h"
+
 #include <crypto/crypto.h>
 #include <Common/Base58.h>
 #include <Common/Util.h>
 #include <Wallet/WalletErrors.h>
 #include <Wallet/LegacyKeysImporter.h>
 #include "CryptoNoteCore/CryptoNoteBasic.h"
-
+#include <ITransfersContainer.h>
 #include "NodeAdapter.h"
 #include "Settings.h"
-#include "WalletAdapter.h"
 #include "Mnemonics/electrum-words.h"
 #include "gui/VerifyMnemonicSeedDialog.h"
+#include "CurrencyAdapter.h"
 
 extern "C"
 {
@@ -46,6 +48,7 @@ WalletAdapter& WalletAdapter::instance() {
 }
 
 WalletAdapter::WalletAdapter() : QObject(), m_wallet(nullptr), m_mutex(), m_isBackupInProgress(false),
+  m_syncSpeed(0), m_syncPeriod(0),
   m_isSynchronized(false), m_newTransactionsNotificationTimer(),
   m_lastWalletTransactionId(std::numeric_limits<quint64>::max()) {
   connect(this, &WalletAdapter::walletInitCompletedSignal, this, &WalletAdapter::onWalletInitCompleted, Qt::QueuedConnection);
@@ -96,7 +99,7 @@ quint64 WalletAdapter::getPendingBalance() const {
 
 quint64 WalletAdapter::getUnmixableBalance() const {
   try {
-    return m_wallet == nullptr ? 0 : m_wallet->dustBalance();
+    return m_wallet == nullptr ? 0 : m_wallet->unmixableBalance();
   } catch (std::system_error&) {
     return 0;
   }
@@ -132,6 +135,29 @@ void WalletAdapter::open(const QString& _password) {
   } else {
     //createWallet();
   }
+}
+
+bool WalletAdapter::tryOpen(const QString& _password) {
+  Q_ASSERT(m_wallet != nullptr);
+  if (Settings::instance().getWalletFile().endsWith(".wallet")) {
+    if (openFile(Settings::instance().getWalletFile(), true)) {
+      try {
+        if (m_wallet->tryLoadWallet(m_file, _password.toStdString())) {
+          closeFile();
+          return true;
+        }
+        else {
+          closeFile();
+          return false;
+        }
+      }
+      catch (std::system_error&) {
+        closeFile();
+        return false;
+      }
+    }
+  }
+  return false;
 }
 
 void WalletAdapter::createWallet() {
@@ -174,6 +200,13 @@ void WalletAdapter::createWithKeys(const CryptoNote::AccountKeys& _keys) {
   m_wallet->initWithKeys(_keys, "");
 }
 
+void WalletAdapter::createWithKeys(const CryptoNote::AccountKeys& _keys, const quint32 _sync_heigth) {
+  m_wallet = NodeAdapter::instance().createWallet();
+  m_wallet->addObserver(this);
+  Settings::instance().setEncrypted(false);
+  Q_EMIT walletStateChangedSignal(tr("Importing keys"));
+  m_wallet->initWithKeys(_keys, "", _sync_heigth);
+}
 
 bool WalletAdapter::isOpen() const {
   return m_wallet != nullptr;
@@ -349,17 +382,6 @@ void WalletAdapter::sendTransaction(const std::vector<CryptoNote::WalletLegacyTr
   }
 }
 
-void WalletAdapter::sweepDust(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, quint64 _fee, const QString& _paymentId, quint64 _mixin) {
-  Q_CHECK_PTR(m_wallet);
-  try {
-    lock();
-    m_wallet->/*sendDustTransaction*/sendTransaction(_transfers, _fee, NodeAdapter::instance().convertPaymentId(_paymentId), _mixin, 0);
-    Q_EMIT walletStateChangedSignal(tr("Sweeping unmixable dust"));
-  } catch (std::system_error&) {
-    unlock();
-  }
-}
-
 quint64 WalletAdapter::estimateFusion(quint64 _threshold) {
   Q_CHECK_PTR(m_wallet);
   try {
@@ -387,6 +409,11 @@ void WalletAdapter::sendFusionTransaction(const std::list<CryptoNote::Transactio
   } catch (std::system_error&) {
     unlock();
   }
+}
+
+bool WalletAdapter::isFusionTransaction(const CryptoNote::WalletLegacyTransaction& walletTx) const {
+  Q_CHECK_PTR(m_wallet);
+  return m_wallet->isFusionTransaction(walletTx);
 }
 
 bool WalletAdapter::changePassword(const QString& _oldPassword, const QString& _newPassword) {
@@ -435,7 +462,7 @@ void WalletAdapter::onWalletInitCompleted(int _error, const QString& _errorText)
   case 0: {
     Q_EMIT walletActualBalanceUpdatedSignal(m_wallet->actualBalance());
     Q_EMIT walletPendingBalanceUpdatedSignal(m_wallet->pendingBalance());
-    Q_EMIT walletUnmixableBalanceUpdatedSignal(m_wallet->dustBalance());
+    Q_EMIT walletUnmixableBalanceUpdatedSignal(m_wallet->unmixableBalance());
     Q_EMIT updateWalletAddressSignal(QString::fromStdString(m_wallet->getAddress()));
     Q_EMIT reloadWalletTransactionsSignal();
     Q_EMIT walletStateChangedSignal(tr("Ready"));
@@ -477,8 +504,52 @@ void WalletAdapter::saveCompleted(std::error_code _error) {
 }
 
 void WalletAdapter::synchronizationProgressUpdated(uint32_t _current, uint32_t _total) {
+  if (m_isSynchronized) {
+    m_syncSpeed = 0;
+    m_syncPeriod = 0;
+    m_perfData.clear();
+  }
   m_isSynchronized = false;
-  Q_EMIT walletStateChangedSignal(QString("%1 %2/%3").arg(tr("Synchronizing")).arg(_current).arg(_total));
+  const uint32_t speedCalcPeriod = 10;
+  const uint32_t periodDay = 60 * 60 * 24;
+  const uint32_t syncPeriodMax = std::numeric_limits<uint32_t>::max();
+  bool calcReady = false;
+  uint32_t totalDeltaTime = 0;
+  uint32_t totalDeltaHeight= 0;
+  uint32_t indexElements = m_perfData.empty() ? 0 : m_perfData.size() - 1;
+  for (uint32_t i = indexElements; i > 0; i--) {
+    totalDeltaTime += m_perfData[i - 1].time.secsTo(m_perfData[i].time);
+    totalDeltaHeight += m_perfData[i].height - m_perfData[i - 1].height;
+    if (totalDeltaTime >= speedCalcPeriod) {
+      m_perfData.erase(m_perfData.begin(), m_perfData.begin() + i - 1);
+      calcReady = true;
+      break;
+    }
+  }
+  if (calcReady && _total >= _current) {
+    m_syncSpeed = static_cast<uint32_t>(totalDeltaHeight / totalDeltaTime);
+    m_syncPeriod = m_syncSpeed > 0 ? static_cast<uint32_t>((_total - _current) / m_syncSpeed) : syncPeriodMax;
+  }
+  PerfType perfData = {_current, QTime::currentTime()};
+  m_perfData.push_back(std::move(perfData));
+  QString perfMess = "";
+  if (m_syncPeriod > 0) {
+    QDateTime leftTime = QDateTime::fromTime_t(m_syncPeriod).toUTC();
+    perfMess += "(";
+    perfMess += QString(tr("%n blocks per second", "", m_syncSpeed));
+    if (m_syncPeriod < syncPeriodMax) {
+      perfMess += " | ";
+      perfMess += QString(tr("est. completion in")) + " ";
+      if (m_syncPeriod >= periodDay) {
+        perfMess += QString(tr("%n day(s) and", "", static_cast<uint32_t>(m_syncPeriod / periodDay))) + " ";
+        perfMess += leftTime.toString("hh:mm");
+      } else {
+        perfMess += leftTime.toString("hh:mm:ss");
+      }
+    }
+    perfMess += ")";
+  }
+  Q_EMIT walletStateChangedSignal(QString("%1 %2/%3 %4").arg(tr("Synchronizing")).arg(_current).arg(_total).arg(perfMess));
   Q_EMIT walletSynchronizationProgressUpdatedSignal(_current, _total);
 }
 
@@ -696,6 +767,7 @@ QString WalletAdapter::getTxProof(Crypto::Hash& _txid, CryptoNote::AccountPublic
     m_wallet->getTxProof(_txid, _address, _tx_key, sig_str);
   } catch (std::system_error&) {
     QMessageBox::critical(nullptr, tr("Failed to get the transaction proof"), tr("Failed to get the transaction proof."), QMessageBox::Ok);
+    return QString();
   }
   return QString::fromStdString(sig_str);
 }
@@ -704,8 +776,8 @@ QString WalletAdapter::getReserveProof(const quint64 &_reserve, const QString &_
   Q_CHECK_PTR(m_wallet);
   if(Settings::instance().isTrackingMode()) {
     QMessageBox::critical(nullptr, tr("Failed to get the reserve proof"), tr("This is tracking wallet. The reserve proof can be generated only by a full wallet."), QMessageBox::Ok);
+    return QString();
   }
-  std::string sig_str;
   try {
     uint64_t amount = 0;
     if (_reserve == 0) {
@@ -716,6 +788,7 @@ QString WalletAdapter::getReserveProof(const quint64 &_reserve, const QString &_
     sig_str = m_wallet->getReserveProof(amount, (!_message.isEmpty() ? _message.toStdString() : ""));
   } catch (std::system_error&) {
     QMessageBox::critical(nullptr, tr("Failed to get the reserve proof"), tr("Failed to get the reserve proof."), QMessageBox::Ok);
+    return QString();
   }
   return QString::fromStdString(sig_str);
 }
