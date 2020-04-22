@@ -19,8 +19,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef BITSTREAM_H
-#define BITSTREAM_H
+#ifndef QBITSTREAM_H
+#define QBITSTREAM_H
 
 typedef struct {
 	int length;

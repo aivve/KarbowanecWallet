@@ -30,7 +30,7 @@
 #include "qrencode.h"
 #include "qrspec.h"
 #include "mqrspec.h"
-#include "bitstream.h"
+#include "qbitstream.h"
 #include "qrinput.h"
 
 /******************************************************************************

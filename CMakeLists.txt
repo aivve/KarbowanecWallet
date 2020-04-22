@@ -42,10 +42,18 @@ OUTPUT_VARIABLE GIT_REVISION)
 set(CRYPTONOTE_LIB cryptonote)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+set(UPNPC_BUILD_STATIC ON CACHE BOOL "Build static library")
+set(UPNPC_BUILD_SHARED OFF CACHE BOOL "Build shared library")
+set(UPNPC_BUILD_TESTS OFF CACHE BOOL "Build test executables")
+
 include_directories(${CMAKE_BINARY_DIR}
     src
+    cryptonote/external/rocksdb/include
+    cryptonote/external/zstd/lib
+    cryptonote/external/zstd/lib/common
+    cryptonote/external/zstd/lib/compress
+    cryptonote/external/zstd/lib/decompress
     cryptonote/external
-    cryptonote/external/rocksdb/include/
     cryptonote/include
     cryptonote/src)
 
@@ -70,13 +78,7 @@ if ((${Boost_MAJOR_VERSION} EQUAL 1) AND (${Boost_MINOR_VERSION} EQUAL 54))
 	message(SEND_ERROR "Boost version 1.54 is unsupported, more details are available here http://goo.gl/RrCFmA")
 endif ()
 
-find_package(Rocksdb 5.15.10)
-
-if (ROCKSDB_FOUND)
-  include_directories(${ROCKSDB_INCLUDE_DIR})
-else()
-  include_directories(cryptonote/external/rocksdb/include)
-endif()
+include_directories(cryptonote/external/rocksdb/include)
 
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -110,15 +112,12 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/external/miniupnpc/connecthostport.c
   cryptonote/external/miniupnpc/igd_desc_parse.c
   cryptonote/external/miniupnpc/minisoap.c
-  cryptonote/external/miniupnpc/minissdpc.c
   cryptonote/external/miniupnpc/miniupnpc.c
   cryptonote/external/miniupnpc/miniwget.c
   cryptonote/external/miniupnpc/minixml.c
   cryptonote/external/miniupnpc/portlistingparse.c
   cryptonote/external/miniupnpc/receivedata.c
   cryptonote/external/miniupnpc/upnpcommands.c
-  cryptonote/external/miniupnpc/upnpdev.c
-  cryptonote/external/miniupnpc/upnperrors.c
   cryptonote/external/miniupnpc/upnpreplyparse.c
   cryptonote/src/Common/Base58.cpp
   cryptonote/src/Common/Base64.cpp
@@ -246,19 +245,31 @@ if (WIN32)
   endforeach()
 endif()
 
+option(WITH_ZSTD ON "Build RocksDB with ZSTD")
+option(ZSTD_USE_STATIC_RUNTIME "LINK TO STATIC RUN-TIME LIBRARIES" OFF)
+option(WITH_MD_LIBRARY "Build RocksDB with MD" ON)
+
+add_subdirectory(cryptonote/external/miniupnpc EXCLUDE_FROM_ALL)
+
+add_subdirectory(cryptonote/external/zstd EXCLUDE_FROM_ALL)
+set_property(TARGET zstd PROPERTY FOLDER "external")
+
+add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+set_property(TARGET rocksdb PROPERTY FOLDER "external")
+
 if (WIN32)
   if (NOT MSVC)
 	message(FATAL_ERROR "Only MSVC is supported on this platform")
   endif ()
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
 
-  if (NOT ROCKSDB_FOUND)
-    add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
-    set_property(TARGET rocksdb PROPERTY FOLDER "external")
-    add_library(rocksdblib STATIC IMPORTED GLOBAL)
-    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
-  endif ()
-  
+  #add_library(zstdlib STATIC IMPORTED GLOBAL)
+  #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.lib)
+
+  #add_library(rocksdblib STATIC IMPORTED GLOBAL)
+  #target_link_libraries(rocksdblib INTERFACE zstdlib)
+  #set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
+ 
   include_directories(cryptonote/src/platform/msc)
   set(CMAKE_CXX_FLAGS "-bigobj -EHsc")
   set(PLATFORM_DIR Windows)
@@ -270,14 +281,14 @@ elseif (UNIX)
 
   file(GLOB PLATFORM_POSIX cryptonote/src/Platform/Posix/System/*)
   list(APPEND CRYPTONOTE_SOURCES ${PLATFORM_POSIX})
+  
+  #add_library(zstdlib STATIC IMPORTED GLOBAL)
+  #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.a)
 
-  if (NOT ROCKSDB_FOUND)
-    add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
-    set_property(TARGET rocksdb PROPERTY FOLDER "external")
-    add_library(rocksdblib STATIC IMPORTED GLOBAL)
-    set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.a)
-  endif ()
-
+  #add_library(rocksdblib STATIC IMPORTED GLOBAL)
+  #target_link_libraries(rocksdblib INTERFACE zstdlib)
+  #set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.a)
+ 
   set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   if (APPLE)
     enable_language(ASM)
@@ -442,19 +453,12 @@ add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
 add_library(Mnemonics ${Mnemonics})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 
-if (NOT ROCKSDB_FOUND)
-  if (WIN32)
-    target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES})
-  else ()
-    target_link_libraries(${CRYPTONOTE_LIB} rocksdb ${Boost_LIBRARIES} -lresolv)
-  endif ()
+if (WIN32)
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdb zstd ${Boost_LIBRARIES})
 else ()
-  if (WIN32)
-    target_link_libraries(${CRYPTONOTE_LIB} ${ROCKSDB_LIBRARIES} ${Boost_LIBRARIES})
-  else ()
-    target_link_libraries(${CRYPTONOTE_LIB} ${ROCKSDB_LIBRARIES} ${Boost_LIBRARIES} -lresolv)
-  endif ()
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdb zstd ${Boost_LIBRARIES} -lresolv)
 endif ()
+
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
 

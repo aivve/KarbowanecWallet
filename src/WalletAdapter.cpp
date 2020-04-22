@@ -185,7 +185,7 @@ void WalletAdapter::createNonDeterministic() {
   m_wallet->addObserver(this);
   Settings::instance().setEncrypted(false);
   try {
-    m_wallet->initAndGenerate("");
+    m_wallet->initAndGenerateNonDeterministic("");
   } catch (std::system_error&) {
     delete m_wallet;
     m_wallet = nullptr;
@@ -774,6 +774,7 @@ QString WalletAdapter::getTxProof(Crypto::Hash& _txid, CryptoNote::AccountPublic
 
 QString WalletAdapter::getReserveProof(const quint64 &_reserve, const QString &_message) {
   Q_CHECK_PTR(m_wallet);
+  std::string sig_str;
   if(Settings::instance().isTrackingMode()) {
     QMessageBox::critical(nullptr, tr("Failed to get the reserve proof"), tr("This is tracking wallet. The reserve proof can be generated only by a full wallet."), QMessageBox::Ok);
     return QString();

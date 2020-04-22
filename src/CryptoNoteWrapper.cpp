@@ -5,6 +5,7 @@
 
 #include <limits>
 #include <future>
+#include <thread>
 #include "CryptoNoteWrapper.h"
 #include <CheckpointsData.h>
 #include "Common/StringTools.h"
@@ -28,8 +29,6 @@
 #include "CryptoNoteCore/DatabaseBlockchainCacheFactory.h"
 #include "CryptoNoteCore/DataBaseConfig.h"
 #include "CryptoNoteCore/DataBaseErrors.h"
-#include "CryptoNoteCore/MainChainStorage.h"
-#include "CryptoNoteCore/IMainChainStorage.h"
 #include "CryptoNoteCore/RocksDBWrapper.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "InProcessNode/InProcessNode.h"
@@ -260,38 +259,29 @@ public:
     Logging::LoggerManager& logManager,
     CryptoNote::Checkpoints& checkpoints,
     const CryptoNote::NetNodeConfig& netNodeConfig,
+    CryptoNote::DataBaseConfig dbConfig,
     INodeCallback& callback) :
     m_currency(currency),
     m_dispatcher(),
     m_callback(callback),
     m_logManager(logManager),
     m_checkpoints(checkpoints),
-    m_dbConfig(),
-    m_database(logManager),
+    m_database(m_logManager, dbConfig),
     m_netNodeConfig(netNodeConfig),
     m_core(currency, logManager, std::move(m_checkpoints), m_dispatcher,
       std::unique_ptr<CryptoNote::IBlockchainCacheFactory>(new CryptoNote::DatabaseBlockchainCacheFactory(m_database, m_logManager)),
-      CryptoNote::createSwappedMainChainStorage(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()), currency)),
+      std::thread::hardware_concurrency()),
     m_protocolHandler(currency, m_dispatcher, m_core, nullptr, logManager),
     m_nodeServer(m_dispatcher, m_protocolHandler, logManager),
     m_node(m_core, m_protocolHandler, m_dispatcher) {
 
-    //TODO: move to settings?
-    m_dbConfig.setConfigFolderDefaulted(true);
-    m_dbConfig.setDataDir(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()));
-    m_dbConfig.setMaxOpenFiles(100);
-    m_dbConfig.setReadCacheSize(128 * 1024 * 1024);
-    m_dbConfig.setWriteBufferSize(128 * 1024 * 1024);
-    m_dbConfig.setTestnet(false);
-    m_dbConfig.setBackgroundThreadsCount(4);
-
     try {
-      m_database.init(m_dbConfig);
+      m_database.init();
       if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(m_database, logManager))
       {
         m_database.shutdown();
-        m_database.destoy(m_dbConfig);
-        m_database.init(m_dbConfig);
+        m_database.destroy();
+        m_database.init();
       }
     }
     catch (const std::system_error& _error) {
@@ -459,7 +449,6 @@ private:
   Logging::LoggerManager& m_logManager;
   CryptoNote::Checkpoints& m_checkpoints;
   CryptoNote::RocksDBWrapper m_database;
-  CryptoNote::DataBaseConfig m_dbConfig;
   CryptoNote::NetNodeConfig m_netNodeConfig;
   CryptoNote::Core m_core;
   CryptoNote::CryptoNoteProtocolHandler m_protocolHandler;
@@ -488,13 +477,34 @@ Node* createRpcNode(const CryptoNote::Currency& currency, INodeCallback& callbac
 Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerManager& logManager,
   const CryptoNote::NetNodeConfig& netNodeConfig, INodeCallback& callback) {
 
+  CryptoNote::DataBaseConfig dbConfig;
+  //TODO: move to settings?
+  dbConfig.setConfigFolderDefaulted(true);
+  dbConfig.setDataDir(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()));
+  dbConfig.setMaxOpenFiles(100);
+  dbConfig.setReadCacheSize(128 * 1024 * 1024);
+  dbConfig.setWriteBufferSize(128 * 1024 * 1024);
+  dbConfig.setTestnet(false);
+  dbConfig.setBackgroundThreadsCount(4);
+
+  if (dbConfig.isConfigFolderDefaulted()) {
+    if (!Tools::create_directories_if_necessary(dbConfig.getDataDir())) {
+      throw std::runtime_error("Can't create directory: " + dbConfig.getDataDir());
+    }
+  }
+  else {
+    if (!Tools::directoryExists(dbConfig.getDataDir())) {
+      throw std::runtime_error("Directory does not exist: " + dbConfig.getDataDir());
+    }
+  }
+
   CryptoNote::Checkpoints checkpoints(logManager);
   for (const CryptoNote::CheckpointData& checkpoint : CryptoNote::CHECKPOINTS) {
     checkpoints.addCheckpoint(checkpoint.index, checkpoint.blockId);
   }
   checkpoints.loadCheckpointsFromDns();
 
-  return new InprocessNode(currency, logManager, checkpoints, netNodeConfig, callback);
+  return new InprocessNode(currency, logManager, checkpoints, netNodeConfig, dbConfig, callback);
 }
 
 }

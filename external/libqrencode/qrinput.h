@@ -23,7 +23,7 @@
 #define QRINPUT_H
 
 #include "qrencode.h"
-#include "bitstream.h"
+#include "qbitstream.h"
 
 int QRinput_isSplittableMode(QRencodeMode mode);
 

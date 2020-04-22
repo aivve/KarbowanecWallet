@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bitstream.h"
+#include "qbitstream.h"
 
 #define DEFAULT_BUFSIZE (128)
 
