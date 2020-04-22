@@ -1,11 +1,11 @@
 Name "Karbo Wallet (64-bit)"
 
 # General Symbol Definitions
-!define PROJECT_NAME "@CN_PROJECT_NAME@"
-!define PROJECT_VERSION "@CN_VERSION@"
+!define PROJECT_NAME "@WALLET_NAME@"
+!define PROJECT_VERSION "@WALLET_VERSION@"
 !define REGKEY "SOFTWARE\$(^Name)"
-!define COMPANY "@PROJECT_VENDOR_NAME@"
-!define URL "@PROJECT_VENDOR_URL@"
+!define COMPANY "@WALLET_VENDOR_NAME@"
+!define URL "@WALLET_VENDOR_URL@"
 
 RequestExecutionLevel highest
 SetCompressor /SOLID lzma

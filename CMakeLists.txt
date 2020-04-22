@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
+# Required for finding Threads on ARM
+enable_language(C)
+enable_language(CXX)
+
 include(CryptoNoteWallet.cmake)
 include(external/ext.cmake)
 
@@ -33,7 +37,7 @@ if(ARCH_ID STREQUAL "ppc64le")
   set(PPC64LE 1)
 endif()
 
-project(${CN_PROJECT_NAME})
+project(${WALLET_NAME})
 
 execute_process(COMMAND git log -1 --pretty=format:%h
 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -462,33 +466,33 @@ endif ()
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
 
-add_executable(${PROJECT_NAME} ${BUILD_PLATFORM} ${BUILD_RESOURCES} ${SOURCES} ${HEADERS} ${UIS} ${RCC})
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${QRENCODE_LIB} Mnemonics)
-add_dependencies(${PROJECT_NAME} translations)
+add_executable(${WALLET_NAME} ${BUILD_PLATFORM} ${BUILD_RESOURCES} ${SOURCES} ${HEADERS} ${UIS} ${RCC})
+set_target_properties(${WALLET_NAME} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
+target_link_libraries(${WALLET_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${QRENCODE_LIB} Mnemonics)
+add_dependencies(${WALLET_NAME} translations)
 if (WIN32)
-  add_dependencies(${PROJECT_NAME} translations_delault)
+  add_dependencies(${WALLET_NAME} translations_delault)
 endif ()
 
 if (APPLE)
-  set_target_properties(${PROJECT_NAME} PROPERTIES
+  set_target_properties(${WALLET_NAME} PROPERTIES
   MACOSX_BUNDLE TRUE
   MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
   
-  target_link_libraries(${PROJECT_NAME} Qt5::PrintSupport) 
+  target_link_libraries(${WALLET_NAME} Qt5::PrintSupport) 
 elseif (UNIX)
-  target_link_libraries(${PROJECT_NAME} -lpthread)
+  target_link_libraries(${WALLET_NAME} -lpthread)
 elseif (WIN32 AND NOT ROCKSDB_FOUND)
-  target_link_libraries(${PROJECT_NAME} Imm32 Iphlpapi Winmm)
+  target_link_libraries(${WALLET_NAME} Imm32 Iphlpapi Winmm)
 elseif (WIN32 AND ROCKSDB_FOUND)
-  target_link_libraries(${PROJECT_NAME} Imm32 Iphlpapi Winmm Rpcrt4 Shlwapi)
+  target_link_libraries(${WALLET_NAME} Imm32 Iphlpapi Winmm Rpcrt4 Shlwapi)
 endif (APPLE)
 
-qt5_use_modules(${PROJECT_NAME} Widgets Gui Network)
+qt5_use_modules(${WALLET_NAME} Widgets Gui Network)
 
 # Installation
 
-set(CPACK_PACKAGE_NAME ${CN_PROJECT_NAME})
+set(CPACK_PACKAGE_NAME ${CN_WALLET_NAME})
 set(CPACK_PACKAGE_VERSION ${CN_VERSION})
 set(CPACK_PACKAGE_VENDOR "Karbowanec-project")
 set(CPACK_PACKAGE_CONTACT "https://karbo.org")
@@ -497,11 +501,11 @@ if (APPLE)
     set(CPACK_GENERATOR DragNDrop)
 	set(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-	install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
+	install(TARGETS ${WALLET_NAME} BUNDLE DESTINATION .)
 elseif (UNIX)
     find_program(RPMBUILD rpmbuild)
 
-    install(PROGRAMS ${CMAKE_BINARY_DIR}/${PROJECT_NAME} DESTINATION bin
+    install(PROGRAMS ${CMAKE_BINARY_DIR}/${WALLET_NAME} DESTINATION bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     install(FILES ${CMAKE_BINARY_DIR}/karbowanecwallet.desktop DESTINATION share/applications)
     install(FILES src/images/karbowanez.png DESTINATION share/pixmaps RENAME karbowanec.png)
@@ -565,7 +569,7 @@ elseif (WIN32)
     set(CPACK_ALL_INSTALL_TYPES Full)
     set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
 
-    #install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
+    #install(TARGETS ${WALLET_NAME} RUNTIME DESTINATION .)
     set(CPACK_GENERATOR NSIS)
 endif (APPLE)
 
