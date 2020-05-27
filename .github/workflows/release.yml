@@ -41,10 +41,10 @@ jobs:
           set CMAKE_PREFIX_PATH="$($qt5_cmake)"
           $qt5_cmake = "${{ env.Qt5_Dir }}/lib/cmake" -replace '[/]', '\\'
           Remove-Item cryptonote -Recurse -ErrorAction Ignore
-          git clone https://github.com/seredat/karbowanec cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir "$build_folder"
           cd "$build_folder"
-          Start-Process cmake -ArgumentList "-G ""Visual Studio 16 2019"" -A x64",".." -NoNewWindow -Wait
+          Start-Process cmake -ArgumentList "-G ""Visual Studio 16 2019"" -DBOOST_ROOT=""$env:BOOST_ROOT_1_69_0"" -A x64",".." -NoNewWindow -Wait
           Start-Process msbuild -ArgumentList "KarbowanecWallet.sln","/p:Configuration=Release" -NoNewWindow -Wait
           $build_path = "./$build_folder"
           echo "::set-output name=build_path::${build_path}"
@@ -114,7 +114,7 @@ jobs:
           brew install gcc boost@1.60
           brew link boost@1.60 --force
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -D CMAKE_BUILD_TYPE=Release ../..
@@ -158,7 +158,7 @@ jobs:
           release_name=Karbo-wallet-ubuntu-16.04-"$krb_ver"
           app_name="KarbowanecWallet"
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -D ARCH=default -D CMAKE_BUILD_TYPE=Release -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -D BOOST_IGNORE_SYSTEM_PATHS_DEFAULT=ON -D BOOST_ROOT=/usr ../..
@@ -200,7 +200,7 @@ jobs:
           release_name=Karbo-wallet-ubuntu-18.04-"$krb_ver"
           app_name="KarbowanecWallet"
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -D ARCH=default -D CMAKE_BUILD_TYPE=Release -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -D BOOST_IGNORE_SYSTEM_PATHS_DEFAULT=ON -D BOOST_ROOT=/usr ../..

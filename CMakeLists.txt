@@ -106,7 +106,7 @@ configure_file(
     @ONLY
 )
 
-add_definitions(-DVERSION=\"${CN_VERSION}\")
+add_definitions(-DVERSION=\"${WALLET_VERSION}\")
 add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
 add_definitions(-DUPNP_STATIC -DMINIUPNP_STATICLIB -DUPNPC_BUILD_STATIC)
 
@@ -161,7 +161,7 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/crypto/slow-hash.c
   cryptonote/src/crypto/slow-hash.cpp
   cryptonote/src/crypto/tree-hash.c
-  cryptonote/src/CheckPoints/CheckPoints.cpp
+  cryptonote/src/Checkpoints/Checkpoints.cpp
   cryptonote/src/CryptoNoteCore/*.cpp
   cryptonote/src/CryptoNoteProtocol/*.cpp
   cryptonote/src/HTTP/HttpRequest.cpp
@@ -252,20 +252,24 @@ endif()
 option(WITH_ZSTD ON "Build RocksDB with ZSTD")
 option(ZSTD_USE_STATIC_RUNTIME "LINK TO STATIC RUN-TIME LIBRARIES" OFF)
 option(WITH_MD_LIBRARY "Build RocksDB with MD" ON)
+set(PORTABLE ON CACHE BOOL "Buid portable RockDB")
+set(WITH_GFLAGS OFF CACHE BOOL "No gflags")
+set(WITH_TESTS OFF CACHE BOOL "No tests")
+set(WITH_TOOLS OFF CACHE BOOL "No tools")
 
 add_subdirectory(cryptonote/external/miniupnpc EXCLUDE_FROM_ALL)
 
 add_subdirectory(cryptonote/external/zstd EXCLUDE_FROM_ALL)
 set_property(TARGET zstd PROPERTY FOLDER "external")
 
-add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
-set_property(TARGET rocksdb PROPERTY FOLDER "external")
-
 if (WIN32)
   if (NOT MSVC)
 	message(FATAL_ERROR "Only MSVC is supported on this platform")
   endif ()
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
+
+  add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
+  set_property(TARGET rocksdb PROPERTY FOLDER "external")
 
   #add_library(zstdlib STATIC IMPORTED GLOBAL)
   #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.lib)
@@ -286,6 +290,21 @@ elseif (UNIX)
   file(GLOB PLATFORM_POSIX cryptonote/src/Platform/Posix/System/*)
   list(APPEND CRYPTONOTE_SOURCES ${PLATFORM_POSIX})
   
+  execute_process(
+        COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/cryptonote/external/rocksdb -DARCH=${ARCH} -DWITH_ZSTD=${WITH_ZSTD} -DWITH_GFLAGS=0 -DCMAKE_BUILD_TYPE=MinSizeRel -DWITH_TESTS=OFF -DWITH_TOOLS=OFF -DPORTABLE=ON -B${PROJECT_BINARY_DIR}/rocksdb
+      )
+  set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a")
+
+  set_property(TARGET upnpc-static zstd PROPERTY FOLDER "external")
+  add_custom_target(
+         rocksdb
+         COMMAND $(MAKE) rocksdb
+         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/rocksdb
+  )
+  add_library(rocksdblib STATIC IMPORTED GLOBAL)
+  set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a)
+  add_dependencies(rocksdblib rocksdb)
+
   #add_library(zstdlib STATIC IMPORTED GLOBAL)
   #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.a)
 
@@ -460,7 +479,7 @@ set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOUR
 if (WIN32)
   target_link_libraries(${CRYPTONOTE_LIB} rocksdb zstd ${Boost_LIBRARIES})
 else ()
-  target_link_libraries(${CRYPTONOTE_LIB} rocksdb zstd ${Boost_LIBRARIES} -lresolv)
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdblib zstd ${Boost_LIBRARIES} -lresolv)
 endif ()
 
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
@@ -492,8 +511,8 @@ qt5_use_modules(${WALLET_NAME} Widgets Gui Network)
 
 # Installation
 
-set(CPACK_PACKAGE_NAME ${CN_WALLET_NAME})
-set(CPACK_PACKAGE_VERSION ${CN_VERSION})
+set(CPACK_PACKAGE_NAME ${WALLET_NAME})
+set(CPACK_PACKAGE_VERSION ${WALLET_VERSION})
 set(CPACK_PACKAGE_VENDOR "Karbowanec-project")
 set(CPACK_PACKAGE_CONTACT "https://karbo.org")
 set(CPACK_STRIP_FILES ON)
@@ -515,7 +534,7 @@ elseif (UNIX)
     if (RPMBUILD)
         set(CPACK_GENERATOR "RPM;DEB")
         set(CPACK_SYSTEM_NAME x86_64)
-        set(CPACK_RPM_PACKAGE_RELEASE ${CN_VERSION})
+        set(CPACK_RPM_PACKAGE_RELEASE ${WALLET_VERSION})
         set(CPACK_RPM_PACKAGE_LICENSE "MIT")
         set(CPACK_RPM_PACKAGE_GROUP Office)
         set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.3.2, qt5-qtbase-gui >= 5.3.2")

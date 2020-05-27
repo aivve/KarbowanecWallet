@@ -55,12 +55,12 @@ InstallDir $PROGRAMFILES64\Karbowanec
 CRCCheck on
 BrandingText "@CN_CURRENCY_DISPLAY_NAME@ Wallet"
 ShowInstDetails show
-VIProductVersion @PROJECT_VER_MAJOR@.@PROJECT_VER_MINOR@.@PROJECT_VER_PATCH@.@PROJECT_VER_BUILD@
+VIProductVersion @WALLET_VER_MAJOR@.@WALLET_VER_MINOR@.@WALLET_VER_PATCH@.@WALLET_VER_BUILD@
 VIAddVersionKey ProductName "${PROJECT_NAME}"
 VIAddVersionKey ProductVersion "${PROJECT_VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
-VIAddVersionKey FileVersion "@CN_VERSION@"
+VIAddVersionKey FileVersion "@WALLET_VERSION@"
 VIAddVersionKey FileDescription "Installer for ${PROJECT_NAME}"
 VIAddVersionKey LegalCopyright "Copyright (C) 2016-2020 ${COMPANY}"
 InstallDirRegKey HKCU "${REGKEY}" Path
