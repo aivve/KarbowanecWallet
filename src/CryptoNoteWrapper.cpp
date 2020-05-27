@@ -7,12 +7,12 @@
 #include <future>
 #include <thread>
 #include "CryptoNoteWrapper.h"
-#include <CheckpointsData.h>
+#include "Checkpoints/Checkpoints.h"
+#include "Checkpoints/CheckpointsData.h"
 #include "Common/StringTools.h"
 #include "CryptoNoteCore/CryptoNoteBasicImpl.h"
 #include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "CryptoNoteCore/Currency.h"
-#include "CryptoNoteCore/Checkpoints.h"
 #include "NodeRpcProxy/NodeRpcProxy.h"
 #include "CryptoNoteCore/DataBaseConfig.h"
 #include "P2p/NetNodeConfig.h"
