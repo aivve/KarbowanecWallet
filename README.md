@@ -1,7 +1,9 @@
+This is [Karbo2](https://github.com/Karbovanets/karbo/) version of Karbo Classic Wallet intended to work with Karbo Core starting from v. 2 (v. 2.3.0). 
+
 **1. Clone wallet sources**
 
 ```
-git clone https://github.com/seredat/karbowanecwallet.git
+git clone https://github.com/Karbovanets/karbo.git
 ```
 
 **2. Set symbolic link to coin sources at the same level as `src`. For example:**
@@ -13,7 +15,7 @@ ln -s ../karbowanec cryptonote
 Alternative way is to create git submodule:
 
 ```
-git submodule add https://github.com/seredat/karbowanec.git cryptonote
+git submodule add https://github.com/Karbovanets/karbo.git cryptonote
 ```
 
 **3. Build**
