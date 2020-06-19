@@ -5,7 +5,7 @@
 #include "AboutDialog.h"
 #include "CurrencyAdapter.h"
 #include "Settings.h"
-#include "cnVersion.h"
+#include "version.h"
 #include "CryptoNoteWalletConfig.h"
 
 #include "ui_aboutdialog.h"
