@@ -111,8 +111,15 @@ jobs:
   build-macos:
     name: macOS
     runs-on: macos-latest
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '10.12'
     steps:
       - uses: actions/checkout@master
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@1.0
+        with:
+          xcode-version: '10'
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
