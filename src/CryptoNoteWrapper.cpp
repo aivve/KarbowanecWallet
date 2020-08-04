@@ -110,7 +110,7 @@ public:
     m_currency(currency),
     m_dispatcher(),
     m_logManager(logManager),
-    m_node(nodeHost, nodePort, m_logManager, "/", enableSSL) {
+    m_node(nodeHost, nodePort, "/", enableSSL, m_logManager) {
     m_node.addObserver(this);
   }
 
