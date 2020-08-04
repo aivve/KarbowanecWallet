@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 2.8)
+# We need 3.8 for set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.8)
 
 # Required for finding Threads on ARM
 enable_language(C)
 enable_language(CXX)
+
+# Enable c++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CryptoNoteWallet.cmake)
 include(external/ext.cmake)
@@ -321,7 +327,7 @@ if (WIN32)
   #set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
  
   include_directories(cryptonote/src/platform/msc)
-  set(CMAKE_CXX_FLAGS "-bigobj -EHsc")
+  set(CMAKE_CXX_FLAGS "-bigobj -EHsc -std=c++17")
   set(PLATFORM_DIR Windows)
   set(BUILD_PLATFORM WIN32)
   set(BUILD_RESOURCES src/cryptonotewallet.rc)
@@ -399,7 +405,7 @@ elseif (UNIX)
 
     include_directories(/usr/include/malloc)
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes -std=c++11 -stdlib=libc++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes -std=c++17 -stdlib=libc++")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -maes -D_DARWIN_C_SOURCE")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Cocoa -framework OpenGL -framework CoreFoundation -framework Carbon -framework IOKit -L/usr/lib")
 
@@ -432,7 +438,7 @@ elseif (UNIX)
       set(ARCH_FLAG "-march=${ARCH}")
     endif()
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_GNU_SOURCE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -D_GNU_SOURCE")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -D_GNU_SOURCE")
 
     if (NOT ARM AND NOT PPC64LE)
