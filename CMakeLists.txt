@@ -154,12 +154,15 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/external/miniupnpc/connecthostport.c
   cryptonote/external/miniupnpc/igd_desc_parse.c
   cryptonote/external/miniupnpc/minisoap.c
+  cryptonote/external/miniupnpc/minissdpc.c
   cryptonote/external/miniupnpc/miniupnpc.c
   cryptonote/external/miniupnpc/miniwget.c
   cryptonote/external/miniupnpc/minixml.c
   cryptonote/external/miniupnpc/portlistingparse.c
   cryptonote/external/miniupnpc/receivedata.c
   cryptonote/external/miniupnpc/upnpcommands.c
+  cryptonote/external/miniupnpc/upnpdev.c
+  cryptonote/external/miniupnpc/upnperrors.c
   cryptonote/external/miniupnpc/upnpreplyparse.c
   cryptonote/src/Common/Base58.cpp
   cryptonote/src/Common/Base64.cpp
@@ -325,7 +328,7 @@ if (WIN32)
   set(QTMAIN Qt5::WinMain)
   
 elseif (UNIX)
-
+  set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   file(GLOB PLATFORM_POSIX cryptonote/src/Platform/Posix/System/*)
   list(APPEND CRYPTONOTE_SOURCES ${PLATFORM_POSIX})
 
