@@ -53,7 +53,7 @@ jobs:
           set CMAKE_PREFIX_PATH="$($qt5_cmake)"
           $qt5_cmake = "${{ env.Qt5_Dir }}/lib/cmake" -replace '[/]', '\\'
           Remove-Item cryptonote -Recurse -ErrorAction Ignore
-          git clone https://github.com/seredat/karbowanec cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir "$build_folder"
           cd "$build_folder"
           Start-Process cmake -ArgumentList "-DBOOST_ROOT=""$env:BOOST_ROOT_1_69_0"" -G ""Visual Studio 16 2019"" -A x64",".." -NoNewWindow -Wait
@@ -145,7 +145,7 @@ jobs:
           brew install gcc boost
           brew link boost --force
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -D CMAKE_BUILD_TYPE=Release ../..
@@ -200,7 +200,7 @@ jobs:
           release_name=Karbo-wallet-ubuntu-20.04-"krb_ver"
           app_name="KarbowanecWallet"
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -D ARCH=default -D CMAKE_BUILD_TYPE=Release -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -D BOOST_IGNORE_SYSTEM_PATHS_DEFAULT=ON -D BOOST_ROOT=/usr ../..
@@ -253,7 +253,7 @@ jobs:
           release_name=Karbo-wallet-ubuntu-18.04-"krb_ver"
           app_name="KarbowanecWallet"
           rm -rf cryptonote
-          git clone https://github.com/seredat/karbowanec.git cryptonote
+          git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
           cd "$build_folder"
           cmake -D ARCH=default -D CMAKE_BUILD_TYPE=Release -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -D BOOST_IGNORE_SYSTEM_PATHS_DEFAULT=ON -D BOOST_ROOT=/usr ../..
