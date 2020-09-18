@@ -171,7 +171,6 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/external/miniupnpc/upnperrors.c
   cryptonote/external/miniupnpc/upnpreplyparse.c
   cryptonote/src/Common/Base58.cpp
-  cryptonote/src/Common/Base64.cpp
   cryptonote/src/Common/CommandLine.cpp
   cryptonote/src/Common/FormatTools.cpp
   cryptonote/src/Common/Util.cpp
