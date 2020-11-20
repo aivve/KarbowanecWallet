@@ -90,7 +90,6 @@ jobs:
         with:
           path: ${{ steps.build.outputs.asset_path_archive }}
           name: ${{ steps.build.outputs.release_name_archive }}
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -150,8 +149,8 @@ jobs:
           rm -rf cryptonote
           git clone https://github.com/Karbovanets/karbo cryptonote
           mkdir -p "$build_folder"
-          cmake -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -D CMAKE_BUILD_TYPE=Release ../..
           cd "$build_folder"
+          cmake -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -D CMAKE_BUILD_TYPE=Release ../..
           make
           mkdir "$app_name$lang_folder"
           cp languages/*.qm "$app_name$lang_folder"
@@ -272,8 +271,5 @@ jobs:
         with:
           path: ${{ steps.build.outputs.asset_path }}
           name: ${{ steps.build.outputs.release_name }}
-          body: |
-            **${{ steps.build.outputs.release_name }}**
-            ${{ steps.build.outputs.sha256 }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
