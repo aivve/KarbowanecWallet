@@ -98,9 +98,6 @@ jobs:
         with:
           path: ${{ steps.build.outputs.asset_path_install }}
           name: ${{ steps.build.outputs.release_name_install }}
-          body: |
-            **${{ steps.build.outputs.release_name_install }}**
-            ${{ steps.build.outputs.sha256i }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -124,7 +121,7 @@ jobs:
         with:
           xcode-version: '10'
 
-      - name: Install deps
+      - name: Install other deps
         run: |
           brew install gcc boost
           brew link boost --force
@@ -169,9 +166,6 @@ jobs:
         with:
           path: ${{ steps.build.outputs.asset_path }}
           name: ${{ steps.build.outputs.release_name }}
-          body: |
-            **${{ steps.build.outputs.release_name }}**
-            ${{ steps.build.outputs.sha256 }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
