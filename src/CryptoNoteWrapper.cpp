@@ -294,7 +294,9 @@ public:
       throw std::runtime_error("Database initialization failed");
     }
 
-    m_core.load();
+    CryptoNote::MinerConfig emptyMiner;
+
+    m_core.load(emptyMiner);
 
     m_protocolHandler.set_p2p_endpoint(&m_nodeServer);
 
