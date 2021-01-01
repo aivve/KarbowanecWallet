@@ -24,7 +24,7 @@
 #include "QRCodeDialog.h"
 #include "QRLabel.h"
 
-#include "ui_QRCodeDialog.h"
+#include "ui_qrcodedialog.h"
 
 namespace WalletGui {
 
