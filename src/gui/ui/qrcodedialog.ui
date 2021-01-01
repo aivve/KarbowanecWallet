@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>QR Code</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -91,7 +91,7 @@
      <item>
       <widget class="QPushButton" name="m_saveToFileButton">
        <property name="text">
-        <string>Save to file</string>
+        <string>Save QR to file</string>
        </property>
       </widget>
      </item>
