@@ -366,6 +366,34 @@ Please wait...</source>
     </message>
 </context>
 <context>
+    <name>ExportRawTransactionDialog</name>
+    <message>
+        <location filename="../gui/ui/exportrawtxdialog.ui" line="26"/>
+        <source>Export raw transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/exportrawtxdialog.ui" line="53"/>
+        <source>You can broadcast this transaction to the network e.g. via block explorer or RPC request to any public node.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/exportrawtxdialog.ui" line="75"/>
+        <source>Save to file</source>
+        <translation>ファイル保存</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/exportrawtxdialog.ui" line="86"/>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/exportrawtxdialog.ui" line="97"/>
+        <source>Close</source>
+        <translation>閉じる</translation>
+    </message>
+</context>
+<context>
     <name>ExportTrackingKeyDialog</name>
     <message>
         <location filename="../gui/ui/exporttrackingkeydialog.ui" line="26"/>
@@ -1005,12 +1033,27 @@ Please wait...</source>
         <translation>ポート:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/newnodedialog.ui" line="72"/>
+        <location filename="../gui/ui/newnodedialog.ui" line="55"/>
+        <source>Path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/newnodedialog.ui" line="62"/>
+        <source>/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/newnodedialog.ui" line="69"/>
+        <source>SSL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/newnodedialog.ui" line="103"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../gui/ui/newnodedialog.ui" line="79"/>
+        <location filename="../gui/ui/newnodedialog.ui" line="110"/>
         <source>OK</source>
         <translation>よし</translation>
     </message>
@@ -1327,12 +1370,12 @@ Please wait...</source>
         <translation>ブロックチェーン ローディング中...</translation>
     </message>
     <message>
-        <location filename="../update.cpp" line="90"/>
+        <location filename="../update.cpp" line="62"/>
         <source>New version available</source>
         <translation>利用可能な新バージョン</translation>
     </message>
     <message>
-        <location filename="../update.cpp" line="90"/>
+        <location filename="../update.cpp" line="62"/>
         <source>There is an update available.
 Do you want to go to the download page?</source>
         <translation>利用可能なアップデートがあります。
@@ -1458,7 +1501,7 @@ Do you want to go to the download page?</source>
         <translation type="vanished">匿名性レベル:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="167"/>
+        <location filename="../gui/ui/sendframe.ui" line="148"/>
         <source>Donate 0.1% to development fund:</source>
         <translation>開発資金へ0.1%寄付:</translation>
     </message>
@@ -1486,12 +1529,12 @@ Do you want to go to the download page?</source>
         <translation>ペイメントID:</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="160"/>
+        <location filename="../gui/ui/sendframe.ui" line="170"/>
         <source>Anonymity:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="189"/>
+        <location filename="../gui/ui/sendframe.ui" line="382"/>
         <source>Priority:</source>
         <translation>優先</translation>
     </message>
@@ -1501,37 +1544,42 @@ Do you want to go to the download page?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="411"/>
+        <location filename="../gui/ui/sendframe.ui" line="396"/>
+        <source>Prepare transaction but do not relay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ui/sendframe.ui" line="542"/>
         <source>Send</source>
         <translation>送信</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="425"/>
+        <location filename="../gui/ui/sendframe.ui" line="450"/>
         <source>Send All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="436"/>
+        <location filename="../gui/ui/sendframe.ui" line="473"/>
         <source>Clear All</source>
         <translation>全て消去</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="447"/>
+        <location filename="../gui/ui/sendframe.ui" line="496"/>
         <source>Add Recipient</source>
         <translation>受領者追加</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="458"/>
+        <location filename="../gui/ui/sendframe.ui" line="424"/>
         <source>Advanced</source>
         <translation>上級</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="491"/>
+        <location filename="../gui/ui/sendframe.ui" line="513"/>
         <source>Wallet is connected through remote node. Additional fee may be applied.</source>
         <translation>リモートノードを介してウォレットは接続されます。追加料金が適用される場合があります。</translation>
     </message>
     <message>
-        <location filename="../gui/ui/sendframe.ui" line="494"/>
+        <location filename="../gui/ui/sendframe.ui" line="516"/>
         <source>Remote mode</source>
         <translation>リモートモード</translation>
     </message>
@@ -1726,12 +1774,12 @@ Do you want to go to the download page?</source>
 <context>
     <name>Updater</name>
     <message>
-        <location filename="../update.cpp" line="77"/>
+        <location filename="../update.cpp" line="38"/>
         <source>Error: %1</source>
         <translation>エラー: %1</translation>
     </message>
     <message>
-        <location filename="../update.cpp" line="78"/>
+        <location filename="../update.cpp" line="39"/>
         <source>Unable to check for update</source>
         <translation>アップデートのチェックができません</translation>
     </message>
@@ -1808,58 +1856,58 @@ Do you want to go to the download page?</source>
 <context>
     <name>WalletGui::AddressBookFrame</name>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="34"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="35"/>
         <source>&amp;Pay to</source>
         <translation>ペイメント先</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="35"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="36"/>
         <source>Copy &amp;label</source>
         <translation>ラベルをコピー</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="36"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="37"/>
         <source>Copy &amp;address</source>
         <translation>アドレスをコピー</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="37"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="38"/>
         <source>Copy Payment &amp;ID</source>
         <translation>ペイメント&amp;IDをコピー</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="38"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="39"/>
         <source>&amp;Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="39"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="40"/>
         <source>&amp;Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="59"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="82"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="117"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="60"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="83"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="118"/>
         <source>Invalid address</source>
         <translation>無効なアドレス</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="64"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="87"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="122"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="65"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="88"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="123"/>
         <source>Invalid payment ID</source>
         <translation>無効なペイメントID</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="71"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="94"/>
-        <location filename="../gui/AddressBookFrame.cpp" line="129"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="72"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="95"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="130"/>
         <source>Contact with such label already exists.</source>
         <translation>同じラベルの連絡先が既に存在します。</translation>
     </message>
     <message>
-        <location filename="../gui/AddressBookFrame.cpp" line="108"/>
+        <location filename="../gui/AddressBookFrame.cpp" line="109"/>
         <source>Edit contact</source>
         <translation>連絡先編集</translation>
     </message>
@@ -2073,6 +2121,19 @@ Do you want to go to the download page?</source>
     </message>
 </context>
 <context>
+    <name>WalletGui::ExportRawTransactionDialog</name>
+    <message>
+        <location filename="../gui/ExportRawTxDialog.cpp" line="35"/>
+        <source>Save transaction to...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/ExportRawTxDialog.cpp" line="35"/>
+        <source>Raw hex transaction (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <location filename="../gui/ExportTrackingKeyDialog.cpp" line="55"/>
@@ -2135,41 +2196,41 @@ Do you want to go to the download page?</source>
 <context>
     <name>WalletGui::InfoDialog</name>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="41"/>
+        <location filename="../gui/InfoDialog.cpp" line="42"/>
         <source>Copy &amp;address</source>
         <translation>アドレスをコピー</translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="42"/>
+        <location filename="../gui/InfoDialog.cpp" line="43"/>
         <source>Copy &amp;Id</source>
         <translation>&amp;Idをコピー</translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="65"/>
+        <location filename="../gui/InfoDialog.cpp" line="66"/>
         <source>%1 (Outgoing: %2, Incoming: %3)</source>
         <translation>%1 (アウトゴーイング: %2, インカミング: %3)</translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="69"/>
+        <location filename="../gui/InfoDialog.cpp" line="70"/>
         <source>White: %1, Grey: %2</source>
         <translation>ホワイト: %1, グレー: %2</translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="73"/>
+        <location filename="../gui/InfoDialog.cpp" line="74"/>
         <source>Known: %1, Local: %2</source>
         <translation>既知: %1, ローカル: %2</translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="76"/>
-        <location filename="../gui/InfoDialog.cpp" line="79"/>
-        <location filename="../gui/InfoDialog.cpp" line="82"/>
-        <location filename="../gui/InfoDialog.cpp" line="85"/>
-        <location filename="../gui/InfoDialog.cpp" line="88"/>
+        <location filename="../gui/InfoDialog.cpp" line="77"/>
+        <location filename="../gui/InfoDialog.cpp" line="80"/>
+        <location filename="../gui/InfoDialog.cpp" line="83"/>
+        <location filename="../gui/InfoDialog.cpp" line="86"/>
+        <location filename="../gui/InfoDialog.cpp" line="89"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/InfoDialog.cpp" line="91"/>
+        <location filename="../gui/InfoDialog.cpp" line="92"/>
         <source>%1 %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2460,9 +2521,8 @@ Are you sure?</source>
 <context>
     <name>WalletGui::NodeModel</name>
     <message>
-        <location filename="../gui/NodeModel.cpp" line="50"/>
         <source>Node URL</source>
-        <translation>ノードURL</translation>
+        <translation type="vanished">ノードURL</translation>
     </message>
 </context>
 <context>
@@ -2612,65 +2672,65 @@ Are you sure?</source>
         <translation>最高</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="224"/>
-        <location filename="../gui/SendFrame.cpp" line="235"/>
+        <location filename="../gui/SendFrame.cpp" line="85"/>
+        <location filename="../gui/SendFrame.cpp" line="227"/>
         <source>Node fee: %1 %2</source>
         <translation>ノードの手数料: %1 %2</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="259"/>
+        <location filename="../gui/SendFrame.cpp" line="254"/>
         <source>Payment request should start with karbowanec:</source>
         <translation>ペイメントリクエストはkarbowanecで始めなくてなならない</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="273"/>
-        <location filename="../gui/SendFrame.cpp" line="339"/>
+        <location filename="../gui/SendFrame.cpp" line="268"/>
+        <location filename="../gui/SendFrame.cpp" line="334"/>
         <source>Invalid recipient address</source>
         <translation>無効な受領者アドレス</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="303"/>
-        <location filename="../gui/SendFrame.cpp" line="453"/>
+        <location filename="../gui/SendFrame.cpp" line="298"/>
+        <location filename="../gui/SendFrame.cpp" line="457"/>
         <source>Insufficient balance.</source>
         <translation>残高不足。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="312"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Incorrect password</source>
         <translation>誤ったパスワード</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="312"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Wrong password.</source>
         <translation>間違ったパスワード。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="378"/>
+        <location filename="../gui/SendFrame.cpp" line="373"/>
         <source>Incorrect fee value</source>
         <translation>正しくない手数料の値</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Insufficient balance</source>
         <translation>残高不足</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="387"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>このトランザクションを送信するための利用可能残高が不足しています。手数料を除外しましたか？</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="394"/>
+        <location filename="../gui/SendFrame.cpp" line="389"/>
         <source>Invalid payment ID</source>
         <translation>無効なペイメントID</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="458"/>
+        <location filename="../gui/SendFrame.cpp" line="462"/>
         <source>Sweep unmixable dust</source>
         <translation>スイープ混合不可</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="459"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>プライバシーレベルがゼロの場合にのみ使用できる、混合できないコインがあります。
@@ -2694,28 +2754,27 @@ when the wallet is synchronized</source>
 <context>
     <name>WalletGui::SignMessageDialog</name>
     <message>
-        <location filename="../gui/SignMessageDialog.cpp" line="44"/>
+        <location filename="../gui/SignMessageDialog.cpp" line="41"/>
         <source>Sign message</source>
         <translation>サインメッセージ</translation>
     </message>
     <message>
-        <location filename="../gui/SignMessageDialog.cpp" line="44"/>
+        <location filename="../gui/SignMessageDialog.cpp" line="41"/>
         <source>Verify signed message</source>
         <translation>署名されたメッセージを確認する</translation>
     </message>
     <message>
-        <location filename="../gui/SignMessageDialog.cpp" line="86"/>
+        <location filename="../gui/SignMessageDialog.cpp" line="69"/>
         <source>Signature is valid</source>
         <translation>署名は有効です！</translation>
     </message>
     <message>
-        <location filename="../gui/SignMessageDialog.cpp" line="89"/>
-        <location filename="../gui/SignMessageDialog.cpp" line="93"/>
+        <location filename="../gui/SignMessageDialog.cpp" line="72"/>
         <source>Signature is invalid!</source>
         <translation>署名が無効です！</translation>
     </message>
     <message>
-        <location filename="../gui/SignMessageDialog.cpp" line="97"/>
+        <location filename="../gui/SignMessageDialog.cpp" line="76"/>
         <source>Address is invalid!</source>
         <translation>アドレスが無効です！</translation>
     </message>
@@ -3017,12 +3076,12 @@ when the wallet is synchronized</source>
         <translation>キーインポート中</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="273"/>
+        <location filename="../WalletAdapter.cpp" line="267"/>
         <source>Saving data</source>
         <translation>データ保存中</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="379"/>
+        <location filename="../WalletAdapter.cpp" line="378"/>
         <source>Sending transaction</source>
         <translation>トランザクション送信中</translation>
     </message>
@@ -3031,235 +3090,250 @@ when the wallet is synchronized</source>
         <translation type="vanished">混合不可ダスト一掃中</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="408"/>
+        <location filename="../WalletAdapter.cpp" line="389"/>
+        <source>Preparing transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WalletAdapter.cpp" line="420"/>
         <source>Optimizing wallet</source>
         <translation>ウォレットの最適化</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="468"/>
-        <location filename="../WalletAdapter.cpp" line="494"/>
+        <location filename="../WalletAdapter.cpp" line="481"/>
+        <location filename="../WalletAdapter.cpp" line="507"/>
         <source>Ready</source>
         <translation>開始</translation>
     </message>
     <message numerus="yes">
-        <location filename="../WalletAdapter.cpp" line="539"/>
+        <location filename="../WalletAdapter.cpp" line="552"/>
         <source>%n blocks per second</source>
         <translation>
             <numerusform>%nブロック/秒</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="542"/>
+        <location filename="../WalletAdapter.cpp" line="555"/>
         <source>est. completion in</source>
         <translation>推定完了</translation>
     </message>
     <message numerus="yes">
-        <location filename="../WalletAdapter.cpp" line="544"/>
+        <location filename="../WalletAdapter.cpp" line="557"/>
         <source>%n day(s) and</source>
         <translation>
             <numerusform>%n日間</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="552"/>
+        <location filename="../WalletAdapter.cpp" line="565"/>
         <source>Synchronizing</source>
         <translation>同期中</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="592"/>
+        <location filename="../WalletAdapter.cpp" line="605"/>
         <source>Object was not initialized</source>
         <translation>オブジェクトは初期化されませんでした</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="593"/>
+        <location filename="../WalletAdapter.cpp" line="606"/>
         <source>The password is wrong</source>
         <translation>パスワードが違います</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="594"/>
+        <location filename="../WalletAdapter.cpp" line="607"/>
         <source>The object is already initialized</source>
         <translation>オブジェクトは既に初期化されました</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="595"/>
+        <location filename="../WalletAdapter.cpp" line="608"/>
         <source>Internal error occurred</source>
         <translation>内部エラー発生</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="596"/>
+        <location filename="../WalletAdapter.cpp" line="609"/>
         <source>MixIn count is too big</source>
         <translation>ミックスインカウントが大きすぎます。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="597"/>
+        <location filename="../WalletAdapter.cpp" line="610"/>
         <source>Bad address</source>
         <translation>無効アドレス</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="598"/>
+        <location filename="../WalletAdapter.cpp" line="611"/>
         <source>Transaction size is too big</source>
         <translation>トランザクションサイズが大きすぎます</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="599"/>
+        <location filename="../WalletAdapter.cpp" line="612"/>
         <source>Wrong amount</source>
         <translation>不適切な数量</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="600"/>
+        <location filename="../WalletAdapter.cpp" line="613"/>
         <source>Sum overflow</source>
         <translation>合計オーバーフロー</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="601"/>
+        <location filename="../WalletAdapter.cpp" line="614"/>
         <source>The destination is empty</source>
         <translation>宛先は空です</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="602"/>
+        <location filename="../WalletAdapter.cpp" line="615"/>
         <source>Impossible to cancel transaction</source>
         <translation>トランザクションのキャンセルはできません。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="603"/>
+        <location filename="../WalletAdapter.cpp" line="616"/>
         <source>The wallet is in wrong state (maybe loading or saving), try again later</source>
         <translation>ウォレットが不適切な状態（おそらくローディング中、または、保存中）なので、しばらく経ってからもう一度試してください。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="604"/>
+        <location filename="../WalletAdapter.cpp" line="617"/>
         <source>The operation you&apos;ve requested has been cancelled</source>
         <translation>あなたがリクエストした操作はキャンセルされました。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="605"/>
+        <location filename="../WalletAdapter.cpp" line="618"/>
         <source>Transaction transfer impossible</source>
         <translation>トランザクショントランスファー不可能</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="606"/>
+        <location filename="../WalletAdapter.cpp" line="619"/>
         <source>Wrong version</source>
         <translation>不適当なバージョン</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="607"/>
+        <location filename="../WalletAdapter.cpp" line="620"/>
         <source>Transaction fee is too small</source>
         <translation>トランザクション手数料が少なすぎます</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="608"/>
+        <location filename="../WalletAdapter.cpp" line="621"/>
         <source>Cannot generate new key</source>
         <translation>新キーは生成できない</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="609"/>
+        <location filename="../WalletAdapter.cpp" line="622"/>
         <source>Index is out of range</source>
         <translation>インデックスは範囲外</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="610"/>
+        <location filename="../WalletAdapter.cpp" line="623"/>
         <source>Address already exists</source>
         <translation>アドレスは既に存在します</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="611"/>
+        <location filename="../WalletAdapter.cpp" line="624"/>
         <source>The wallet is in tracking mode</source>
         <translation>ウォレットはトラッキングモードです</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="612"/>
+        <location filename="../WalletAdapter.cpp" line="625"/>
         <source>Wrong parameters passed</source>
         <translation>不適切なパラメーターが渡されました</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="613"/>
+        <location filename="../WalletAdapter.cpp" line="626"/>
         <source>Object not found</source>
         <translation>不明オブジェクト</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="614"/>
+        <location filename="../WalletAdapter.cpp" line="627"/>
         <source>Requested wallet not found</source>
         <translation>リクエストされたウォレットが見つかりません</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="615"/>
+        <location filename="../WalletAdapter.cpp" line="628"/>
         <source>Change address required</source>
         <translation>アドレスの変更が必要</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="616"/>
+        <location filename="../WalletAdapter.cpp" line="629"/>
         <source>Change address not found</source>
         <translation>変更されたアドレスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="617"/>
+        <location filename="../WalletAdapter.cpp" line="630"/>
         <source>Destination address required</source>
         <translation>宛先アドレスが必要</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="618"/>
+        <location filename="../WalletAdapter.cpp" line="631"/>
         <source>Destination address not found</source>
         <translation>宛先アドレスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="619"/>
+        <location filename="../WalletAdapter.cpp" line="632"/>
         <source>Wrong payment id format</source>
         <translation>不適切なペイメントIDフォーマット</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="620"/>
+        <location filename="../WalletAdapter.cpp" line="633"/>
         <source>Wrong transaction extra format</source>
         <translation>不適切なトランザクションエキストラフォーマット</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="621"/>
+        <location filename="../WalletAdapter.cpp" line="634"/>
         <source>Unknown error</source>
         <translation>不明のエラー</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="701"/>
+        <location filename="../WalletAdapter.cpp" line="714"/>
         <source>  Warning: last block was received %1 hours %2 minutes ago</source>
         <translation>  警告: 最新のブロックは%1時間%2分前に受信されました</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="702"/>
+        <location filename="../WalletAdapter.cpp" line="715"/>
         <source>Wallet synchronized. Height: %1  |  Time (UTC): %2%3</source>
         <translation>ウォレットは同期されました。高さ: %1 | 時刻(UTC): %2%3</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="754"/>
+        <location filename="../WalletAdapter.cpp" line="767"/>
         <source>Mnemonic seed is not correct</source>
         <translation>ニーモニックシードが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="754"/>
+        <location filename="../WalletAdapter.cpp" line="767"/>
         <source>There must be an error in mnemonic seed. Make sure you entered it correctly.</source>
         <translation>ニーモニックシードにエラーがあります。正しく入力したか確認してください。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="770"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof</source>
         <translation>取引証明の取得に失敗しました</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="770"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof.</source>
         <translation>トランザクションプルーフの取得に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="778"/>
-        <location filename="../WalletAdapter.cpp" line="791"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
+        <location filename="../WalletAdapter.cpp" line="804"/>
         <source>Failed to get the reserve proof</source>
         <translation>予備金の証明を取得できませんでした</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="778"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
         <source>This is tracking wallet. The reserve proof can be generated only by a full wallet.</source>
         <translation>これは追跡ウォレットです。 リザーブプルーフは、フルウォレットでのみ生成できます。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="791"/>
+        <location filename="../WalletAdapter.cpp" line="804"/>
         <source>Failed to get the reserve proof.</source>
         <translation>予備金の証明を取得できませんでした。</translation>
+    </message>
+    <message>
+        <location filename="../WalletAdapter.cpp" line="813"/>
+        <source>Failed to sign message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WalletAdapter.cpp" line="813"/>
+        <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -335,6 +335,30 @@ Proszę czekać...</translation>
     </message>
 </context>
 <context>
+    <name>ExportRawTransactionDialog</name>
+    <message>
+        <source>Export raw transaction</source>
+        <translation>Eksportuj surową transakcję</translation>
+    </message>
+    <message>
+        <source>You can broadcast this transaction to the network e.g. via block explorer or RPC request to any public node.</source>
+        <translatorcomment>Możesz transmitować tę transakcję do sieci np. za pośrednictwem eksploratora bloków lub żądania RPC do dowolnego węzła publicznego.</translatorcomment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save to file</source>
+        <translation>Zapisz do pliku</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiuj</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>ExportTrackingKeyDialog</name>
     <message>
         <source>Export tracking key</source>
@@ -918,6 +942,18 @@ Proszę czekać...</translation>
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>Path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SSL:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewPasswordDialog</name>
@@ -1391,6 +1427,10 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
         <source>Send All</source>
         <translation>Wyślij wszystko</translation>
     </message>
+    <message>
+        <source>Prepare transaction but do not relay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowPaymentRequestDialog</name>
@@ -1848,6 +1888,17 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
 </context>
 <context>
+    <name>WalletGui::ExportRawTransactionDialog</name>
+    <message>
+        <source>Save transaction to...</source>
+        <translation>Zapisz transakcję do...</translation>
+    </message>
+    <message>
+        <source>Raw hex transaction (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -2204,7 +2255,7 @@ Jesteś pewien?</translation>
     <name>WalletGui::NodeModel</name>
     <message>
         <source>Node URL</source>
-        <translation>Adres węzła</translation>
+        <translation type="vanished">Adres węzła</translation>
     </message>
 </context>
 <context>
@@ -2921,6 +2972,18 @@ kiedy portfel skończy synchronizowanie</translation>
             <numerusform>%n dni i</numerusform>
             <numerusform>%n dni i</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Preparing transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to sign message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

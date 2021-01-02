@@ -355,6 +355,29 @@ S&apos;il vous plaît, patientez...</translation>
     </message>
 </context>
 <context>
+    <name>ExportRawTransactionDialog</name>
+    <message>
+        <source>Export raw transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can broadcast this transaction to the network e.g. via block explorer or RPC request to any public node.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save to file</source>
+        <translation>Enregistrer dans le fichier</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Copier</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+</context>
+<context>
     <name>ExportTrackingKeyDialog</name>
     <message>
         <source>Export tracking key</source>
@@ -938,6 +961,18 @@ S&apos;il vous plaît, patientez...</translation>
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>Path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SSL:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewPasswordDialog</name>
@@ -1419,6 +1454,10 @@ Voulez-vous aller à la page de téléchargement?</translation>
         <source>Send All</source>
         <translation>Envoyer tout</translation>
     </message>
+    <message>
+        <source>Prepare transaction but do not relay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowPaymentRequestDialog</name>
@@ -1865,6 +1904,17 @@ Voulez-vous aller à la page de téléchargement?</translation>
     </message>
 </context>
 <context>
+    <name>WalletGui::ExportRawTransactionDialog</name>
+    <message>
+        <source>Save transaction to...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raw hex transaction (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::ExportTrackingKeyDialog</name>
     <message>
         <source>Save tracking key to...</source>
@@ -2212,7 +2262,7 @@ Are you sure?</source>
     <name>WalletGui::NodeModel</name>
     <message>
         <source>Node URL</source>
-        <translation>URL du noeud</translation>
+        <translation type="vanished">URL du noeud</translation>
     </message>
 </context>
 <context>
@@ -2921,6 +2971,18 @@ quand le portefeuille aura terminé la synchronisation</translation>
             <numerusform>%n jour et</numerusform>
             <numerusform>%n jours et</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Preparing transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to sign message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
