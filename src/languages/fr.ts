@@ -1456,7 +1456,7 @@ Voulez-vous aller à la page de téléchargement?</translation>
     </message>
     <message>
         <source>Prepare transaction but do not relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Préparer la transaction mais ne pas relayer</translation>
     </message>
 </context>
 <context>
@@ -2974,7 +2974,7 @@ quand le portefeuille aura terminé la synchronisation</translation>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Préparation de la transaction</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

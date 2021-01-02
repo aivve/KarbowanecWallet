@@ -1445,7 +1445,7 @@ Möchten Sie die Download Seite besuchen?</translation>
     </message>
     <message>
         <source>Prepare transaction but do not relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktion vorbereiten, aber nicht weiterleiten</translation>
     </message>
 </context>
 <context>
@@ -2974,7 +2974,7 @@ Kann keinen neuen Schlüssel generieren</translation>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktion vorbereiten</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

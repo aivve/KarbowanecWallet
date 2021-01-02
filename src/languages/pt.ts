@@ -1453,7 +1453,7 @@ Você quer ir à página de dowload?</translation>
     </message>
     <message>
         <source>Prepare transaction but do not relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepare a sua transacção, mas não retransmita</translation>
     </message>
 </context>
 <context>
@@ -2975,7 +2975,7 @@ quando a carteira vai terminar de sincronizar</translation>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Preparando transacção</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

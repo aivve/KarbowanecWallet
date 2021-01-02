@@ -3133,7 +3133,7 @@ when the wallet is synchronized</source>
     <message>
         <location filename="../WalletAdapter.cpp" line="389"/>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Preparazione della transazione</translation>
     </message>
     <message>
         <location filename="../WalletAdapter.cpp" line="420"/>

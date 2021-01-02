@@ -2967,7 +2967,7 @@ cuando la cartera termine de sincronizar</translation>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Preparando transacción</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

@@ -1428,7 +1428,7 @@ Do you want to go to the download page?</source>
     </message>
     <message>
         <source>Prepare transaction but do not relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Подготовить транзакцию, но не передавать в сеть</translation>
     </message>
 </context>
 <context>
@@ -2971,7 +2971,7 @@ when the wallet is synchronized</source>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Подготовка транзакции</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

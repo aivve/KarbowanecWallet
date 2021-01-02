@@ -1429,7 +1429,7 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
     <message>
         <source>Prepare transaction but do not relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Przygotuj transakcję, ale nie transmituj</translation>
     </message>
 </context>
 <context>
@@ -2975,7 +2975,7 @@ kiedy portfel skończy synchronizowanie</translation>
     </message>
     <message>
         <source>Preparing transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Przygotowanie transakcji</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
