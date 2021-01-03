@@ -351,6 +351,29 @@ Por favor aguarde...</translation>
     </message>
 </context>
 <context>
+    <name>ExportRawTransactionDialog</name>
+    <message>
+        <source>Export raw transaction</source>
+        <translation>Exportar transação</translation>
+    </message>
+    <message>
+        <source>You can broadcast this transaction to the network e.g. via block explorer or RPC request to any public node.</source>
+        <translation>Pode transmitir esta transação para a rede, por exemplo via block explorer ou solicitação RPC para qualquer node público.</translation>
+    </message>
+    <message>
+        <source>Save to file</source>
+        <translation>Salvar no arquivo</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Copiar</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fechar</translation>
+    </message>
+</context>
+<context>
     <name>ExportTrackingKeyDialog</name>
     <message>
         <source>Export tracking key</source>
@@ -1443,6 +1466,10 @@ Você quer ir à página de dowload?</translation>
         <source>Send All</source>
         <translation>Enviar tudo</translation>
     </message>
+    <message>
+        <source>Prepare transaction but do not relay</source>
+        <translation>Prepare a sua transacção, mas não retransmita</translation>
+    </message>
 </context>
 <context>
     <name>ShowPaymentRequestDialog</name>
@@ -1894,6 +1921,17 @@ Você quer ir à página de dowload?</translation>
     <message>
         <source>Last resp. height</source>
         <translation>A altura da última resposta</translation>
+    </message>
+</context>
+<context>
+    <name>WalletGui::ExportRawTransactionDialog</name>
+    <message>
+        <source>Save transaction to...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raw hex transaction (*.txt)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2960,6 +2998,10 @@ quando a carteira vai terminar de sincronizar</translation>
             <numerusform>%n dia e</numerusform>
             <numerusform>%n dias e</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Preparing transaction</source>
+        <translation>Preparando transacção</translation>
     </message>
     <message>
         <source>Failed to sign message</source>

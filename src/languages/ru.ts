@@ -335,6 +335,29 @@ Please wait...</source>
     </message>
 </context>
 <context>
+    <name>ExportRawTransactionDialog</name>
+    <message>
+        <source>Export raw transaction</source>
+        <translation>Экспорт транзакции</translation>
+    </message>
+    <message>
+        <source>You can broadcast this transaction to the network e.g. via block explorer or RPC request to any public node.</source>
+        <translation>Вы можете транслировать эту транзакцию в сеть, например через обозреватель блоков или запрос RPC к любому общедоступному узлу.</translation>
+    </message>
+    <message>
+        <source>Save to file</source>
+        <translation>Сохранить в файл</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
     <name>ExportTrackingKeyDialog</name>
     <message>
         <source>Export tracking key</source>
@@ -1418,6 +1441,10 @@ Do you want to go to the download page?</source>
         <source>Send All</source>
         <translation>Послать все</translation>
     </message>
+    <message>
+        <source>Prepare transaction but do not relay</source>
+        <translation>Подготовить транзакцию, но не передавать в сеть</translation>
+    </message>
 </context>
 <context>
     <name>ShowPaymentRequestDialog</name>
@@ -1865,6 +1892,17 @@ Do you want to go to the download page?</source>
     <message>
         <source>Last resp. height</source>
         <translation>Высота последнего ответа</translation>
+    </message>
+</context>
+<context>
+    <name>WalletGui::ExportRawTransactionDialog</name>
+    <message>
+        <source>Save transaction to...</source>
+        <translation>Сохранить транзакцию в...</translation>
+    </message>
+    <message>
+        <source>Raw hex transaction (*.txt)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2956,6 +2994,10 @@ when the wallet is synchronized</source>
     <message>
         <source>est. completion in</source>
         <translation>будет завершено через</translation>
+    </message>
+    <message>
+        <source>Preparing transaction</source>
+        <translation>Подготовка транзакции</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
