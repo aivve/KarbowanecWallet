@@ -222,7 +222,7 @@
     <message>
         <location filename="../gui/ui/changepassworddialog.ui" line="41"/>
         <source>Ok</source>
-        <translation type="unfinished">よし</translation>
+        <translation>よし</translation>
     </message>
     <message>
         <location filename="../gui/ui/changepassworddialog.ui" line="58"/>
@@ -1648,7 +1648,7 @@ Do you want to go to the download page?</source>
     <message>
         <location filename="../gui/ui/signmessagedialog.ui" line="51"/>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <location filename="../gui/ui/signmessagedialog.ui" line="79"/>
@@ -1659,13 +1659,13 @@ Do you want to go to the download page?</source>
         <location filename="../gui/ui/signmessagedialog.ui" line="102"/>
         <location filename="../gui/ui/signmessagedialog.ui" line="241"/>
         <source>Message</source>
-        <translation type="unfinished">伝言</translation>
+        <translation>伝言</translation>
     </message>
     <message>
         <location filename="../gui/ui/signmessagedialog.ui" line="137"/>
         <location filename="../gui/ui/signmessagedialog.ui" line="218"/>
         <source>Signature</source>
-        <translation type="unfinished">署名</translation>
+        <translation>署名</translation>
     </message>
     <message>
         <location filename="../gui/ui/signmessagedialog.ui" line="184"/>
@@ -2677,85 +2677,85 @@ Are you sure?</source>
 <context>
     <name>WalletGui::SendFrame</name>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="59"/>
+        <location filename="../gui/SendFrame.cpp" line="60"/>
         <source>Low</source>
         <translation>低い</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="60"/>
+        <location filename="../gui/SendFrame.cpp" line="61"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="61"/>
+        <location filename="../gui/SendFrame.cpp" line="62"/>
         <source>High</source>
         <translation>高い</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="62"/>
+        <location filename="../gui/SendFrame.cpp" line="63"/>
         <source>Highest</source>
         <translation>最高</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="84"/>
-        <location filename="../gui/SendFrame.cpp" line="226"/>
+        <location filename="../gui/SendFrame.cpp" line="85"/>
+        <location filename="../gui/SendFrame.cpp" line="227"/>
         <source>Node fee: %1 %2</source>
         <translation>ノードの手数料: %1 %2</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="253"/>
+        <location filename="../gui/SendFrame.cpp" line="254"/>
         <source>Payment request should start with karbowanec:</source>
         <translation>ペイメントリクエストはkarbowanecで始めなくてなならない</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="267"/>
-        <location filename="../gui/SendFrame.cpp" line="333"/>
+        <location filename="../gui/SendFrame.cpp" line="268"/>
+        <location filename="../gui/SendFrame.cpp" line="334"/>
         <source>Invalid recipient address</source>
         <translation>無効な受領者アドレス</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="297"/>
-        <location filename="../gui/SendFrame.cpp" line="447"/>
+        <location filename="../gui/SendFrame.cpp" line="298"/>
+        <location filename="../gui/SendFrame.cpp" line="457"/>
         <source>Insufficient balance.</source>
         <translation>残高不足。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Incorrect password</source>
         <translation>誤ったパスワード</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Wrong password.</source>
         <translation>間違ったパスワード。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="372"/>
+        <location filename="../gui/SendFrame.cpp" line="373"/>
         <source>Incorrect fee value</source>
         <translation>正しくない手数料の値</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Insufficient balance</source>
         <translation>残高不足</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>このトランザクションを送信するための利用可能残高が不足しています。手数料を除外しましたか？</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="388"/>
+        <location filename="../gui/SendFrame.cpp" line="389"/>
         <source>Invalid payment ID</source>
         <translation>無効なペイメントID</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="462"/>
         <source>Sweep unmixable dust</source>
         <translation>スイープ混合不可</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="453"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>プライバシーレベルがゼロの場合にのみ使用できる、混合できないコインがあります。
@@ -3325,23 +3325,23 @@ when the wallet is synchronized</source>
         <translation>ニーモニックシードにエラーがあります。正しく入力したか確認してください。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof</source>
         <translation>取引証明の取得に失敗しました</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof.</source>
         <translation>トランザクションプルーフの取得に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
-        <location filename="../WalletAdapter.cpp" line="791"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
+        <location filename="../WalletAdapter.cpp" line="804"/>
         <source>Failed to get the reserve proof</source>
         <translation>予備金の証明を取得できませんでした</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
         <source>This is tracking wallet. The reserve proof can be generated only by a full wallet.</source>
         <translation>これは追跡ウォレットです。 リザーブプルーフは、フルウォレットでのみ生成できます。</translation>
     </message>
@@ -3351,12 +3351,12 @@ when the wallet is synchronized</source>
         <translation>予備金の証明を取得できませんでした。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>Failed to sign message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
         <translation type="unfinished"></translation>
     </message>

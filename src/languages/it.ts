@@ -222,7 +222,7 @@
     <message>
         <location filename="../gui/ui/changepassworddialog.ui" line="41"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../gui/ui/changepassworddialog.ui" line="58"/>
@@ -441,7 +441,7 @@ Attendere prego…
     <message>
         <location filename="../gui/ui/getbalanceproofdialog.ui" line="62"/>
         <source>Message</source>
-        <translation type="unfinished">Messaggio</translation>
+        <translation>Messaggio</translation>
     </message>
     <message>
         <location filename="../gui/ui/getbalanceproofdialog.ui" line="124"/>
@@ -1042,7 +1042,7 @@ Attendere prego…
     <message>
         <location filename="../gui/ui/newnodedialog.ui" line="25"/>
         <source>Host:</source>
-        <translation type="unfinished">Host:</translation>
+        <translation>Host:</translation>
     </message>
     <message>
         <location filename="../gui/ui/newnodedialog.ui" line="35"/>
@@ -1085,7 +1085,7 @@ Attendere prego…
     <message>
         <location filename="../gui/ui/newpassworddialog.ui" line="29"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../gui/ui/newpassworddialog.ui" line="39"/>
@@ -1516,7 +1516,7 @@ Vuoi andare alla pagina dei download?</translation>
     <message>
         <location filename="../gui/ui/restorefrommnemonicseeddialog.ui" line="84"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -2679,85 +2679,85 @@ Are you sure?</source>
 <context>
     <name>WalletGui::SendFrame</name>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="59"/>
+        <location filename="../gui/SendFrame.cpp" line="60"/>
         <source>Low</source>
         <translation>Basso</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="60"/>
+        <location filename="../gui/SendFrame.cpp" line="61"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="61"/>
+        <location filename="../gui/SendFrame.cpp" line="62"/>
         <source>High</source>
         <translation>Alto</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="62"/>
+        <location filename="../gui/SendFrame.cpp" line="63"/>
         <source>Highest</source>
         <translation>Massimo</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="84"/>
-        <location filename="../gui/SendFrame.cpp" line="226"/>
+        <location filename="../gui/SendFrame.cpp" line="85"/>
+        <location filename="../gui/SendFrame.cpp" line="227"/>
         <source>Node fee: %1 %2</source>
         <translation>Tassa sul nodo: %1 %2</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="253"/>
+        <location filename="../gui/SendFrame.cpp" line="254"/>
         <source>Payment request should start with karbowanec:</source>
         <translation>La richiesta di pagamento dovrebbe iniziare con karbowanec:</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="267"/>
-        <location filename="../gui/SendFrame.cpp" line="333"/>
+        <location filename="../gui/SendFrame.cpp" line="268"/>
+        <location filename="../gui/SendFrame.cpp" line="334"/>
         <source>Invalid recipient address</source>
         <translation>Indirizzo del destinatario non valido</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="297"/>
-        <location filename="../gui/SendFrame.cpp" line="447"/>
+        <location filename="../gui/SendFrame.cpp" line="298"/>
+        <location filename="../gui/SendFrame.cpp" line="457"/>
         <source>Insufficient balance.</source>
         <translation>Il saldo insufficiente.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Incorrect password</source>
         <translation>Password errata</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Wrong password.</source>
         <translation>Password errata.</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="372"/>
+        <location filename="../gui/SendFrame.cpp" line="373"/>
         <source>Incorrect fee value</source>
         <translation>Valore di commissione errato</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Insufficient balance</source>
         <translation>Saldo insufficiente</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>Il Saldo disponibile non è sufficiente per inviare questa transazione. Hai escluso la commissione?</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="388"/>
+        <location filename="../gui/SendFrame.cpp" line="389"/>
         <source>Invalid payment ID</source>
         <translation>ID di pagamento non valido</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="462"/>
         <source>Sweep unmixable dust</source>
         <translation>Sweep unmixable</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="453"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>Hai monete non mescolabili che possono essere spese solo con un livello di privacy pari a zero.
@@ -3368,23 +3368,23 @@ when the wallet is synchronized</source>
         <translation>Ci deve essere un errore nel seed mnemonico. Assicuratevi di averlo inserito correttamente.</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof</source>
         <translation>Impossibile ottenere la prova della transazione</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof.</source>
         <translation>Impossibile ottenere la prova della transazione.</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
-        <location filename="../WalletAdapter.cpp" line="791"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
+        <location filename="../WalletAdapter.cpp" line="804"/>
         <source>Failed to get the reserve proof</source>
         <translation>Impossibile ottenere la prova della riserva</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
         <source>This is tracking wallet. The reserve proof can be generated only by a full wallet.</source>
         <translation>Questo è il monitoraggio del portafoglio. La prova di riserva può essere generata solo da un portafoglio completo.</translation>
     </message>
@@ -3394,12 +3394,12 @@ when the wallet is synchronized</source>
         <translation>Impossibile ottenere la prova della riserva.</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile firmare il messaggio</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
         <translation type="unfinished"></translation>
     </message>

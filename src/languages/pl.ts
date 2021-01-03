@@ -3005,11 +3005,11 @@ kiedy portfel skończy synchronizowanie</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się podpisać wiadomość</translation>
     </message>
     <message>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>To jest portfel śledzący. Wiadomość może być podpisana tylko pełnym portfelem.</translation>
     </message>
 </context>
 </TS>

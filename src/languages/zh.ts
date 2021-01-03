@@ -2747,85 +2747,85 @@ Are you sure?</source>
 <context>
     <name>WalletGui::SendFrame</name>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="59"/>
+        <location filename="../gui/SendFrame.cpp" line="60"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="60"/>
+        <location filename="../gui/SendFrame.cpp" line="61"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="61"/>
+        <location filename="../gui/SendFrame.cpp" line="62"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="62"/>
+        <location filename="../gui/SendFrame.cpp" line="63"/>
         <source>Highest</source>
         <translation>最高</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="84"/>
-        <location filename="../gui/SendFrame.cpp" line="226"/>
+        <location filename="../gui/SendFrame.cpp" line="85"/>
+        <location filename="../gui/SendFrame.cpp" line="227"/>
         <source>Node fee: %1 %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="253"/>
+        <location filename="../gui/SendFrame.cpp" line="254"/>
         <source>Payment request should start with karbowanec:</source>
         <translation>付款请求应从karbowanec开始</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="267"/>
-        <location filename="../gui/SendFrame.cpp" line="333"/>
+        <location filename="../gui/SendFrame.cpp" line="268"/>
+        <location filename="../gui/SendFrame.cpp" line="334"/>
         <source>Invalid recipient address</source>
         <translation>收件人地址无效</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="297"/>
-        <location filename="../gui/SendFrame.cpp" line="447"/>
+        <location filename="../gui/SendFrame.cpp" line="298"/>
+        <location filename="../gui/SendFrame.cpp" line="457"/>
         <source>Insufficient balance.</source>
         <translation>余额不足。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Incorrect password</source>
         <translation>密码错误</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="306"/>
+        <location filename="../gui/SendFrame.cpp" line="307"/>
         <source>Wrong password.</source>
         <translation>密码错误。</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="372"/>
+        <location filename="../gui/SendFrame.cpp" line="373"/>
         <source>Incorrect fee value</source>
         <translation>费用数值不正确</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Insufficient balance</source>
         <translation>余额不足</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="381"/>
+        <location filename="../gui/SendFrame.cpp" line="382"/>
         <source>Available balance is insufficient to send this transaction. Have you excluded a fee?</source>
         <translation>可用余额不足，无法发送本次交易。您是否已包括交易手续费在内？</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="388"/>
+        <location filename="../gui/SendFrame.cpp" line="389"/>
         <source>Invalid payment ID</source>
         <translation>付款ID无效</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="452"/>
+        <location filename="../gui/SendFrame.cpp" line="462"/>
         <source>Sweep unmixable dust</source>
         <translation>扫除不可混合的金额</translation>
     </message>
     <message>
-        <location filename="../gui/SendFrame.cpp" line="453"/>
+        <location filename="../gui/SendFrame.cpp" line="463"/>
         <source>You have unmixable coins that can be only spent with zero privacy level.
  Shall we continue with zero privacy?</source>
         <translation>您有不可混合使用的硬币，只能在零隐私级别下使用。
@@ -3395,23 +3395,23 @@ when the wallet is synchronized</source>
         <translation>助记种子有误，请确保输入正确的数据。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof</source>
         <translation>未能获得交易证明</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="769"/>
+        <location filename="../WalletAdapter.cpp" line="782"/>
         <source>Failed to get the transaction proof.</source>
         <translation>无法获得交易证明。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
-        <location filename="../WalletAdapter.cpp" line="791"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
+        <location filename="../WalletAdapter.cpp" line="804"/>
         <source>Failed to get the reserve proof</source>
         <translation>无法获得储备金证明</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="779"/>
+        <location filename="../WalletAdapter.cpp" line="792"/>
         <source>This is tracking wallet. The reserve proof can be generated only by a full wallet.</source>
         <translation>这是跟踪钱包。 储备证明只能由完整的钱包生成。</translation>
     </message>
@@ -3421,12 +3421,12 @@ when the wallet is synchronized</source>
         <translation>无法获得储备金证明。</translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>Failed to sign message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WalletAdapter.cpp" line="800"/>
+        <location filename="../WalletAdapter.cpp" line="813"/>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
         <translation type="unfinished"></translation>
     </message>

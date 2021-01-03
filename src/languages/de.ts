@@ -2500,7 +2500,7 @@ wenn die Brieftasche die Synchronisation beendet</translation>
     </message>
     <message>
         <source>Address is invalid!</source>
-        <translation type="unfinished">Adresse ist ungültig!</translation>
+        <translation>Adresse ist ungültig!</translation>
     </message>
 </context>
 <context>
@@ -3004,7 +3004,7 @@ Kann keinen neuen Schlüssel generieren</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Nachricht konnte nicht signiert werden</translation>
     </message>
     <message>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>

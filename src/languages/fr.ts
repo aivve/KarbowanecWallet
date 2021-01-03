@@ -275,7 +275,7 @@
     </message>
     <message>
         <source>Confirm sending %1 KRB</source>
-        <translation type="unfinished">Confirmer l&apos;envoi de %1 KRB</translation>
+        <translation>Confirmer l&apos;envoi de %1 KRB</translation>
     </message>
 </context>
 <context>
@@ -3004,7 +3004,7 @@ quand le portefeuille aura terminé la synchronisation</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la signature du message</translation>
     </message>
     <message>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>

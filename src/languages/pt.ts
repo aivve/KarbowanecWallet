@@ -271,7 +271,7 @@
     </message>
     <message>
         <source>Confirm sending %1 KRB</source>
-        <translation type="unfinished">Confirmar envio de %1 KRB</translation>
+        <translation>Confirmar envio de %1 KRB</translation>
     </message>
 </context>
 <context>
@@ -1377,7 +1377,7 @@ Você quer ir à página de dowload?</translation>
     </message>
     <message>
         <source>Start synchronization from this height (leave empty if unsure):</source>
-        <translation type="unfinished">Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
+        <translation>Inicie a sincronização a partir desta altura (deixe em branco se não tiver a certeza):</translation>
     </message>
 </context>
 <context>
@@ -2476,7 +2476,7 @@ Devemos continuar com zero privacidade?</translation>
     <name>WalletGui::SendGlassFrame</name>
     <message>
         <source>Synchronizing</source>
-        <translation type="unfinished">A sincronização está em andamento</translation>
+        <translation>A sincronização está em andamento</translation>
     </message>
     <message>
         <source>You will be able to send %1
@@ -3005,7 +3005,7 @@ quando a carteira vai terminar de sincronizar</translation>
     </message>
     <message>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao assinar mensagem</translation>
     </message>
     <message>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>

@@ -1250,7 +1250,7 @@ Do you want to go to the download page?</source>
     <name>QRCodeDialog</name>
     <message>
         <source>QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>QR-код</translation>
     </message>
     <message>
         <source>Save QR to file</source>
@@ -1481,7 +1481,7 @@ Do you want to go to the download page?</source>
     <name>SignMessageDialog</name>
     <message>
         <source>Sign or verify message</source>
-        <translation type="unfinished"></translation>
+        <translation>Підписати чи перевірити повідомлення</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1646,7 +1646,7 @@ Do you want to go to the download page?</source>
     <name>WalletGui::AboutDialog</name>
     <message>
         <source>About %1 Wallet</source>
-        <translation>Про гаманець Карбованця</translation>
+        <translation>Про гаманець %1</translation>
     </message>
 </context>
 <context>
@@ -1665,7 +1665,7 @@ Do you want to go to the download page?</source>
     </message>
     <message>
         <source>&lt;p style=&quot;height:30&quot;&gt;Available: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p style=&quot;height:30&quot;&gt;Доступно: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p style=&quot;height:30&quot;&gt;Доступно: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p style=&quot;height:30&quot;&gt;Total: &lt;strong style=&quot;font-size:18px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</source>
@@ -1681,7 +1681,7 @@ Do you want to go to the download page?</source>
     </message>
     <message>
         <source>QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>QR-код</translation>
     </message>
 </context>
 <context>
@@ -2997,11 +2997,11 @@ when the wallet is synchronized</source>
     </message>
     <message>
         <source>Failed to sign message</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося підписати повідомлення</translation>
     </message>
     <message>
         <source>This is tracking wallet. The message can be signed only by a full wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Це гаманець стеження. Повідомлення може бути підписане лише повним гаманцем.</translation>
     </message>
 </context>
 </TS>

@@ -2500,7 +2500,7 @@ when the wallet is synchronized</source>
     </message>
     <message>
         <source>Address is invalid!</source>
-        <translation type="unfinished">Адрас з&apos;яўляецца несапраўдным!</translation>
+        <translation>Адрас з&apos;яўляецца несапраўдным!</translation>
     </message>
 </context>
 <context>
