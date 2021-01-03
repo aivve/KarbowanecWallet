@@ -1248,6 +1248,21 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
 </context>
 <context>
+    <name>QRCodeDialog</name>
+    <message>
+        <source>QR Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save QR to file</source>
+        <translation>Zapisz QR kod do pliku</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>ReceiveFrame</name>
     <message>
         <source>Frame</source>
@@ -1255,11 +1270,11 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
     <message>
         <source>Copy address</source>
-        <translation>Kopiuj adres</translation>
+        <translation type="vanished">Kopiuj adres</translation>
     </message>
     <message>
         <source>Save QR to file</source>
-        <translation>Zapisz QR kod do pliku</translation>
+        <translation type="vanished">Zapisz QR kod do pliku</translation>
     </message>
     <message>
         <source>Request payment</source>
@@ -1267,7 +1282,7 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
     <message>
         <source>Use this form to request payment.</source>
-        <translation>Użyj tego formularza do stworzenia wniosku o zapłatę.</translation>
+        <translation type="vanished">Użyj tego formularza do stworzenia wniosku o zapłatę.</translation>
     </message>
     <message>
         <source>Label:</source>
@@ -1291,7 +1306,7 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Zamknij</translation>
+        <translation type="vanished">Zamknij</translation>
     </message>
     <message>
         <source>Enter desired label for payer&apos;s address book</source>
@@ -1675,6 +1690,10 @@ Czy chesz otworzyć stronę pobierania w przeglądarce?</translation>
     <message>
         <source>&lt;p style=&quot;height:30&quot;&gt;Unmixable: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</source>
         <translation>&lt;p style=&quot;height:30&quot;&gt;Nieosiągalne: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2329,6 +2348,13 @@ Jesteś pewien?</translation>
     </message>
 </context>
 <context>
+    <name>WalletGui::QRCodeDialog</name>
+    <message>
+        <source>Save QR Code</source>
+        <translation>Zapisz QR kod</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::QRLabel</name>
     <message>
         <source>&amp;Save Image...</source>
@@ -2351,7 +2377,7 @@ Jesteś pewien?</translation>
     </message>
     <message>
         <source>Save QR Code</source>
-        <translation>Zapisz QR kod</translation>
+        <translation type="vanished">Zapisz QR kod</translation>
     </message>
 </context>
 <context>

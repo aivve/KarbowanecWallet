@@ -1268,6 +1268,21 @@ Você quer ir à página de dowload?</translation>
     </message>
 </context>
 <context>
+    <name>QRCodeDialog</name>
+    <message>
+        <source>QR Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save QR to file</source>
+        <translation>Savar para arquivo QR</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fechar</translation>
+    </message>
+</context>
+<context>
     <name>ReceiveFrame</name>
     <message>
         <source>Frame</source>
@@ -1275,11 +1290,11 @@ Você quer ir à página de dowload?</translation>
     </message>
     <message>
         <source>Copy address</source>
-        <translation>Copiar endereço</translation>
+        <translation type="vanished">Copiar endereço</translation>
     </message>
     <message>
         <source>Save QR to file</source>
-        <translation>Savar para arquivo QR</translation>
+        <translation type="vanished">Savar para arquivo QR</translation>
     </message>
     <message>
         <source>Request payment</source>
@@ -1287,7 +1302,7 @@ Você quer ir à página de dowload?</translation>
     </message>
     <message>
         <source>Use this form to request payment.</source>
-        <translation>Use isso para requerir pagamento.</translation>
+        <translation type="vanished">Use isso para requerir pagamento.</translation>
     </message>
     <message>
         <source>Label:</source>
@@ -1315,7 +1330,7 @@ Você quer ir à página de dowload?</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation type="vanished">Fechar</translation>
     </message>
     <message>
         <source>Enter desired label for payer&apos;s address book</source>
@@ -1684,6 +1699,10 @@ Você quer ir à página de dowload?</translation>
     <message>
         <source>&lt;p style=&quot;height:30&quot;&gt;Unmixable: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</source>
         <translation>&lt;p style=&quot;height:30&quot;&gt;Não-misturável: &lt;strong style=&quot;font-size:14px; color: #ffffff;&quot;&gt;%1&lt;/strong&gt;&lt;small style=&quot;font-size:10px; color: #D3D3D3;&quot;&gt;%2 %3&lt;/small&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2337,6 +2356,13 @@ Você tem certeza?</translation>
     </message>
 </context>
 <context>
+    <name>WalletGui::QRCodeDialog</name>
+    <message>
+        <source>Save QR Code</source>
+        <translation>Salvar código QR</translation>
+    </message>
+</context>
+<context>
     <name>WalletGui::QRLabel</name>
     <message>
         <source>&amp;Save Image...</source>
@@ -2359,7 +2385,7 @@ Você tem certeza?</translation>
     </message>
     <message>
         <source>Save QR Code</source>
-        <translation>Salvar código QR</translation>
+        <translation type="vanished">Salvar código QR</translation>
     </message>
 </context>
 <context>
