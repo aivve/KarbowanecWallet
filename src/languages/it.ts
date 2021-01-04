@@ -2942,7 +2942,7 @@ when the wallet is synchronized</source>
     <message>
         <location filename="../gui/TransactionsFrame.cpp" line="65"/>
         <source>Range...</source>
-        <translation type="unfinished">Raggio...</translation>
+        <translation>Raggio...</translation>
     </message>
     <message>
         <location filename="../gui/TransactionsFrame.cpp" line="68"/>
