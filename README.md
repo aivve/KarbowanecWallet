@@ -3,13 +3,19 @@ This is [Karbo2](https://github.com/Karbovanets/karbo/) version of Karbo Classic
 **1. Clone wallet sources**
 
 ```
-git clone https://github.com/Karbovanets/karbo.git
+git clone https://github.com/Karbovanets/karbowanecwallet.git
 ```
 
 **2. Set symbolic link to coin sources at the same level as `src`. For example:**
 
 ```
-ln -s ../karbowanec cryptonote
+ln -s ../karbo cryptonote
+```
+
+or clone coins souces into `cryptonote` folder:
+
+```
+git clone https://github.com/Karbovanets/karbo.git cryptonote
 ```
 
 Alternative way is to create git submodule:
