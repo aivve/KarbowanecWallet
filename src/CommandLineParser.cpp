@@ -28,7 +28,9 @@ CommandLineParser::CommandLineParser(QObject* _parent) : QObject(_parent), m_par
   m_hideMyPortOption("hide-my-port", tr("Do not announce yourself as peerlist candidate")),
   m_dataDirOption("data-dir", tr("Specify data directory"), tr("directory"), QString::fromLocal8Bit(Tools::getDefaultDataDirectory().c_str())),
   m_rollBackOption("rollback", tr("Rollback to height"), tr("height"), QString::number(std::numeric_limits<uint32_t>::max())),
-  m_minimized("minimized", tr("Run application in minimized mode")) {
+  m_minimized("minimized", tr("Run application in minimized mode")),
+  m_levelDb("level-db", tr("Use LevelDB instead of RocksDB"))
+{
   m_parser.setApplicationDescription(tr("Karbowanec wallet"));
   m_parser.addHelpOption();
   m_parser.addVersionOption();
@@ -45,6 +47,7 @@ CommandLineParser::CommandLineParser(QObject* _parent) : QObject(_parent), m_par
   m_parser.addOption(m_dataDirOption);
   m_parser.addOption(m_rollBackOption);
   m_parser.addOption(m_minimized);
+  m_parser.addOption(m_levelDb);
 }
 
 CommandLineParser::~CommandLineParser() {
@@ -81,6 +84,10 @@ bool CommandLineParser::hasAllowLocalIpOption() const {
 
 bool CommandLineParser::hasHideMyPortOption() const {
   return m_parser.isSet(m_hideMyPortOption);
+}
+
+bool CommandLineParser::hasLevelDBOption() const {
+  return m_parser.isSet(m_levelDb);
 }
 
 QString CommandLineParser::getErrorText() const {
