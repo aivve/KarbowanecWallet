@@ -23,7 +23,6 @@
 #include "Rpc/CoreRpcServerCommandsDefinitions.h"
 #include "Rpc/HttpClient.h"
 #include "Common/Util.h"
-#include "Common/ScopeExit.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "CryptoNoteCore/CryptoNoteTools.h"
 #include "CryptoNoteCore/DatabaseBlockchainCache.h"
@@ -38,6 +37,7 @@
 #include "WalletLegacy/WalletLegacy.h"
 #include "Logging/LoggerManager.h"
 #include "System/Dispatcher.h"
+#include "IDataBase.h"
 #include "CurrencyAdapter.h"
 #include "Settings.h"
 
@@ -267,52 +267,25 @@ public:
     Logging::LoggerManager& logManager,
     CryptoNote::Checkpoints& checkpoints,
     const CryptoNote::NetNodeConfig& netNodeConfig,
-    CryptoNote::IDataBase& db,
+    CryptoNote::IDataBase& database,
     INodeCallback& callback) :
     m_currency(currency),
     m_dispatcher(),
     m_callback(callback),
     m_logManager(logManager),
     m_checkpoints(checkpoints),
+    m_database(database),
     m_netNodeConfig(netNodeConfig),
-    m_database(db),
     m_core(currency, logManager, std::move(m_checkpoints), m_dispatcher,
       std::unique_ptr<CryptoNote::IBlockchainCacheFactory>(new CryptoNote::DatabaseBlockchainCacheFactory(m_database, m_logManager)),
       std::thread::hardware_concurrency()),
     m_protocolHandler(currency, m_dispatcher, m_core, nullptr, logManager),
     m_nodeServer(m_dispatcher, m_protocolHandler, logManager),
-    m_node(m_core, m_protocolHandler, m_dispatcher) {
-
-    try {
-      m_database.init();
-
-      Tools::ScopeExit dbShutdownOnExit([&]() { m_database.shutdown(); });
-
-      if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(m_database, logManager))
-      {
-        dbShutdownOnExit.cancel();
-        m_database.shutdown();
-        m_database.destroy();
-        m_database.init();
-        dbShutdownOnExit.resume();
-      }
-    }
-    catch (const std::system_error& _error) {
-      if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
-        throw std::runtime_error("IO error");
-      }
-      throw std::runtime_error("Database in usage");
-    }
-    catch (const std::exception& _error) {
-      throw std::runtime_error("Database initialization failed");
-    }
-
+    m_node(m_core, m_protocolHandler, m_dispatcher)
+  {
     CryptoNote::MinerConfig emptyMiner;
-
     m_core.load(emptyMiner);
-
     m_protocolHandler.set_p2p_endpoint(&m_nodeServer);
-
   }
 
   ~InprocessNode() override {
@@ -517,13 +490,32 @@ Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerM
     }
   }
 
-  std::shared_ptr<CryptoNote::IDataBase> database;
+  static std::shared_ptr<CryptoNote::IDataBase> database;
 
   bool enableLevelDB = Settings::instance().useLevelDB();
   if (enableLevelDB) {
     database = std::make_shared<CryptoNote::LevelDBWrapper>(logManager, dbConfig);
   } else {
     database = std::make_shared<CryptoNote::RocksDBWrapper>(logManager, dbConfig);
+  }
+
+  try {
+    database->init();
+    if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(*database, logManager))
+    {
+      database->shutdown();
+      database->destroy();
+      database->init();
+    }
+  }
+  catch (const std::system_error& _error) {
+    if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
+      throw std::runtime_error("IO error");
+    }
+    throw std::runtime_error("Database in usage");
+  }
+  catch (const std::exception& _error) {
+    throw std::runtime_error("Database initialization failed");
   }
 
   CryptoNote::Checkpoints checkpoints(logManager);
