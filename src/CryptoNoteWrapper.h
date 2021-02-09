@@ -32,7 +32,7 @@ public:
   virtual ~Node() = 0;
   virtual void init(const std::function<void(std::error_code)>& callback) = 0;
   virtual void deinit() = 0;
-  
+
   virtual std::string convertPaymentId(const std::string& paymentIdString) = 0;
   virtual std::string extractPaymentId(const std::string& extra) = 0;
   virtual uint64_t getLastKnownBlockHeight() const = 0;

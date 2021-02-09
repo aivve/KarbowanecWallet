@@ -29,6 +29,7 @@
 #include "CryptoNoteCore/DatabaseBlockchainCacheFactory.h"
 #include "CryptoNoteCore/DataBaseConfig.h"
 #include "CryptoNoteCore/DataBaseErrors.h"
+#include "CryptoNoteCore/LevelDBWrapper.h"
 #include "CryptoNoteCore/RocksDBWrapper.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "InProcessNode/InProcessNode.h"
@@ -36,6 +37,7 @@
 #include "WalletLegacy/WalletLegacy.h"
 #include "Logging/LoggerManager.h"
 #include "System/Dispatcher.h"
+#include "IDataBase.h"
 #include "CurrencyAdapter.h"
 #include "Settings.h"
 
@@ -261,51 +263,29 @@ private:
 
 class InprocessNode : CryptoNote::INodeObserver, public Node {
 public:
-  InprocessNode(const CryptoNote::Currency& currency, 
+  InprocessNode(const CryptoNote::Currency& currency,
     Logging::LoggerManager& logManager,
     CryptoNote::Checkpoints& checkpoints,
     const CryptoNote::NetNodeConfig& netNodeConfig,
-    CryptoNote::DataBaseConfig dbConfig,
+    CryptoNote::IDataBase& database,
     INodeCallback& callback) :
     m_currency(currency),
     m_dispatcher(),
     m_callback(callback),
     m_logManager(logManager),
     m_checkpoints(checkpoints),
-    m_database(m_logManager, dbConfig),
+    m_database(database),
     m_netNodeConfig(netNodeConfig),
     m_core(currency, logManager, std::move(m_checkpoints), m_dispatcher,
       std::unique_ptr<CryptoNote::IBlockchainCacheFactory>(new CryptoNote::DatabaseBlockchainCacheFactory(m_database, m_logManager)),
       std::thread::hardware_concurrency()),
     m_protocolHandler(currency, m_dispatcher, m_core, nullptr, logManager),
     m_nodeServer(m_dispatcher, m_protocolHandler, logManager),
-    m_node(m_core, m_protocolHandler, m_dispatcher) {
-
-    try {
-      m_database.init();
-      if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(m_database, logManager))
-      {
-        m_database.shutdown();
-        m_database.destroy();
-        m_database.init();
-      }
-    }
-    catch (const std::system_error& _error) {
-      if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
-        throw std::runtime_error("IO error");
-      }
-      throw std::runtime_error("Database in usage");
-    }
-    catch (const std::exception& _error) {
-      throw std::runtime_error("Database initialization failed");
-    }
-
+    m_node(m_core, m_protocolHandler, m_dispatcher)
+  {
     CryptoNote::MinerConfig emptyMiner;
-
     m_core.load(emptyMiner);
-
     m_protocolHandler.set_p2p_endpoint(&m_nodeServer);
-
   }
 
   ~InprocessNode() override {
@@ -456,7 +436,7 @@ private:
   System::Dispatcher m_dispatcher;
   Logging::LoggerManager& m_logManager;
   CryptoNote::Checkpoints& m_checkpoints;
-  CryptoNote::RocksDBWrapper m_database;
+  CryptoNote::IDataBase& m_database;
   CryptoNote::NetNodeConfig m_netNodeConfig;
   CryptoNote::Core m_core;
   CryptoNote::CryptoNoteProtocolHandler m_protocolHandler;
@@ -510,13 +490,41 @@ Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerM
     }
   }
 
+  static std::shared_ptr<CryptoNote::IDataBase> database;
+
+  bool enableLevelDB = Settings::instance().useLevelDB();
+  if (enableLevelDB) {
+    database = std::make_shared<CryptoNote::LevelDBWrapper>(logManager, dbConfig);
+  } else {
+    database = std::make_shared<CryptoNote::RocksDBWrapper>(logManager, dbConfig);
+  }
+
+  try {
+    database->init();
+    if (!CryptoNote::DatabaseBlockchainCache::checkDBSchemeVersion(*database, logManager))
+    {
+      database->shutdown();
+      database->destroy();
+      database->init();
+    }
+  }
+  catch (const std::system_error& _error) {
+    if (_error.code().value() == static_cast<int>(CryptoNote::error::DataBaseErrorCodes::IO_ERROR)) {
+      throw std::runtime_error("IO error");
+    }
+    throw std::runtime_error("Database in usage");
+  }
+  catch (const std::exception& _error) {
+    throw std::runtime_error("Database initialization failed");
+  }
+
   CryptoNote::Checkpoints checkpoints(logManager);
   for (const CryptoNote::CheckpointData& checkpoint : CryptoNote::CHECKPOINTS) {
     checkpoints.addCheckpoint(checkpoint.index, checkpoint.blockId);
   }
   checkpoints.loadCheckpointsFromDns();
 
-  return new InprocessNode(currency, logManager, checkpoints, netNodeConfig, dbConfig, callback);
+  return new InprocessNode(currency, logManager, checkpoints, netNodeConfig, *database, callback);
 }
 
 }

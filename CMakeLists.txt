@@ -58,11 +58,13 @@ set(UPNPC_BUILD_TESTS OFF CACHE BOOL "Build test executables")
 
 include_directories(${CMAKE_BINARY_DIR}
     src
+    cryptonote/external/leveldb/include
     cryptonote/external/rocksdb/include
     cryptonote/external/zstd/lib
     cryptonote/external/zstd/lib/common
     cryptonote/external/zstd/lib/compress
     cryptonote/external/zstd/lib/decompress
+    cryptonote/external/snappy
     cryptonote/external
     cryptonote/include
     cryptonote/src)
@@ -87,8 +89,6 @@ find_package(Boost REQUIRED COMPONENTS date_time filesystem program_options rege
 if ((${Boost_MAJOR_VERSION} EQUAL 1) AND (${Boost_MINOR_VERSION} EQUAL 54))
 	message(SEND_ERROR "Boost version 1.54 is unsupported, more details are available here http://goo.gl/RrCFmA")
 endif ()
-
-include_directories(cryptonote/external/rocksdb/include)
 
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -287,11 +287,11 @@ add_custom_target(translations DEPENDS ${TRANSLATION_QM})
 if (WIN32)
   file(GLOB _TRANSLATION_FILES_DEFAULT ${_qt5Core_install_prefix}/translations/*.qm)
   list(FILTER _TRANSLATION_FILES_DEFAULT INCLUDE REGEX "\\/[a-z][a-z]_[a-z][a-z].qm$")
-  add_custom_target(translations_delault)
+  add_custom_target(translations_default)
   foreach(_qm_file_src ${_TRANSLATION_FILES_DEFAULT})
     get_filename_component(_qm_file_name ${_qm_file_src} NAME)
     set(_qm_file_dst "${CMAKE_BINARY_DIR}/languages/${_qm_file_name}")
-    add_custom_command(TARGET translations_delault
+    add_custom_command(TARGET translations_default
                        COMMAND ${CMAKE_COMMAND} -E copy ${_qm_file_src} ${_qm_file_dst})
   endforeach()
 endif()
@@ -313,20 +313,13 @@ if (WIN32)
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
 
   add_subdirectory(cryptonote/external/zstd EXCLUDE_FROM_ALL)
-  set_property(TARGET zstd PROPERTY FOLDER "external")
-
   add_subdirectory(cryptonote/external/rocksdb EXCLUDE_FROM_ALL)
-  set_property(TARGET rocksdb PROPERTY FOLDER "external")
+  add_subdirectory(cryptonote/external/leveldb EXCLUDE_FROM_ALL)
+  add_subdirectory(cryptonote/external/snappy EXCLUDE_FROM_ALL)
+  set_property(TARGET rocksdb leveldb snappy zstd PROPERTY FOLDER "external")
 
-  #add_library(zstdlib STATIC IMPORTED GLOBAL)
-  #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.lib)
-
-  #add_library(rocksdblib STATIC IMPORTED GLOBAL)
-  #target_link_libraries(rocksdblib INTERFACE zstdlib)
-  #set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.lib)
- 
   include_directories(cryptonote/src/platform/msc)
-  set(CMAKE_CXX_FLAGS "-bigobj -EHsc -std=c++17")
+  set(CMAKE_CXX_FLAGS "-bigobj -EHsc -std:c++17")
   set(PLATFORM_DIR Windows)
   set(BUILD_PLATFORM WIN32)
   set(BUILD_RESOURCES src/cryptonotewallet.rc)
@@ -361,15 +354,16 @@ elseif (UNIX)
   if (APPLE)
     execute_process(
         COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/cryptonote/external/rocksdb -DARCH=${ARCH} -DWITH_ZSTD=ON -DWITH_GFLAGS=0 -DCMAKE_BUILD_TYPE=MinSizeRel -DWITH_TESTS=OFF -DWITH_TOOLS=OFF -DPORTABLE=ON -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -B${PROJECT_BINARY_DIR}/rocksdb
+        COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/cryptonote/external/leveldb -DARCH=${ARCH} -DCMAKE_BUILD_TYPE=MinSizeRel -DLEVELDB_BUILD_TESTS=OFF -DLEVELDB_BUILD_BENCHMARKS=OFF -DLEVELDB_INSTALL=OFF -DCMAKE_C_FLAGS="-mmacosx-version-min=10.12" -DCMAKE_CXX_FLAGS="-mmacosx-version-min=10.12" -B${PROJECT_BINARY_DIR}/leveldb
     )
   else()  
     execute_process(
         COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/cryptonote/external/rocksdb -DARCH=${ARCH} -DWITH_ZSTD=ON -DWITH_GFLAGS=0 -DCMAKE_BUILD_TYPE=MinSizeRel -DWITH_TESTS=OFF -DWITH_TOOLS=OFF -DPORTABLE=ON -B${PROJECT_BINARY_DIR}/rocksdb
+        COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/cryptonote/external/leveldb -DARCH=${ARCH} -DCMAKE_BUILD_TYPE=MinSizeRel -DLEVELDB_BUILD_TESTS=OFF -DLEVELDB_BUILD_BENCHMARKS=OFF -DLEVELDB_INSTALL=OFF -B${PROJECT_BINARY_DIR}/leveldb
     )
   endif()
   set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a")
 
-  #set_property(TARGET upnpc-static zstd PROPERTY FOLDER "external")
   set_property(TARGET upnpc-static PROPERTY FOLDER "external")
 
   add_custom_target(
@@ -381,12 +375,14 @@ elseif (UNIX)
   set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb/librocksdb.a)
   add_dependencies(rocksdblib rocksdb)
 
-  #add_library(zstdlib STATIC IMPORTED GLOBAL)
-  #set_target_properties(zstdlib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/zstd.a)
-
-  #add_library(rocksdblib STATIC IMPORTED GLOBAL)
-  #target_link_libraries(rocksdblib INTERFACE zstdlib)
-  #set_target_properties(rocksdblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/rocksdb.a)
+  add_custom_target(
+         leveldb
+         COMMAND $(MAKE) leveldb
+         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/leveldb
+  )
+  add_library(leveldblib STATIC IMPORTED GLOBAL)
+  set_target_properties(leveldblib PROPERTIES IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/leveldb/libleveldb.a)
+  add_dependencies(leveldblib leveldb)
  
   set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} cryptonote/external/miniupnpc/minissdpc.c)
   if (APPLE)
@@ -553,9 +549,9 @@ add_library(Mnemonics ${Mnemonics})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 
 if (WIN32)
-  target_link_libraries(${CRYPTONOTE_LIB} rocksdb zstd ${Boost_LIBRARIES})
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdb leveldb snappy zstd ${Boost_LIBRARIES})
 else ()
-  target_link_libraries(${CRYPTONOTE_LIB} rocksdblib zstdlib ${Boost_LIBRARIES} -lresolv)
+  target_link_libraries(${CRYPTONOTE_LIB} rocksdblib leveldblib snappy zstdlib ${Boost_LIBRARIES} -lresolv)
 endif ()
 
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
@@ -566,7 +562,7 @@ set_target_properties(${WALLET_NAME} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(${WALLET_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${QRENCODE_LIB} Mnemonics)
 add_dependencies(${WALLET_NAME} translations)
 if (WIN32)
-  add_dependencies(${WALLET_NAME} translations_delault)
+  add_dependencies(${WALLET_NAME} translations_default)
 endif ()
 
 if (OPENSSL_FOUND)
