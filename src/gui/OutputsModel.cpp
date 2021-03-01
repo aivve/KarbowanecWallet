@@ -105,10 +105,7 @@ QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
     return QVariant();
   }
 
-  CryptoNote::TransactionOutputInformation _output = m_outputs.value(_index.row());
-  CryptoNote::TransactionSpentOutputInformation _spentOutput = boost::value_initialized<CryptoNote::TransactionSpentOutputInformation>();
-
-  bool isSpent = isOutputSpent(_output, _spentOutput);
+  CryptoNote::TransactionSpentOutputInformation _output = m_outputs.value(_index.row());
 
   switch(_role) {
   case Qt::DisplayRole:
@@ -122,7 +119,7 @@ QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
     return getAlignmentRole(_index);
 
   default:
-    return getUserRole(_index, _role, _output, _spentOutput, isSpent);
+    return getUserRole(_index, _role, _output);
   }
 
   return QVariant();
@@ -222,11 +219,11 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   return QVariant();
 }
 
-QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionOutputInformation _output) const {
+QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionSpentOutputInformation _output) const {
   switch(_role) {
 
   case ROLE_STATE: {
-    if (_isSpent)
+    if (_output.spendingTransactionHash != CryptoNote::NULL_HASH)
       return static_cast<quint8>(OutputState::SPENT);
     else
       return static_cast<quint8>(OutputState::UNSPENT);
@@ -251,19 +248,19 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
     return static_cast<quint32>(_output.outputInTransaction);
 
   case ROLE_SPENDING_BLOCK_HEIGHT:
-    return _spentOutput.spendingBlockHeight;
+    return _output.spendingBlockHeight;
 
   case ROLE_TIMESTAMP:
-    return (_spentOutput.timestamp > 0 ? QDateTime::fromTime_t(_spentOutput.timestamp) : QDateTime());
+    return (_output.timestamp > 0 ? QDateTime::fromTime_t(_output.timestamp) : QDateTime());
 
   case ROLE_SPENDING_TRANSACTION_HASH:
-    return QByteArray(reinterpret_cast<char*>(&_spentOutput.spendingTransactionHash), sizeof(_spentOutput.spendingTransactionHash));
+    return QByteArray(reinterpret_cast<char*>(&_output.spendingTransactionHash), sizeof(_output.spendingTransactionHash));
 
   case ROLE_KEY_IMAGE:
-    return QByteArray(reinterpret_cast<char*>(&_spentOutput.keyImage), sizeof(_spentOutput.keyImage));
+    return QByteArray(reinterpret_cast<char*>(&_output.keyImage), sizeof(_output.keyImage));
 
   case ROLE_INPUT_IN_TRANSACTION:
-    return static_cast<quint32>(_spentOutput.inputInTransaction);
+    return static_cast<quint32>(_output.inputInTransaction);
 
   case ROLE_ROW:
     return _index.row();
@@ -275,19 +272,43 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
 void OutputsModel::reloadWalletTransactions() {
   reset();
 
-  m_outputs = QVector<CryptoNote::TransactionOutputInformation>::fromStdVector(WalletAdapter::instance().getOutputs());
+  m_unspentOutputs = QVector<CryptoNote::TransactionOutputInformation>::fromStdVector(WalletAdapter::instance().getOutputs());
   m_spentOutputs = QVector<CryptoNote::TransactionSpentOutputInformation>::fromStdVector(WalletAdapter::instance().getSpentOutputs());
 
-  quint32 outputsCount = m_outputs.size();
+  quint32 unspentCount = m_unspentOutputs.size();
   quint32 spentCount = m_spentOutputs.size();
 
-  std::cout << "Unspent outputs count " << outputsCount << std::endl;
-
+  std::cout << "Unspent outputs count " << unspentCount << std::endl;
   std::cout << "Spent outputs count " << spentCount << std::endl;
 
+  quint32 outputsCount = unspentCount + spentCount;
 
+  std::cout << "Total outputs count " << outputsCount << std::endl;
 
-  beginInsertRows(QModelIndex(), 0, rowCount - 1);
+  // just append unspent to spent and show them together
+  m_outputs.append(m_spentOutputs);
+
+  for (const auto& o : m_unspentOutputs) {
+    CryptoNote::TransactionSpentOutputInformation s;
+    s.type = o.type;
+    s.amount = o.amount;
+    s.globalOutputIndex = o.globalOutputIndex;
+    s.outputInTransaction = o.outputInTransaction;
+    s.transactionHash = o.transactionHash;
+    s.transactionPublicKey = o.transactionPublicKey;
+    s.outputKey = o.outputKey;
+    s.requiredSignatures = o.requiredSignatures;
+
+    s.spendingBlockHeight = std::numeric_limits<uint32_t>::max();
+    s.spendingTransactionHash = CryptoNote::NULL_HASH;
+    s.timestamp = 0;
+    s.keyImage = {};
+    s.inputInTransaction = std::numeric_limits<uint32_t>::max();
+
+    m_outputs.append(s);
+  }
+
+  beginInsertRows(QModelIndex(), 0, outputsCount - 1);
   endInsertRows();
 }
 
@@ -300,18 +321,6 @@ void OutputsModel::reset() {
   m_outputs.clear();
   m_spentOutputs.clear();
   endResetModel();
-}
-
-bool OutputsModel::isOutputSpent(CryptoNote::TransactionOutputInformation& _output,
-                            CryptoNote::TransactionSpentOutputInformation& _spentOutput) const {
-  for (const auto& s : m_spentOutputs) {
-    if (_output.outputKey == s.outputKey) {
-      _spentOutput = s;
-      return true;
-    }
-  }
-
-  return false;
 }
 
 }

@@ -44,8 +44,10 @@ public:
   QModelIndex parent(const QModelIndex& _index) const Q_DECL_OVERRIDE;
 
 private:
-  QVector<CryptoNote::TransactionOutputInformation> m_outputs;
+  QVector<CryptoNote::TransactionOutputInformation> m_unspentOutputs;
   QVector<CryptoNote::TransactionSpentOutputInformation> m_spentOutputs;
+  QVector<CryptoNote::TransactionSpentOutputInformation> m_outputs;
+
 
   OutputsModel();
   ~OutputsModel();
@@ -53,15 +55,11 @@ private:
   QVariant getDisplayRole(const QModelIndex& _index) const;
   QVariant getDecorationRole(const QModelIndex& _index) const;
   QVariant getAlignmentRole(const QModelIndex& _index) const;
-  QVariant getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionOutputInformation _output,
-                      CryptoNote::TransactionSpentOutputInformation& _spentOutput, bool _isSpent) const;
+  QVariant getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionSpentOutputInformation _output) const;
 
   void reloadWalletTransactions();
   void appendTransaction(CryptoNote::TransactionId _id);
   void reset();
-
-  bool isOutputSpent(CryptoNote::TransactionOutputInformation& _output,
-               CryptoNote::TransactionSpentOutputInformation& _spentOutput) const;
 };
 
 }
