@@ -20,7 +20,7 @@
 #include "WalletEvents.h"
 #include "IWalletLegacy.h"
 
-#include "ui_CoinsFrame.h"
+#include "ui_coinsframe.h"
 
 namespace WalletGui {
 
@@ -32,9 +32,10 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   m_ui->m_outputsView->setModel(m_visibleOutputsModel.data());
   m_ui->m_outputsView->header()->setSectionResizeMode(QHeaderView::Interactive);
   m_ui->m_outputsView->header()->setSectionResizeMode(0, QHeaderView::Fixed);
-  m_ui->m_outputsView->header()->resizeSection(0, 25);
-  //m_ui->m_outputsView->header()->resizeSection(1, 100);
-  //m_ui->m_outputsView->header()->resizeSection(3, 25);
+  m_ui->m_outputsView->header()->resizeSection(0, 30);
+  m_ui->m_outputsView->header()->resizeSection(1, 30);
+  m_ui->m_outputsView->header()->resizeSection(2, 250);
+  m_ui->m_outputsView->header()->resizeSection(3, 250);
 
   connect(m_ui->m_outputsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &CoinsFrame::currentOutputChanged);
 
@@ -53,7 +54,7 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   connect(m_ui->m_searchFor, SIGNAL(textChanged(QString)), this, SLOT(changedSearchFor(QString)));
 
   // set sorting to include all types of transactions
-  SortedOutputsModel::instance().setType(-1);
+  SortedOutputsModel::instance().setState(-1);
 }
 
 CoinsFrame::~CoinsFrame() {
@@ -98,13 +99,13 @@ void CoinsFrame::chooseType(int idx)
     switch(m_ui->m_typeSelect->itemData(idx).toInt())
     {
     case AllTypes:
-        SortedOutputsModel::instance().setType(-1);
+        SortedOutputsModel::instance().setState(-1);
         break;
     case Spent:
-        SortedOutputsModel::instance().setType(0);
+        SortedOutputsModel::instance().setState(0);
         break;
     case Unspent:
-        SortedOutputsModel::instance().setType(1);
+        SortedOutputsModel::instance().setState(1);
         break;
     }
 }
@@ -119,7 +120,7 @@ void CoinsFrame::changedSearchFor(const QString &searchstring)
 void CoinsFrame::resetFilterClicked() {
   m_ui->m_searchFor->clear();
   m_ui->m_typeSelect->setCurrentIndex(0);
-  SortedOutputsModel::instance().setType(-1);
+  SortedOutputsModel::instance().setState(-1);
   m_ui->m_outputsView->clearSelection();
 }
 

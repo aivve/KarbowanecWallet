@@ -16,8 +16,8 @@ class SortedOutputsModel : public QSortFilterProxyModel {
 public:
   static SortedOutputsModel& instance();
 
-  void setType(const int type);
-  void setSearchFor(const QString &searchstring);
+  void setState(const int state);
+  void setSearchFor(const QString &searchString);
 
 protected:
   bool filterAcceptsRow(int _row, const QModelIndex &_parent) const Q_DECL_OVERRIDE;
@@ -26,8 +26,8 @@ private:
   SortedOutputsModel();
   ~SortedOutputsModel();
 
-  QString searchString;
-  int selectedType = -1;
+  QString m_searchString;
+  int m_selectedState = -1;
 
 };
 

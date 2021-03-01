@@ -27,31 +27,29 @@ SortedOutputsModel::~SortedOutputsModel() {
 bool SortedOutputsModel::filterAcceptsRow(int _row, const QModelIndex &_parent) const {
   QModelIndex _index = sourceModel()->index(_row, 0, _parent);
 
-  int ourType = _index.data(OutputsModel::ROLE_TYPE).value<quint8>();
+  int state = _index.data(OutputsModel::ROLE_STATE).value<quint8>();
 
-  if(selectedType != -1) {
-    if(ourType != selectedType)
+  if(m_selectedState != -1) {
+    if(state != m_selectedState)
       return false;
   }
 
-  QModelIndex index2 = sourceModel()->index(_row, 2, _parent);
-  QModelIndex index3 = sourceModel()->index(_row, 3, _parent);
-  QModelIndex index6 = sourceModel()->index(_row, 6, _parent);
-
-  return (sourceModel()->data(index2).toString().contains(searchString,Qt::CaseInsensitive)
-       || sourceModel()->data(index3).toString().contains(searchString,Qt::CaseInsensitive)
-       || sourceModel()->data(index6).toString().contains(searchString,Qt::CaseInsensitive));
+  return (sourceModel()->data(sourceModel()->index(_row, 2, _parent)).toString().contains(m_searchString,Qt::CaseInsensitive)
+       || sourceModel()->data(sourceModel()->index(_row, 3, _parent)).toString().contains(m_searchString,Qt::CaseInsensitive)
+       || sourceModel()->data(sourceModel()->index(_row, 4, _parent)).toString().contains(m_searchString,Qt::CaseInsensitive)
+       || sourceModel()->data(sourceModel()->index(_row, 5, _parent)).toString().contains(m_searchString,Qt::CaseInsensitive)
+  );
 
   return true;
 }
 
 void SortedOutputsModel::setSearchFor(const QString &searchString) {
-  this->searchString = searchString;
+  this->m_searchString = searchString;
   invalidateFilter();
 }
 
-void SortedOutputsModel::setType(const int type) {
-  this->selectedType = type;
+void SortedOutputsModel::setState(const int state) {
+  this->m_selectedState = state;
   invalidateFilter();
 }
 

@@ -17,7 +17,8 @@ VisibleOutputsModel::~VisibleOutputsModel() {
 }
 
 bool VisibleOutputsModel::filterAcceptsColumn(int _sourceColumn, const QModelIndex& _sourceParent) const {
-  return _sourceColumn == OutputsModel::COLUMN_TYPE ||
+  return _sourceColumn == OutputsModel::COLUMN_STATE ||
+         _sourceColumn == OutputsModel::COLUMN_TYPE ||
          _sourceColumn == OutputsModel::COLUMN_OUTPUT_KEY ||
          _sourceColumn == OutputsModel::COLUMN_TX_HASH ||
          _sourceColumn == OutputsModel::COLUMN_AMOUNT ||
