@@ -289,15 +289,7 @@ void OutputsModel::reloadWalletTransactions() {
   m_outputs.append(m_spentOutputs);
 
   for (const auto& o : m_unspentOutputs) {
-    CryptoNote::TransactionSpentOutputInformation s;
-    s.type = o.type;
-    s.amount = o.amount;
-    s.globalOutputIndex = o.globalOutputIndex;
-    s.outputInTransaction = o.outputInTransaction;
-    s.transactionHash = o.transactionHash;
-    s.transactionPublicKey = o.transactionPublicKey;
-    s.outputKey = o.outputKey;
-    s.requiredSignatures = o.requiredSignatures;
+    CryptoNote::TransactionSpentOutputInformation s = *static_cast<const CryptoNote::TransactionSpentOutputInformation *>(&o);
 
     s.spendingBlockHeight = std::numeric_limits<uint32_t>::max();
     s.spendingTransactionHash = CryptoNote::NULL_HASH;
