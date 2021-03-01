@@ -162,12 +162,14 @@ void MainWindow::initUi() {
   m_ui->m_receiveFrame->hide();
   m_ui->m_transactionsFrame->hide();
   m_ui->m_addressBookFrame->hide();
+  m_ui->m_coinsFrame->hide();
 
   m_tabActionGroup->addAction(m_ui->m_overviewAction);
   m_tabActionGroup->addAction(m_ui->m_sendAction);
   m_tabActionGroup->addAction(m_ui->m_receiveAction);
   m_tabActionGroup->addAction(m_ui->m_transactionsAction);
   m_tabActionGroup->addAction(m_ui->m_addressBookAction);
+  m_tabActionGroup->addAction(m_ui->m_coinsAction);
 
   m_syncProgressBar->setMaximum(maxProgressBar);
   m_syncProgressBar->setMinimum(0);
@@ -1036,6 +1038,7 @@ void MainWindow::lockWalletWithPassword() {
     m_ui->m_sendFrame->hide();
     m_ui->m_transactionsFrame->hide();
     m_ui->m_addressBookFrame->hide();
+    m_ui->m_coinsFrame->hide();
   }
   bool keep_asking = true;
   bool wrong_pass = false;
@@ -1193,6 +1196,7 @@ void MainWindow::walletClosed() {
   m_ui->m_sendFrame->hide();
   m_ui->m_transactionsFrame->hide();
   m_ui->m_addressBookFrame->hide();
+  m_ui->m_coinsFrame->hide();
   m_ui->m_noWalletFrame->show();
   m_encryptionStateIconLabel->hide();
   m_trackingModeIconLabel->hide();

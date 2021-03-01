@@ -370,6 +370,42 @@ Crypto::SecretKey WalletAdapter::getTxKey(Crypto::Hash& txid) {
   return CryptoNote::NULL_SECRET_KEY;
 }
 
+std::vector<CryptoNote::TransactionOutputInformation> WalletAdapter::getOutputs() {
+  Q_CHECK_PTR(m_wallet);
+  try {
+    return m_wallet->getOutputs();
+  } catch (std::system_error&) {
+  }
+  return {};
+}
+
+std::vector<CryptoNote::TransactionOutputInformation> WalletAdapter::getLockedOutputs() {
+  Q_CHECK_PTR(m_wallet);
+  try {
+    return m_wallet->getLockedOutputs();
+  } catch (std::system_error&) {
+  }
+  return {};
+}
+
+std::vector<CryptoNote::TransactionOutputInformation> WalletAdapter::getUnlockedOutputs() {
+  Q_CHECK_PTR(m_wallet);
+  try {
+    return m_wallet->getLockedOutputs();
+  } catch (std::system_error&) {
+  }
+  return {};
+}
+
+std::vector<CryptoNote::TransactionSpentOutputInformation> WalletAdapter::getSpentOutputs() {
+  Q_CHECK_PTR(m_wallet);
+  try {
+    return m_wallet->getSpentOutputs();
+  } catch (std::system_error&) {
+  }
+  return {};
+}
+
 void WalletAdapter::sendTransaction(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, quint64 _fee, const QString& _payment_id, quint64 _mixin) {
   Q_CHECK_PTR(m_wallet);
   try {
