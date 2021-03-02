@@ -217,10 +217,15 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
     return _index.data(ROLE_OUTPUT_IN_TRANSACTION).value<qint32>();
 
   case COLUMN_SPENDING_BLOCK_HEIGHT: {
-    if (is_spent)
-      return _index.data(ROLE_SPENDING_BLOCK_HEIGHT).value<qint32>();
-    else
+    if (is_spent) {
+      quint32 height = _index.data(ROLE_SPENDING_BLOCK_HEIGHT).value<qint32>();
+      if (height < 0 || height == std::numeric_limits<uint32_t>::max())
+        return "Unconfirmed";
+      else
+        return height;
+    } else {
       return "-";
+    }
   }
 
   case COLUMN_TIMESTAMP: {
