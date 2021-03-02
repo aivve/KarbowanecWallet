@@ -40,10 +40,12 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   m_ui->m_outputsView->header()->resizeSection(7, 50);
 
   connect(m_ui->m_outputsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &CoinsFrame::currentOutputChanged);
+  connect(m_ui->m_outputsView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CoinsFrame::computeSelected);
 
   m_ui->m_outputsView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(m_ui->m_outputsView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
- 
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &CoinsFrame::walletClosed);
+
   contextMenu = new QMenu();
   contextMenu->addAction(QString(tr("Copy transaction &hash")), this, SLOT(copyHash()));
   contextMenu->addAction(QString(tr("Copy &key")), this, SLOT(copyKey()));
@@ -136,6 +138,27 @@ void CoinsFrame::resetFilterClicked() {
   m_ui->m_typeSelect->setCurrentIndex(0);
   SortedOutputsModel::instance().setState(-1);
   m_ui->m_outputsView->clearSelection();
+}
+
+void CoinsFrame::walletClosed() {
+  QString amountText = QString::number(0, 'f', 12) + " " + CurrencyAdapter::instance().getCurrencyTicker().toUpper();
+  m_ui->m_selectedAmount->setText(amountText);
+}
+
+void CoinsFrame::computeSelected() {
+  double amount = 0;
+  if(!m_ui->m_outputsView->selectionModel())
+    return;
+
+    QModelIndexList selection = m_ui->m_outputsView->selectionModel()->selectedRows();
+
+    foreach (QModelIndex index, selection){
+        QString amountstring = index.sibling(index.row(), OutputsModel::COLUMN_AMOUNT).data().toString().remove(',');
+        amount += amountstring.toDouble();
+    }
+    QString amountText = QString::number(amount, 'f', 12) + " " + CurrencyAdapter::instance().getCurrencyTicker().toUpper();
+    m_ui->m_selectedAmount->show();
+    m_ui->m_selectedAmount->setText(amountText);
 }
 
 }

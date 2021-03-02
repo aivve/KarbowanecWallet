@@ -46,6 +46,8 @@ public Q_SLOTS:
   void copyKey();
   void copyGindex();
   void showDetails();
+  void computeSelected();
+  void walletClosed();
 
 private:
   QScopedPointer<Ui::CoinsFrame> m_ui;
