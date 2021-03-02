@@ -70,7 +70,7 @@ QVariant OutputsModel::headerData(int _section, Qt::Orientation _orientation, in
     case COLUMN_TYPE:
       return tr("Type");
     case COLUMN_OUTPUT_KEY:
-      return tr("Key");
+      return tr("Public key (stealth address)");
     case COLUMN_TX_HASH:
       return tr("Transaction hash");
     case COLUMN_AMOUNT:
@@ -158,13 +158,15 @@ QVariant OutputsModel::getDecorationRole(const QModelIndex& _index) const {
 }
 
 QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
+  OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
+  bool is_spent = state == OutputState::SPENT;
+
   switch(_index.column()) {
 
   case COLUMN_STATE: {
-    OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
-    if (state == OutputState::SPENT) {
+    if (is_spent) {
       return tr("Spent");
-    } else if(state == OutputState::UNSPENT) {
+    } else {
       return tr("Unspent");
     }
 
@@ -198,22 +200,42 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   case COLUMN_OUTPUT_IN_TRANSACTION:
     return _index.data(ROLE_OUTPUT_IN_TRANSACTION).value<qint32>();
 
-  case COLUMN_SPENDING_BLOCK_HEIGHT:
-    return _index.data(ROLE_SPENDING_BLOCK_HEIGHT).value<qint32>();
-
-  case COLUMN_TIMESTAMP: {
-    QDateTime date = _index.data(ROLE_TIMESTAMP).toDateTime();
-    return (date.isNull() || !date.isValid() ? "-" : date.toString("dd-MM-yy HH:mm"));
+  case COLUMN_SPENDING_BLOCK_HEIGHT: {
+    if (is_spent)
+      return _index.data(ROLE_SPENDING_BLOCK_HEIGHT).value<qint32>();
+    else
+      return "-";
   }
 
-  case COLUMN_SPENDING_TRANSACTION_HASH:
-    return _index.data(ROLE_SPENDING_TRANSACTION_HASH).toByteArray().toHex().toUpper();
+  case COLUMN_TIMESTAMP: {
+    if (is_spent) {
+      QDateTime date = _index.data(ROLE_TIMESTAMP).toDateTime();
+      return (date.isNull() || !date.isValid() ? "-" : date.toString("dd-MM-yy HH:mm"));
+    } else {
+      return "-";
+    }
+  }
 
-  case COLUMN_KEY_IMAGE:
-    return _index.data(ROLE_KEY_IMAGE).toByteArray().toHex().toUpper();
+  case COLUMN_SPENDING_TRANSACTION_HASH: {
+    if (is_spent)
+      return _index.data(ROLE_SPENDING_TRANSACTION_HASH).toByteArray().toHex().toUpper();
+    else
+      return "-";
+  }
 
-  case COLUMN_INPUT_IN_TRANSACTION:
-    return _index.data(ROLE_INPUT_IN_TRANSACTION).value<qint32>();
+  case COLUMN_KEY_IMAGE: {
+    if (is_spent)
+      return _index.data(ROLE_KEY_IMAGE).toByteArray().toHex().toUpper();
+    else
+      return "-";
+  }
+
+  case COLUMN_INPUT_IN_TRANSACTION: {
+    if (is_spent)
+      return _index.data(ROLE_INPUT_IN_TRANSACTION).value<qint32>();
+    else
+      return "-";
+  }
 
   default:
     break;

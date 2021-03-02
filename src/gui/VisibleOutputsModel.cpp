@@ -23,7 +23,8 @@ bool VisibleOutputsModel::filterAcceptsColumn(int _sourceColumn, const QModelInd
          _sourceColumn == OutputsModel::COLUMN_TX_HASH ||
          _sourceColumn == OutputsModel::COLUMN_AMOUNT ||
          _sourceColumn == OutputsModel::COLUMN_GLOBAL_OUTPUT_INDEX ||
-         _sourceColumn == OutputsModel::COLUMN_OUTPUT_IN_TRANSACTION;
+         _sourceColumn == OutputsModel::COLUMN_OUTPUT_IN_TRANSACTION ||
+         _sourceColumn == OutputsModel::COLUMN_SPENDING_BLOCK_HEIGHT;
 }
 
 }

@@ -10,7 +10,7 @@
 #include "Common/FormatTools.h"
 #include "CoinsFrame.h"
 #include "MainWindow.h"
-//#include "OutputDetailsDialog.h"
+#include "OutputDetailsDialog.h"
 #include "OutputsModel.h"
 #include "SortedOutputsModel.h"
 #include "VisibleOutputsModel.h"
@@ -36,6 +36,8 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   m_ui->m_outputsView->header()->resizeSection(1, 30);
   m_ui->m_outputsView->header()->resizeSection(2, 200);
   m_ui->m_outputsView->header()->resizeSection(3, 200);
+  m_ui->m_outputsView->header()->resizeSection(6, 50);
+  m_ui->m_outputsView->header()->resizeSection(7, 50);
 
   connect(m_ui->m_outputsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &CoinsFrame::currentOutputChanged);
 
@@ -71,10 +73,10 @@ void CoinsFrame::outputDoubleClicked(const QModelIndex& _index) {
     return;
   }
 
-  /*OutputDetailsDialog dlg(_index, &MainWindow::instance());
+  OutputDetailsDialog dlg(_index, &MainWindow::instance());
   if (dlg.exec() == QDialog::Accepted) {
-    
-  }*/
+    // do nothing
+  }
 }
 
 void CoinsFrame::onCustomContextMenu(const QPoint &point)

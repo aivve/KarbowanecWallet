@@ -89,7 +89,7 @@
    <sender>m_outputsView</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>CoinsFrame</receiver>
-   <slot>messageDoubleClicked(QModelIndex)</slot>
+   <slot>outputDoubleClicked(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>337</x>
