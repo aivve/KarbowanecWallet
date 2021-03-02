@@ -417,6 +417,21 @@ void WalletAdapter::sendTransaction(const std::vector<CryptoNote::WalletLegacyTr
   }
 }
 
+// Prerequisites: deduce fee from transfers, selected outs amount and tansfers amount + fee should match
+void WalletAdapter::sendTransaction(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, const std::list<CryptoNote::TransactionOutputInformation>& _selectedOuts, quint64 _fee, const QString& _payment_id, quint64 _mixin) {
+  Q_CHECK_PTR(m_wallet);
+
+  // can validate here that transfer amount + fee = selected outs amounts
+
+  try {
+    lock();
+    Q_EMIT walletStateChangedSignal(tr("Sending transaction"));
+    m_wallet->sendTransaction(_transfers, _selectedOuts, _fee, NodeAdapter::instance().convertPaymentId(_payment_id), _mixin, 0);
+  } catch (std::system_error&) {
+    unlock();
+  }
+}
+
 QString WalletAdapter::prepareRawTransaction(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, quint64 _fee, const QString& _payment_id, quint64 _mixin) {
   Q_CHECK_PTR(m_wallet);
   try {

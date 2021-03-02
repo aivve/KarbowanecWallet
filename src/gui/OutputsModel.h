@@ -43,6 +43,8 @@ public:
   QModelIndex index(int _row, int _column, const QModelIndex& _parent = QModelIndex()) const Q_DECL_OVERRIDE;
   QModelIndex parent(const QModelIndex& _index) const Q_DECL_OVERRIDE;
 
+  CryptoNote::TransactionOutputInformation getOutput(const QModelIndex& _index) const;
+
 private:
   QVector<CryptoNote::TransactionOutputInformation> m_unspentOutputs;
   QVector<CryptoNote::TransactionSpentOutputInformation> m_spentOutputs;

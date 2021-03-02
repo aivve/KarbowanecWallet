@@ -100,6 +100,22 @@ QVariant OutputsModel::headerData(int _section, Qt::Orientation _orientation, in
   return QVariant();
 }
 
+CryptoNote::TransactionOutputInformation OutputsModel::getOutput(const QModelIndex& _index) const {
+  CryptoNote::TransactionOutputInformation out = boost::value_initialized<CryptoNote::TransactionOutputInformation>();
+
+  OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
+
+  if(!_index.isValid() || state == OutputState::SPENT) {
+    return out;
+  }
+
+  CryptoNote::TransactionSpentOutputInformation _output = m_spentOutputs.value(_index.row());
+
+  out = *static_cast<const CryptoNote::TransactionOutputInformation *>(&_output);
+
+  return out;
+}
+
 QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
   if(!_index.isValid()) {
     return QVariant();
