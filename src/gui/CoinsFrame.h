@@ -43,6 +43,8 @@ public slots:
 
 public Q_SLOTS:
   void copyHash();
+  void copyKey();
+  void copyGindex();
   void showDetails();
 
 private:

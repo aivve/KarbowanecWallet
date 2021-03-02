@@ -46,8 +46,6 @@ public:
 private:
   QVector<CryptoNote::TransactionOutputInformation> m_unspentOutputs;
   QVector<CryptoNote::TransactionSpentOutputInformation> m_spentOutputs;
-  QVector<CryptoNote::TransactionSpentOutputInformation> m_outputs;
-
 
   OutputsModel();
   ~OutputsModel();
@@ -56,6 +54,7 @@ private:
   QVariant getDecorationRole(const QModelIndex& _index) const;
   QVariant getAlignmentRole(const QModelIndex& _index) const;
   QVariant getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionSpentOutputInformation _output) const;
+  QVariant getToolTipRole(const QModelIndex& _index) const;
 
   void reloadWalletTransactions();
   void appendTransaction(CryptoNote::TransactionId _id);

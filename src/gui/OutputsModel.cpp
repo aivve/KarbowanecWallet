@@ -54,7 +54,7 @@ int OutputsModel::columnCount(const QModelIndex& _parent) const {
 }
 
 int OutputsModel::rowCount(const QModelIndex& _parent) const {
-  return m_outputs.size();
+  return m_spentOutputs.size();
 }
 
 QVariant OutputsModel::headerData(int _section, Qt::Orientation _orientation, int _role) const {
@@ -105,7 +105,7 @@ QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
     return QVariant();
   }
 
-  CryptoNote::TransactionSpentOutputInformation _output = m_outputs.value(_index.row());
+  CryptoNote::TransactionSpentOutputInformation _output = m_spentOutputs.value(_index.row());
 
   switch(_role) {
   case Qt::DisplayRole:
@@ -117,6 +117,9 @@ QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
 
   case Qt::TextAlignmentRole:
     return getAlignmentRole(_index);
+
+  case Qt::ToolTipRole:
+    return getToolTipRole(_index);
 
   default:
     return getUserRole(_index, _role, _output);
@@ -219,6 +222,17 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   return QVariant();
 }
 
+QVariant OutputsModel::getToolTipRole(const QModelIndex& _index) const {
+  OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
+  if (state == OutputState::SPENT) {
+    return tr("Spent");
+  } else if(state == OutputState::UNSPENT) {
+    return tr("Unspent");
+  }
+
+  return QVariant();
+}
+
 QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoNote::TransactionSpentOutputInformation _output) const {
   switch(_role) {
 
@@ -271,34 +285,28 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
 
 void OutputsModel::reloadWalletTransactions() {
   reset();
+  std::vector unspent = WalletAdapter::instance().getOutputs();
+  m_unspentOutputs = QVector<CryptoNote::TransactionOutputInformation>(unspent.begin(), unspent.end());
+  unspent.clear();
+  unspent.shrink_to_fit();
+  std::vector spent = WalletAdapter::instance().getSpentOutputs();
+  m_spentOutputs = QVector<CryptoNote::TransactionSpentOutputInformation>(spent.begin(), spent.end());
+  spent.clear();
+  spent.shrink_to_fit();
 
-  m_unspentOutputs = QVector<CryptoNote::TransactionOutputInformation>::fromStdVector(WalletAdapter::instance().getOutputs());
-  m_spentOutputs = QVector<CryptoNote::TransactionSpentOutputInformation>::fromStdVector(WalletAdapter::instance().getSpentOutputs());
-
-  quint32 unspentCount = m_unspentOutputs.size();
-  quint32 spentCount = m_spentOutputs.size();
-
-  std::cout << "Unspent outputs count " << unspentCount << std::endl;
-  std::cout << "Spent outputs count " << spentCount << std::endl;
-
-  quint32 outputsCount = unspentCount + spentCount;
-
-  std::cout << "Total outputs count " << outputsCount << std::endl;
-
-  // just append unspent to spent and show them together
-  m_outputs.append(m_spentOutputs);
+  quint32 outputsCount = m_unspentOutputs.size() + m_spentOutputs.size();
 
   for (const auto& o : m_unspentOutputs) {
     CryptoNote::TransactionSpentOutputInformation s = *static_cast<const CryptoNote::TransactionSpentOutputInformation *>(&o);
-
     s.spendingBlockHeight = std::numeric_limits<uint32_t>::max();
     s.spendingTransactionHash = CryptoNote::NULL_HASH;
     s.timestamp = 0;
     s.keyImage = {};
     s.inputInTransaction = std::numeric_limits<uint32_t>::max();
 
-    m_outputs.append(s);
+    m_spentOutputs.append(s);
   }
+  m_unspentOutputs.clear();
 
   beginInsertRows(QModelIndex(), 0, outputsCount - 1);
   endInsertRows();
@@ -310,7 +318,7 @@ void OutputsModel::appendTransaction(CryptoNote::TransactionId _id) {
 
 void OutputsModel::reset() {
   beginResetModel();
-  m_outputs.clear();
+  m_unspentOutputs.clear();
   m_spentOutputs.clear();
   endResetModel();
 }

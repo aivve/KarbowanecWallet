@@ -34,8 +34,8 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   m_ui->m_outputsView->header()->setSectionResizeMode(0, QHeaderView::Fixed);
   m_ui->m_outputsView->header()->resizeSection(0, 30);
   m_ui->m_outputsView->header()->resizeSection(1, 30);
-  m_ui->m_outputsView->header()->resizeSection(2, 250);
-  m_ui->m_outputsView->header()->resizeSection(3, 250);
+  m_ui->m_outputsView->header()->resizeSection(2, 200);
+  m_ui->m_outputsView->header()->resizeSection(3, 200);
 
   connect(m_ui->m_outputsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &CoinsFrame::currentOutputChanged);
 
@@ -43,7 +43,9 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   connect(m_ui->m_outputsView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
  
   contextMenu = new QMenu();
-  contextMenu->addAction(QString(tr("Copy &tx hash")), this, SLOT(copyHash()));
+  contextMenu->addAction(QString(tr("Copy transaction &hash")), this, SLOT(copyHash()));
+  contextMenu->addAction(QString(tr("Copy &key")), this, SLOT(copyKey()));
+  contextMenu->addAction(QString(tr("Copy &global index")), this, SLOT(copyGindex()));
   contextMenu->addAction(QString(tr("Show &details")), this, SLOT(showDetails()));
 
   m_ui->m_typeSelect->addItem(tr("All types"), AllTypes);
@@ -88,7 +90,17 @@ void CoinsFrame::showDetails()
 
 void CoinsFrame::copyHash()
 {
+  QApplication::clipboard()->setText(m_index.sibling(m_index.row(), 3).data().toString());
+}
+
+void CoinsFrame::copyKey()
+{
   QApplication::clipboard()->setText(m_index.sibling(m_index.row(), 2).data().toString());
+}
+
+void CoinsFrame::copyGindex()
+{
+  QApplication::clipboard()->setText(m_index.sibling(m_index.row(), 5).data().toString());
 }
 
 void CoinsFrame::chooseType(int idx)
