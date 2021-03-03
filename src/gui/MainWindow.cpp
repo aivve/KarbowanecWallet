@@ -53,6 +53,7 @@
 #include "MnemonicSeedDialog.h"
 #include "ConfirmSendDialog.h"
 #include "TranslatorManager.h"
+#include "CoinsFrame.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -134,6 +135,7 @@ void MainWindow::connectToSignals() {
   connect(m_ui->m_noWalletFrame, &NoWalletFrame::openWalletClickedSignal, this, &MainWindow::openWallet, Qt::QueuedConnection);
   connect(m_ui->m_addressBookFrame, &AddressBookFrame::payToSignal, this, &MainWindow::payTo);
   connect(m_connectionStateIconLabel, SIGNAL(clicked()), this, SLOT(showStatusInfo()));
+  connect(m_ui->m_coinsFrame, &CoinsFrame::sendOutputsSignal, this, &MainWindow::onSendOutputs, Qt::QueuedConnection);
 }
 
 void MainWindow::setMainWindowTitle() {
@@ -896,6 +898,16 @@ void MainWindow::onUriOpenSignal() {
       isTrackingMode();
       return;
   }
+  m_ui->m_sendAction->trigger();
+}
+
+void MainWindow::onSendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
+  if (Settings::instance().isTrackingMode()) {
+    isTrackingMode();
+    return;
+  }
+
+  m_ui->m_sendFrame->sendOutputs(_selectedOutputs);
   m_ui->m_sendAction->trigger();
 }
 

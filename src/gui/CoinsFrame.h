@@ -18,7 +18,6 @@ class CoinsFrame;
 
 namespace WalletGui {
 
-class DnsManager;
 class VisibleOutputsModel;
 
 class CoinsFrame : public QFrame {
@@ -51,34 +50,20 @@ public Q_SLOTS:
   void walletClosed();
   void sendClicked();
 
-protected:
-  void timerEvent(QTimerEvent* _event) Q_DECL_OVERRIDE;
+Q_SIGNALS:
+  void sendOutputsSignal(std::list<CryptoNote::TransactionOutputInformation> _selectedOutputs);
 
 private:
   QScopedPointer<Ui::CoinsFrame> m_ui;
   QScopedPointer<VisibleOutputsModel> m_visibleOutputsModel;
   QMenu* contextMenu;
-  DnsManager* m_aliasProvider;
-
-  int m_addressInputTimer;
-  std::list<CryptoNote::TransactionOutputInformation> m_selectedTransfers;
-  quint64 m_selectedAmount;
 
   void currentOutputChanged(const QModelIndex& _currentIndex);
-  void onAliasFound(const QString& _name, const QString& _address);
-  void sendTxCompleted(CryptoNote::TransactionId _transactionId, bool _error, const QString& _errorText);
-  void resetSendForm();
-
-  QString extractAddress(const QString& _addressString) const;
 
   Q_SLOT void outputDoubleClicked(const QModelIndex& _index);
-  Q_SLOT void addressEdited(const QString& _text);
-  Q_SLOT void addressBookClicked();
-  Q_SLOT void pasteClicked();
   
 private slots:
   void resetFilterClicked();
-
 };
 
 }

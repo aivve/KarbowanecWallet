@@ -11,6 +11,7 @@
 #include <QTime>
 #include <QUrl>
 
+#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "AddressBookModel.h"
 #include "CurrencyAdapter.h"
 #include "MainWindow.h"
@@ -46,8 +47,8 @@ SendFrame::SendFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendFrame
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &SendFrame::walletActualBalanceUpdated,
     Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &SendFrame::reset);
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &SendFrame::walletSynchronized
-    , Qt::QueuedConnection);
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &SendFrame::walletSynchronized,
+    Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationProgressUpdatedSignal,
     this, &SendFrame::walletSynchronizationInProgress, Qt::QueuedConnection);
 
@@ -292,6 +293,39 @@ void SendFrame::parsePaymentRequest(QString _request) {
   if(!payment_id.isEmpty()){
     SendFrame::insertPaymentID(payment_id);
   }
+}
+
+void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
+
+  // check that amount > fees
+
+  for (auto& out : _selectedOutputs) {
+    m_selectedOutputsAmount += out.amount;
+    // if unmixable force mixin zero
+    if (!CryptoNote::is_valid_decomposed_amount(out.amount)) {
+      m_ui->m_mixinSlider->setValue(0);
+    }
+  }
+
+  std::cout << "SendFrame::sendOutputs got signal to send " << m_selectedOutputsAmount << std::endl;
+
+  quint64 fee = CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
+  m_nodeFee = 0;
+  if(!m_nodeFeeAddress.isEmpty()) {
+    if (m_flatRateNodeFee == 0) {
+      m_nodeFee = static_cast<qint64>(m_selectedOutputsAmount * 0.0025); // fee is 0.25%
+      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
+          m_nodeFee = NodeAdapter::instance().getMinimalFee();
+      }
+    } else {
+      m_nodeFee = m_flatRateNodeFee;
+    }
+    if (m_nodeFee > CryptoNote::parameters::COIN) {
+        m_nodeFee = CryptoNote::parameters::COIN;
+    }
+  }
+  quint64 amount = m_selectedOutputsAmount - (fee + m_nodeFee);
+  m_transfers.at(0)->TransferFrame::setAmount(amount);
 }
 
 void SendFrame::sendClicked() {

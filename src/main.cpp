@@ -154,6 +154,7 @@ int main(int argc, char* argv[]) {
 
   app.processEvents();
   qRegisterMetaType<CryptoNote::TransactionId>("CryptoNote::TransactionId");
+  qRegisterMetaType<std::list<CryptoNote::TransactionOutputInformation>>("std::list<CryptoNote::TransactionOutputInformation>");
   qRegisterMetaType<quintptr>("quintptr");
   if (!NodeAdapter::instance().init()) {
     return 0;
