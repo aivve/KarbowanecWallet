@@ -55,7 +55,7 @@ private:
   void onNodeFeeAddressFound(const QString& _address, const quint64 _feeAmount);
   double getMinimalFee();
   quint64 getFee();
-  void calculateNodeFee(quint64 amount);
+  void calculateNodeFee();
   void recalculateAmountsSendOutputs();
   void reset();
 
@@ -64,7 +64,8 @@ private:
   Q_SLOT void mixinValueChanged(int _value);
   Q_SLOT void priorityValueChanged(int _value);
   Q_SLOT void feeValueChanged(double _value);
-  Q_SLOT void amountValueChange();
+  Q_SLOT void donateValueChanged(double _value);
+  Q_SLOT void amountValueChanged();
   Q_SLOT void sendClicked();
   Q_SLOT void sendAllClicked();
   Q_SLOT void openUriClicked();
@@ -72,6 +73,7 @@ private:
   Q_SLOT void advancedClicked(bool _show);
   Q_SLOT void dontRelayToggled(bool _dont);
   Q_SLOT void donateToggled(bool _donate);
+  Q_SLOT void feeOverrideToggled(bool _override);
 
 Q_SIGNALS:
   void uriOpenSignal();
