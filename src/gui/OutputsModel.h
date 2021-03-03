@@ -20,6 +20,7 @@ class OutputsModel : public QAbstractItemModel {
 
 public:
   enum class OutputType : uint8_t { Invalid, Key, Multisignature };
+  enum class OutputState : quint8 { SPENT, UNSPENT };
 
   enum Columns{
     COLUMN_STATE = 0, COLUMN_TYPE, COLUMN_OUTPUT_KEY, COLUMN_TX_HASH, COLUMN_AMOUNT, COLUMN_GLOBAL_OUTPUT_INDEX, COLUMN_OUTPUT_IN_TRANSACTION, COLUMN_TX_PUBLIC_KEY, COLUMN_REQ_SIG,

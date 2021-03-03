@@ -14,11 +14,8 @@
 
 namespace WalletGui {
 
-enum class OutputState : quint8 {SPENT, UNSPENT};
-
 const int OUTPUTS_MODEL_COLUMN_COUNT =
   OutputsModel::staticMetaObject.enumerator(OutputsModel::staticMetaObject.indexOfEnumerator("Columns")).keyCount();
-
 
 OutputsModel::OutputsModel() : QAbstractItemModel()
 {
