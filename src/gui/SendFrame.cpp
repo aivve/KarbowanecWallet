@@ -445,7 +445,14 @@ void SendFrame::sendClicked() {
           WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
         }
       } else {
-        QString rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        QString rawTx;
+
+        if (m_selectedOutputsAmount > 0) {
+          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, m_selectedOutputs.toStdList(), fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        } else {
+          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        }
+
         if (!rawTx.isEmpty()) {
           ExportRawTransactionDialog dlg(&MainWindow::instance());
           dlg.setTransaction(rawTx);

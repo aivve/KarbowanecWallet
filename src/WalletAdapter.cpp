@@ -445,6 +445,19 @@ QString WalletAdapter::prepareRawTransaction(const std::vector<CryptoNote::Walle
   return QString();
 }
 
+QString WalletAdapter::prepareRawTransaction(const std::vector<CryptoNote::WalletLegacyTransfer>& _transfers, const std::list<CryptoNote::TransactionOutputInformation>& _selectedOuts, quint64 _fee, const QString& _payment_id, quint64 _mixin) {
+  Q_CHECK_PTR(m_wallet);
+  try {
+    lock();
+    Q_EMIT walletStateChangedSignal(tr("Preparing transaction"));
+    CryptoNote::TransactionId transactionId;
+    return QString::fromStdString(m_wallet->prepareRawTransaction(transactionId, _transfers, _fee, NodeAdapter::instance().convertPaymentId(_payment_id), _mixin, 0));
+  } catch (std::system_error&) {
+    unlock();
+  }
+  return QString();
+}
+
 quint64 WalletAdapter::estimateFusion(quint64 _threshold) {
   Q_CHECK_PTR(m_wallet);
   try {
