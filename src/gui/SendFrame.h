@@ -43,6 +43,8 @@ private:
   quint64 m_totalAmount = 0;
   quint64 m_unmixableBalance = 0;
   quint64 m_selectedOutputsAmount = 0;
+  bool m_mixinZero = false;
+  std::list<CryptoNote::TransactionOutputInformation> m_selectedOutputs;
 
   void sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _error_text);
   void walletActualBalanceUpdated(quint64 _balance);
@@ -52,13 +54,16 @@ private:
   static bool isValidPaymentId(const QByteArray& _paymentIdString);
   void onNodeFeeAddressFound(const QString& _address, const quint64 _feeAmount);
   double getMinimalFee();
+  quint64 getFee();
   void calculateNodeFee(quint64 amount);
+  void recalculateAmountsSendOutputs();
   void reset();
 
   Q_SLOT void addRecipientClicked();
   Q_SLOT void clearAllClicked();
   Q_SLOT void mixinValueChanged(int _value);
   Q_SLOT void priorityValueChanged(int _value);
+  Q_SLOT void feeValueChanged(double _value);
   Q_SLOT void amountValueChange();
   Q_SLOT void sendClicked();
   Q_SLOT void sendAllClicked();
@@ -66,6 +71,7 @@ private:
   Q_SLOT void generatePaymentIdClicked();
   Q_SLOT void advancedClicked(bool _show);
   Q_SLOT void dontRelayToggled(bool _dont);
+  Q_SLOT void donateToggled(bool _donate);
 
 Q_SIGNALS:
   void uriOpenSignal();

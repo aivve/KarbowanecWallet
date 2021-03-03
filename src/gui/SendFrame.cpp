@@ -32,7 +32,8 @@
 namespace WalletGui {
 
 SendFrame::SendFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendFrame), m_glassFrame(new SendGlassFrame(nullptr)),
-  m_nodeFee(0), m_flatRateNodeFee(0) {
+    m_nodeFee(0), m_flatRateNodeFee(0), m_selectedOutputsAmount(0)
+{
   m_ui->setupUi(this);
   m_glassFrame->setObjectName("m_sendGlassFrame");
   clearAllClicked();
@@ -81,7 +82,7 @@ SendFrame::SendFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendFrame
   QString connection = Settings::instance().getConnection();
   if(connection.compare("remote") == 0) {
     m_nodeFeeAddress  = NodeAdapter::instance().getNodeFeeAddress();
-    m_flatRateNodeFee = NodeAdapter::instance().getNodeFeeAmount();
+    m_flatRateNodeFee = std::min(NodeAdapter::instance().getNodeFeeAmount(), CryptoNote::parameters::COIN);
 
     m_ui->m_remote_label->setText(QString(tr("Node fee: %1 %2")).arg(CurrencyAdapter::instance().formatAmount(m_flatRateNodeFee).remove(QRegExp("0+$"))).arg(CurrencyAdapter::instance().getCurrencyTicker().toUpper()));
     m_ui->m_remote_label->show();
@@ -172,18 +173,17 @@ void SendFrame::clearAllClicked() {
 }
 
 void SendFrame::reset() {
+  m_selectedOutputs.clear();
+  m_selectedOutputsAmount = 0;
+  m_mixinZero = false;
   amountValueChange();
 }
 
 void SendFrame::amountValueChange() {
-  QVector<quint64> amounts;
+  m_totalAmount = 0;
   Q_FOREACH (TransferFrame * transfer, m_transfers) {
     quint64 amount = CurrencyAdapter::instance().parseAmount(transfer->getAmountString());
-    amounts.push_back(amount);
-    }
-  m_totalAmount = 0;
-  for(QVector<quint64>::iterator it = amounts.begin(); it != amounts.end(); ++it) {
-    m_totalAmount += *it;
+    m_totalAmount += amount;
   }
 
   calculateNodeFee(m_totalAmount);
@@ -273,22 +273,8 @@ void SendFrame::parsePaymentRequest(QString _request) {
   }
 }
 
-void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
-  m_selectedOutputsAmount = 0;
-
-  for (auto& out : _selectedOutputs) {
-    m_selectedOutputsAmount += out.amount;
-    // if unmixable force mixin zero
-    if (!CryptoNote::is_valid_decomposed_amount(out.amount)) {
-      m_ui->m_mixinSlider->setValue(0);
-    }
-  }
-
-  std::cout << "SendFrame::sendOutputs got signal to send " << m_selectedOutputsAmount << std::endl;
-
-  quint64 fee = CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
-
-  calculateNodeFee(m_selectedOutputsAmount);
+void SendFrame::recalculateAmountsSendOutputs() {
+  quint64 fee = getFee();
 
   if (m_selectedOutputsAmount <= m_nodeFee + fee) {
     QCoreApplication::postEvent(
@@ -298,7 +284,32 @@ void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInforma
   }
 
   quint64 amount = m_selectedOutputsAmount - (fee + m_nodeFee);
-  m_transfers.at(0)->TransferFrame::setAmount(amount);
+
+  if (m_ui->donateCheckBox->isChecked()) {
+    amount -= CurrencyAdapter::instance().parseAmount(m_ui->m_donateSpin->cleanText());
+    m_transfers[0]->setAmount(amount);
+  } else {
+    m_transfers[0]->setAmount(amount);
+  }
+}
+
+void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
+  m_selectedOutputsAmount = 0;
+
+  for (auto& out : _selectedOutputs) {
+    m_selectedOutputsAmount += out.amount;
+    // if unmixable force mixin zero
+    if (!CryptoNote::is_valid_decomposed_amount(out.amount)) {
+      m_mixinZero = true;
+      m_ui->m_mixinSlider->setValue(0);
+    }
+  }
+
+  m_selectedOutputs = _selectedOutputs;
+
+  recalculateAmountsSendOutputs();
+
+  // that's all, now it's sendClicked() turn, i.e. user has to enter recipient and hit Send button
 }
 
 void SendFrame::sendClicked() {
@@ -369,7 +380,7 @@ void SendFrame::sendClicked() {
 
   // Miners fee
   priorityValueChanged(m_ui->m_prioritySlider->value());
-  quint64 fee = CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
+  quint64 fee = getFee();
 
   if (fee < NodeAdapter::instance().getMinimalFee()) {
     QCoreApplication::postEvent(&MainWindow::instance(), new ShowMessageEvent(tr("Incorrect fee value"), QtCriticalMsg));
@@ -412,7 +423,11 @@ void SendFrame::sendClicked() {
   if (dlg.exec() == QDialog::Accepted) {
     if (WalletAdapter::instance().isOpen()) {
       if (!m_ui->dontRelayCheckBox->isChecked()) {
-        WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        if (m_selectedOutputsAmount > 0) {
+          WalletAdapter::instance().sendTransaction(walletTransfers, m_selectedOutputs, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        } else {
+          WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+        }
       } else {
         QString rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
         if (!rawTx.isEmpty()) {
@@ -426,12 +441,32 @@ void SendFrame::sendClicked() {
 }
 
 void SendFrame::mixinValueChanged(int _value) {
+  if (m_mixinZero)
+    m_ui->m_mixinSlider->setValue(0);
   m_ui->m_mixinLabel->setText(QString::number(_value));
 }
 
 void SendFrame::priorityValueChanged(int _value) {
   double send_fee = getMinimalFee() * _value;
   m_ui->m_feeSpin->setValue(send_fee);
+
+  if (m_selectedOutputsAmount > 0) {
+    recalculateAmountsSendOutputs();
+  }
+}
+
+void SendFrame::feeValueChanged(double _value) {
+  if (m_selectedOutputsAmount > 0) {
+    recalculateAmountsSendOutputs();
+  }
+}
+
+quint64 SendFrame::getFee() {
+  if (m_ui->m_manualFeeCheckBox->isChecked()) {
+     return CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
+  }
+
+  return CurrencyAdapter::instance().parseAmount(QString::number(getMinimalFee() * m_ui->m_prioritySlider->value()));
 }
 
 void SendFrame::sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _errorText) {
@@ -482,6 +517,13 @@ void SendFrame::dontRelayToggled(bool _dont) {
   }
 }
 
+void SendFrame::donateToggled(bool _donate) {
+  Q_UNUSED(_donate);
+  if (m_selectedOutputsAmount > 0) {
+    recalculateAmountsSendOutputs();
+  }
+}
+
 void SendFrame::sendAllClicked() {
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   if (actualBalance < NodeAdapter::instance().getMinimalFee()) {
@@ -507,10 +549,8 @@ void SendFrame::sendAllClicked() {
     }
   }
 
-  calculateNodeFee(actualBalance);
-
-  quint64 priorityFee = CurrencyAdapter::instance().parseAmount(QString::number(getMinimalFee() * m_ui->m_prioritySlider->value()));
-  quint64 amount = actualBalance - (priorityFee + m_nodeFee);
+  quint64 fee = getFee();
+  quint64 amount = actualBalance - (fee + m_nodeFee);
   if (m_ui->donateCheckBox->isChecked()) {
     float donation_amount = CurrencyAdapter::instance().formatAmount(amount).toDouble() * 0.1 / 100;
     donation_amount = floor(donation_amount * pow(10., 4) + .5) / pow(10., 4);
@@ -529,15 +569,9 @@ void SendFrame::calculateNodeFee(quint64 amount) {
   m_nodeFee = 0;
   if(!m_nodeFeeAddress.isEmpty()) {
     if (m_flatRateNodeFee == 0) {
-      m_nodeFee = static_cast<qint64>(amount * 0.0025); // fee is 0.25%
-      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
-          m_nodeFee = NodeAdapter::instance().getMinimalFee();
-      }
+      m_nodeFee = NodeAdapter::instance().getMinimalFee();
     } else {
       m_nodeFee = m_flatRateNodeFee;
-    }
-    if (m_nodeFee > CryptoNote::parameters::COIN) {
-        m_nodeFee = CryptoNote::parameters::COIN;
     }
   }
 }
