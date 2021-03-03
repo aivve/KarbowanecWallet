@@ -163,6 +163,7 @@ void SendFrame::clearAllClicked() {
   m_selectedOutputs.clear();
   m_selectedOutputsAmount = 0;
   m_ui->m_mixinSlider->setEnabled(true);
+  m_ui->m_sendAllButton->setEnabled(true);
 
   Q_FOREACH (TransferFrame* transfer, m_transfers) {
     transfer->close();
@@ -180,6 +181,7 @@ void SendFrame::reset() {
   m_selectedOutputs.clear();
   m_selectedOutputsAmount = 0;
   m_ui->m_mixinSlider->setEnabled(true);
+  m_ui->m_sendAllButton->setEnabled(true);
   amountValueChanged();
 }
 
@@ -307,8 +309,10 @@ void SendFrame::recalculateAmountsSendOutputs() {
 void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
   m_selectedOutputsAmount = 0;
 
-  bool zeroMixinAgreed = false;
+  // disable send all in this case
+  m_ui->m_sendAllButton->setEnabled(false);
 
+  bool zeroMixinAgreed = false;
   for (auto& out : _selectedOutputs) {
     m_selectedOutputsAmount += out.amount;
     // if unmixable force mixin zero
