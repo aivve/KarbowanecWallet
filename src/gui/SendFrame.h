@@ -52,6 +52,7 @@ private:
   static bool isValidPaymentId(const QByteArray& _paymentIdString);
   void onNodeFeeAddressFound(const QString& _address, const quint64 _feeAmount);
   double getMinimalFee();
+  void calculateNodeFee(quint64 amount);
   void reset();
 
   Q_SLOT void addRecipientClicked();

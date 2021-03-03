@@ -186,29 +186,7 @@ void SendFrame::amountValueChange() {
     m_totalAmount += *it;
   }
 
-  if(!m_nodeFeeAddress.isEmpty()) {
-    QVector<quint64> fees;
-    fees.clear();
-    Q_FOREACH (TransferFrame * transfer, m_transfers) {
-      quint64 amount = CurrencyAdapter::instance().parseAmount(transfer->getAmountString());
-      quint64 percentfee = amount * 0.25 / 100; // fee is 0.25%
-      fees.push_back(percentfee);
-    }
-    m_nodeFee = 0;
-    if (m_flatRateNodeFee == 0) {
-      for(QVector<quint64>::iterator it = fees.begin(); it != fees.end(); ++it) {
-        m_nodeFee += *it;
-      }
-      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
-          m_nodeFee = NodeAdapter::instance().getMinimalFee();
-      }
-    } else {
-      m_nodeFee = m_flatRateNodeFee;
-    }
-    if (m_nodeFee > CryptoNote::parameters::COIN) {
-      m_nodeFee = CryptoNote::parameters::COIN;
-    }
-  }
+  calculateNodeFee(m_totalAmount);
 
   QVector<float> donations;
   donations.clear();
@@ -296,8 +274,7 @@ void SendFrame::parsePaymentRequest(QString _request) {
 }
 
 void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
-
-  // check that amount > fees
+  m_selectedOutputsAmount = 0;
 
   for (auto& out : _selectedOutputs) {
     m_selectedOutputsAmount += out.amount;
@@ -310,20 +287,16 @@ void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInforma
   std::cout << "SendFrame::sendOutputs got signal to send " << m_selectedOutputsAmount << std::endl;
 
   quint64 fee = CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
-  m_nodeFee = 0;
-  if(!m_nodeFeeAddress.isEmpty()) {
-    if (m_flatRateNodeFee == 0) {
-      m_nodeFee = static_cast<qint64>(m_selectedOutputsAmount * 0.0025); // fee is 0.25%
-      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
-          m_nodeFee = NodeAdapter::instance().getMinimalFee();
-      }
-    } else {
-      m_nodeFee = m_flatRateNodeFee;
-    }
-    if (m_nodeFee > CryptoNote::parameters::COIN) {
-        m_nodeFee = CryptoNote::parameters::COIN;
-    }
+
+  calculateNodeFee(m_selectedOutputsAmount);
+
+  if (m_selectedOutputsAmount <= m_nodeFee + fee) {
+    QCoreApplication::postEvent(
+      &MainWindow::instance(),
+      new ShowMessageEvent(tr("Insufficient balance."), QtCriticalMsg));
+    return;
   }
+
   quint64 amount = m_selectedOutputsAmount - (fee + m_nodeFee);
   m_transfers.at(0)->TransferFrame::setAmount(amount);
 }
@@ -332,7 +305,7 @@ void SendFrame::sendClicked() {
   amountValueChange();
 
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
-  if (actualBalance < NodeAdapter::instance().getMinimalFee()) {
+  if (actualBalance <= NodeAdapter::instance().getMinimalFee()) {
     QCoreApplication::postEvent(
       &MainWindow::instance(),
       new ShowMessageEvent(tr("Insufficient balance."), QtCriticalMsg));
@@ -533,20 +506,8 @@ void SendFrame::sendAllClicked() {
           break;
     }
   }
-  m_nodeFee = 0;
-  if(!m_nodeFeeAddress.isEmpty()) {
-    if (m_flatRateNodeFee == 0) {
-      m_nodeFee = static_cast<qint64>(actualBalance * 0.0025); // fee is 0.25%
-      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
-          m_nodeFee = NodeAdapter::instance().getMinimalFee();
-      }
-    } else {
-      m_nodeFee = m_flatRateNodeFee;
-    }
-    if (m_nodeFee > CryptoNote::parameters::COIN) {
-        m_nodeFee = CryptoNote::parameters::COIN;
-    }
-  }
+
+  calculateNodeFee(actualBalance);
 
   quint64 priorityFee = CurrencyAdapter::instance().parseAmount(QString::number(getMinimalFee() * m_ui->m_prioritySlider->value()));
   quint64 amount = actualBalance - (priorityFee + m_nodeFee);
@@ -561,6 +522,23 @@ void SendFrame::sendAllClicked() {
     m_ui->m_donateSpin->setValue(QString::number(donation_amount).toDouble());
   } else {
     m_transfers[0]->setAmount(amount);
+  }
+}
+
+void SendFrame::calculateNodeFee(quint64 amount) {
+  m_nodeFee = 0;
+  if(!m_nodeFeeAddress.isEmpty()) {
+    if (m_flatRateNodeFee == 0) {
+      m_nodeFee = static_cast<qint64>(amount * 0.0025); // fee is 0.25%
+      if (m_nodeFee < NodeAdapter::instance().getMinimalFee()) {
+          m_nodeFee = NodeAdapter::instance().getMinimalFee();
+      }
+    } else {
+      m_nodeFee = m_flatRateNodeFee;
+    }
+    if (m_nodeFee > CryptoNote::parameters::COIN) {
+        m_nodeFee = CryptoNote::parameters::COIN;
+    }
   }
 }
 
