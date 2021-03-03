@@ -44,7 +44,9 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
 
   m_ui->m_outputsView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(m_ui->m_outputsView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &CoinsFrame::walletClosed);
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &CoinsFrame::resetTotalAmountLabel);
+
+  resetTotalAmountLabel();
 
   contextMenu = new QMenu();
   contextMenu->addAction(QString(tr("Copy transaction &hash")), this, SLOT(copyHash()));
@@ -141,7 +143,7 @@ void CoinsFrame::resetFilterClicked() {
 
 }
 
-void CoinsFrame::walletClosed() {
+void CoinsFrame::resetTotalAmountLabel() {
   QString amountText = QString::number(0, 'f', 12) + " " + CurrencyAdapter::instance().getCurrencyTicker().toUpper();
   m_ui->m_selectedAmount->setText(amountText);
 }

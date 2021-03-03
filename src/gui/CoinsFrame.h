@@ -47,7 +47,7 @@ public Q_SLOTS:
   void copyGindex();
   void showDetails();
   void computeSelected();
-  void walletClosed();
+  void resetTotalAmountLabel();
   void sendClicked();
 
 Q_SIGNALS:
