@@ -901,7 +901,7 @@ void MainWindow::onUriOpenSignal() {
   m_ui->m_sendAction->trigger();
 }
 
-void MainWindow::onSendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
+void MainWindow::onSendOutputs(QList<CryptoNote::TransactionOutputInformation> _selectedOutputs) {
   if (Settings::instance().isTrackingMode()) {
     isTrackingMode();
     return;

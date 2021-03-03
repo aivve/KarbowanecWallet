@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QList>
 #include <QMenu>
 #include <QWidget>
 #include <QAbstractItemModel>
@@ -51,7 +52,7 @@ public Q_SLOTS:
   void sendClicked();
 
 Q_SIGNALS:
-  void sendOutputsSignal(std::list<CryptoNote::TransactionOutputInformation> _selectedOutputs);
+  void sendOutputsSignal(QList<CryptoNote::TransactionOutputInformation> _selectedOutputs);
 
 private:
   QScopedPointer<Ui::CoinsFrame> m_ui;

@@ -169,7 +169,7 @@ void CoinsFrame::sendClicked() {
     return;
 
   QModelIndexList selection = m_ui->m_outputsView->selectionModel()->selectedRows();
-  std::list<CryptoNote::TransactionOutputInformation> selectedOutputs;
+  QList<CryptoNote::TransactionOutputInformation> selectedOutputs;
 
   foreach (QModelIndex index, selection) {
     CryptoNote::TransactionOutputInformation o;
@@ -179,8 +179,12 @@ void CoinsFrame::sendClicked() {
     o.outputInTransaction = index.data(OutputsModel::ROLE_OUTPUT_IN_TRANSACTION).value<quint32>();
     o.transactionHash = *reinterpret_cast<const Crypto::Hash*>(index.data(OutputsModel::ROLE_TX_HASH).value<QByteArray>().data());
     o.transactionPublicKey = *reinterpret_cast<const Crypto::PublicKey*>(index.data(OutputsModel::ROLE_TX_PUBLIC_KEY).value<QByteArray>().data());
-    o.outputKey = *reinterpret_cast<const Crypto::PublicKey*>(index.data(OutputsModel::ROLE_OUTPUT_KEY).value<QByteArray>().data());
-    o.requiredSignatures = index.data(OutputsModel::ROLE_REQ_SIG).value<quint32>();
+
+    if (o.type == CryptoNote::TransactionTypes::OutputType::Key)
+        o.outputKey = *reinterpret_cast<const Crypto::PublicKey*>(index.data(OutputsModel::ROLE_OUTPUT_KEY).value<QByteArray>().data());
+    else if (o.type == CryptoNote::TransactionTypes::OutputType::Multisignature)
+        o.requiredSignatures = index.data(OutputsModel::ROLE_REQ_SIG).value<quint32>();
+
     if (index.data(OutputsModel::ROLE_STATE).value<quint8>() != static_cast<quint8>(OutputsModel::OutputState::SPENT)) {
       selectedOutputs.push_back(o);
     }

@@ -305,7 +305,7 @@ void SendFrame::recalculateAmountsSendOutputs() {
   }
 }
 
-void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
+void SendFrame::sendOutputs(QList<CryptoNote::TransactionOutputInformation> _selectedOutputs) {
   m_selectedOutputsAmount = 0;
 
   // disable send all in this case
@@ -326,8 +326,6 @@ void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInforma
   m_selectedOutputs = _selectedOutputs;
 
   recalculateAmountsSendOutputs();
-
-  // that's all, now it's sendClicked() turn, i.e. user has to enter recipient and hit Send button
 }
 
 void SendFrame::sendClicked() {
@@ -442,7 +440,7 @@ void SendFrame::sendClicked() {
     if (WalletAdapter::instance().isOpen()) {
       if (!m_ui->dontRelayCheckBox->isChecked()) {
         if (m_selectedOutputsAmount > 0) {
-          WalletAdapter::instance().sendTransaction(walletTransfers, m_selectedOutputs, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+          WalletAdapter::instance().sendTransaction(walletTransfers, m_selectedOutputs.toStdList(), fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
         } else {
           WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
         }

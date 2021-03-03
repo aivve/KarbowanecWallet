@@ -30,7 +30,7 @@ public:
 
   void setAddress(const QString& _address);
   Q_SLOT void parsePaymentRequest(QString _request);
-  Q_SLOT void sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs);
+  Q_SLOT void sendOutputs(QList<CryptoNote::TransactionOutputInformation> _selectedOutputs);
 
 private:
   QScopedPointer<Ui::SendFrame> m_ui;
@@ -43,7 +43,7 @@ private:
   quint64 m_totalAmount = 0;
   quint64 m_unmixableBalance = 0;
   quint64 m_selectedOutputsAmount = 0;
-  std::list<CryptoNote::TransactionOutputInformation> m_selectedOutputs;
+  QList<CryptoNote::TransactionOutputInformation> m_selectedOutputs;
 
   void sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _error_text);
   void walletActualBalanceUpdated(quint64 _balance);

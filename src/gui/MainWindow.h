@@ -104,7 +104,7 @@ private:
   void updateWalletAddress(const QString& _address);
   void reset();
   void onUriOpenSignal();
-  void onSendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs);
+  void onSendOutputs(QList<CryptoNote::TransactionOutputInformation> _selectedOutputs);
   void adjustForCurrentFile(const QString& filePath);
   void updateRecentActionList();
   void updateUnmixableBalance(quint64 _balance);

@@ -160,6 +160,8 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
   bool is_spent = state == OutputState::SPENT;
 
+  OutputType type = static_cast<OutputType>(_index.data(ROLE_TYPE).value<quint8>());
+
   switch(_index.column()) {
 
   case COLUMN_STATE: {
@@ -173,7 +175,6 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   }
 
   case COLUMN_TYPE: {
-    OutputType type = static_cast<OutputType>(_index.data(ROLE_TYPE).value<quint8>());
     if (type == OutputType::Key)
       return tr("Key");
     else if (type == OutputType::Multisignature)
@@ -193,14 +194,23 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
     return CurrencyAdapter::instance().formatAmount(amount);
   }
 
-  case COLUMN_GLOBAL_OUTPUT_INDEX:
-    return _index.data(ROLE_GLOBAL_OUTPUT_INDEX).value<qint32>();
+  case COLUMN_GLOBAL_OUTPUT_INDEX: {
+    quint32 index = _index.data(ROLE_GLOBAL_OUTPUT_INDEX).value<qint32>();
+      if (index < 0 || index == std::numeric_limits<uint32_t>::max())
+        return tr("Pending");
+      else
+        return index;
+  }
 
   case COLUMN_OUTPUT_IN_TRANSACTION:
     return _index.data(ROLE_OUTPUT_IN_TRANSACTION).value<qint32>();
 
-  case COLUMN_TX_PUBLIC_KEY:
-    return _index.data(ROLE_TX_PUBLIC_KEY).toByteArray().toHex().toUpper();
+  case COLUMN_TX_PUBLIC_KEY: {
+    if (type == OutputType::Key)
+      return _index.data(ROLE_TX_PUBLIC_KEY).toByteArray().toHex().toUpper();
+    else if (type == OutputType::Multisignature)
+      return "-";
+  }
 
   case COLUMN_SPENDING_BLOCK_HEIGHT: {
     if (is_spent) {
@@ -275,12 +285,6 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
   case ROLE_TYPE:
     return static_cast<quint8>(_output.type);
 
-  case ROLE_TX_HASH:
-    return QByteArray(reinterpret_cast<char*>(&_output.transactionHash), sizeof(_output.transactionHash));
-
-  case ROLE_OUTPUT_KEY:
-    return QByteArray(reinterpret_cast<char*>(&_output.outputKey), sizeof(_output.outputKey));
-
   case ROLE_AMOUNT:
     return static_cast<quint64>(_output.amount);
 
@@ -290,8 +294,14 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
   case ROLE_OUTPUT_IN_TRANSACTION:
     return static_cast<quint32>(_output.outputInTransaction);
 
+  case ROLE_TX_HASH:
+    return QByteArray(reinterpret_cast<char*>(&_output.transactionHash), 32);
+
   case ROLE_TX_PUBLIC_KEY:
-    return QByteArray(reinterpret_cast<char*>(&_output.transactionPublicKey), sizeof(_output.transactionPublicKey));
+    return QByteArray(reinterpret_cast<char*>(&_output.transactionPublicKey), 32);
+
+  case ROLE_OUTPUT_KEY:
+    return QByteArray(reinterpret_cast<char*>(&_output.outputKey), 32);
 
   case ROLE_SPENDING_BLOCK_HEIGHT:
     return _output.spendingBlockHeight;
@@ -300,10 +310,10 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
     return (_output.timestamp > 0 ? QDateTime::fromTime_t(_output.timestamp) : QDateTime());
 
   case ROLE_SPENDING_TRANSACTION_HASH:
-    return QByteArray(reinterpret_cast<char*>(&_output.spendingTransactionHash), sizeof(_output.spendingTransactionHash));
+    return QByteArray(reinterpret_cast<char*>(&_output.spendingTransactionHash), 32);
 
   case ROLE_KEY_IMAGE:
-    return QByteArray(reinterpret_cast<char*>(&_output.keyImage), sizeof(_output.keyImage));
+    return QByteArray(reinterpret_cast<char*>(&_output.keyImage), 32);
 
   case ROLE_INPUT_IN_TRANSACTION:
     return static_cast<quint32>(_output.inputInTransaction);
