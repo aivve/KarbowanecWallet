@@ -43,7 +43,6 @@ private:
   quint64 m_totalAmount = 0;
   quint64 m_unmixableBalance = 0;
   quint64 m_selectedOutputsAmount = 0;
-  bool m_mixinZero = false;
   std::list<CryptoNote::TransactionOutputInformation> m_selectedOutputs;
 
   void sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _error_text);
@@ -58,6 +57,7 @@ private:
   void calculateNodeFee();
   void recalculateAmountsSendOutputs();
   void reset();
+  bool confirmZeroMixin();
 
   Q_SLOT void addRecipientClicked();
   Q_SLOT void clearAllClicked();

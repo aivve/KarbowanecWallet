@@ -162,7 +162,7 @@ double SendFrame::getMinimalFee() {
 void SendFrame::clearAllClicked() {
   m_selectedOutputs.clear();
   m_selectedOutputsAmount = 0;
-  m_mixinZero = false;
+  m_ui->m_mixinSlider->setEnabled(true);
 
   Q_FOREACH (TransferFrame* transfer, m_transfers) {
     transfer->close();
@@ -179,7 +179,7 @@ void SendFrame::clearAllClicked() {
 void SendFrame::reset() {
   m_selectedOutputs.clear();
   m_selectedOutputsAmount = 0;
-  m_mixinZero = false;
+  m_ui->m_mixinSlider->setEnabled(true);
   amountValueChanged();
 }
 
@@ -307,12 +307,16 @@ void SendFrame::recalculateAmountsSendOutputs() {
 void SendFrame::sendOutputs(const std::list<CryptoNote::TransactionOutputInformation>& _selectedOutputs) {
   m_selectedOutputsAmount = 0;
 
+  bool zeroMixinAgreed = false;
+
   for (auto& out : _selectedOutputs) {
     m_selectedOutputsAmount += out.amount;
     // if unmixable force mixin zero
     if (!CryptoNote::is_valid_decomposed_amount(out.amount)) {
-      m_mixinZero = true;
-      m_ui->m_mixinSlider->setValue(0);
+      if(!zeroMixinAgreed && !confirmZeroMixin())
+         return;
+      m_ui->m_mixinSlider->setEnabled(false);
+      zeroMixinAgreed = true;
     }
   }
 
@@ -452,8 +456,6 @@ void SendFrame::sendClicked() {
 }
 
 void SendFrame::mixinValueChanged(int _value) {
-  if (m_mixinZero)
-    m_ui->m_mixinSlider->setValue(0);
   m_ui->m_mixinLabel->setText(QString::number(_value));
 }
 
@@ -554,6 +556,24 @@ void SendFrame::donateToggled(bool _donate) {
   }
 }
 
+bool SendFrame::confirmZeroMixin() {
+  int ret = QMessageBox::question(nullptr, tr("Sweep unmixable dust"),
+                                  tr("You have unmixable coins that can be only spent with zero privacy level.\n Shall we continue with zero privacy?"),
+                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+  switch (ret) {
+    case QMessageBox::Yes:
+      m_ui->m_mixinSlider->setValue(0);
+      return true;
+    case QMessageBox::No:
+      return false;
+    default:
+      // should never be reached
+      break;
+    }
+
+  return false;
+}
+
 void SendFrame::sendAllClicked() {
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   if (actualBalance < NodeAdapter::instance().getMinimalFee()) {
@@ -564,19 +584,8 @@ void SendFrame::sendAllClicked() {
   }
   m_unmixableBalance = WalletAdapter::instance().getUnmixableBalance();
   if (m_unmixableBalance != 0) {
-    int ret = QMessageBox::question(nullptr, tr("Sweep unmixable dust"),
-                                    tr("You have unmixable coins that can be only spent with zero privacy level.\n Shall we continue with zero privacy?"),
-                                    QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    switch (ret) {
-      case QMessageBox::Yes:
-          m_ui->m_mixinSlider->setValue(0);
-          break;
-      case QMessageBox::No:
-          return;
-      default:
-          // should never be reached
-          break;
-    }
+    if(!confirmZeroMixin())
+      return;
   }
 
   quint64 fee = getFee();
