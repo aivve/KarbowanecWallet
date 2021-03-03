@@ -213,7 +213,6 @@ void SendFrame::amountValueChanged() {
   m_ui->m_donateSpin->setValue(QString::number(donation_amount).toDouble());
 
   if(!m_nodeFeeAddress.isEmpty()) {
-    quint64 actualBalance = WalletAdapter::instance().getActualBalance();
     m_ui->m_remote_label->setText(QString(tr("Node fee: %1 %2")).arg(CurrencyAdapter::instance().formatAmount(m_nodeFee).remove(QRegExp("0+$"))).arg(CurrencyAdapter::instance().getCurrencyTicker().toUpper()));
   }
 }
