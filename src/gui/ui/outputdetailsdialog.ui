@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>705</width>
-    <height>300</height>
+    <height>314</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,8 +26,8 @@
       <property name="horizontalSpacing">
        <number>20</number>
       </property>
-      <item row="8" column="1">
-       <widget class="QLabel" name="m_timestampLabel">
+      <item row="2" column="1">
+       <widget class="QLabel" name="m_keyLabel">
         <property name="text">
          <string/>
         </property>
@@ -36,27 +36,13 @@
         </property>
        </widget>
       </item>
-      <item row="10" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Key image</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QLabel" name="m_spentHeightLabel">
+      <item row="11" column="1">
+       <widget class="QLabel" name="m_keyImageLabel">
         <property name="text">
          <string/>
         </property>
         <property name="textInteractionFlags">
          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Transaction hash</string>
         </property>
        </widget>
       </item>
@@ -70,10 +56,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Type</string>
+         <string>Spent at height</string>
         </property>
        </widget>
       </item>
@@ -84,8 +70,8 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="m_typeLabel">
+      <item row="3" column="1">
+       <widget class="QLabel" name="m_hashLabel">
         <property name="text">
          <string/>
         </property>
@@ -101,13 +87,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="m_hashLabel">
+      <item row="12" column="0">
+       <widget class="QLabel" name="label_11">
         <property name="text">
-         <string/>
-        </property>
-        <property name="textInteractionFlags">
-         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+         <string>Input index in spending transaction</string>
         </property>
        </widget>
       </item>
@@ -118,8 +101,15 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="1">
-       <widget class="QLabel" name="m_inputInTxLabel">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Amount</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="m_indexInTxLabel">
         <property name="text">
          <string/>
         </property>
@@ -128,22 +118,66 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Spent at height</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
+      <item row="10" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Spent in transaction</string>
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Transaction hash</string>
+        </property>
+       </widget>
+      </item>
       <item row="9" column="1">
+       <widget class="QLabel" name="m_timestampLabel">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Key image</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="m_typeLabel">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
        <widget class="QLabel" name="m_spendingTxHashLabel">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Index in transaction</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QLabel" name="m_inputInTxLabel">
         <property name="text">
          <string/>
         </property>
@@ -162,13 +196,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Amount</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QLabel" name="m_stateLabel">
         <property name="text">
@@ -179,8 +206,8 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="m_keyLabel">
+      <item row="8" column="1">
+       <widget class="QLabel" name="m_spentHeightLabel">
         <property name="text">
          <string/>
         </property>
@@ -189,39 +216,29 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0">
+      <item row="9" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Timestamp</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="1">
-       <widget class="QLabel" name="m_keyImageLabel">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string/>
-        </property>
-        <property name="textInteractionFlags">
-         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+         <string>Type</string>
         </property>
        </widget>
       </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="label_11">
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_13">
         <property name="text">
-         <string>Input index in spending transaction</string>
+         <string>Transaction public key</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Index in transaction</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLabel" name="m_indexInTxLabel">
+      <item row="7" column="1">
+       <widget class="QLabel" name="m_txPublicKeyLabel">
         <property name="text">
          <string/>
         </property>

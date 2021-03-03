@@ -25,6 +25,7 @@ OutputDetailsDialog::OutputDetailsDialog(const QModelIndex& _index, QWidget* _pa
   m_dataMapper.addMapping(m_ui->m_typeLabel, OutputsModel::COLUMN_TYPE, "text");
   m_dataMapper.addMapping(m_ui->m_keyLabel, OutputsModel::COLUMN_OUTPUT_KEY, "text");
   m_dataMapper.addMapping(m_ui->m_hashLabel, OutputsModel::COLUMN_TX_HASH, "text");
+  m_dataMapper.addMapping(m_ui->m_txPublicKeyLabel, OutputsModel::COLUMN_TX_PUBLIC_KEY, "text");
   m_dataMapper.addMapping(m_ui->m_amountLabel, OutputsModel::COLUMN_AMOUNT, "text");
   m_dataMapper.addMapping(m_ui->m_indexLabel, OutputsModel::COLUMN_GLOBAL_OUTPUT_INDEX, "text");
   m_dataMapper.addMapping(m_ui->m_indexInTxLabel, OutputsModel::COLUMN_OUTPUT_IN_TRANSACTION, "text");
