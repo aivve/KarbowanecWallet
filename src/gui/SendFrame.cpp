@@ -160,6 +160,10 @@ double SendFrame::getMinimalFee() {
 }
 
 void SendFrame::clearAllClicked() {
+  m_selectedOutputs.clear();
+  m_selectedOutputsAmount = 0;
+  m_mixinZero = false;
+
   Q_FOREACH (TransferFrame* transfer, m_transfers) {
     transfer->close();
   }
