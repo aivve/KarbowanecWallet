@@ -22,12 +22,12 @@ public:
   enum class OutputType : uint8_t { Invalid, Key, Multisignature };
 
   enum Columns{
-    COLUMN_STATE = 0, COLUMN_TYPE, COLUMN_OUTPUT_KEY, COLUMN_TX_HASH, COLUMN_AMOUNT, COLUMN_GLOBAL_OUTPUT_INDEX, COLUMN_OUTPUT_IN_TRANSACTION,
+    COLUMN_STATE = 0, COLUMN_TYPE, COLUMN_OUTPUT_KEY, COLUMN_TX_HASH, COLUMN_AMOUNT, COLUMN_GLOBAL_OUTPUT_INDEX, COLUMN_OUTPUT_IN_TRANSACTION, COLUMN_TX_PUBLIC_KEY, COLUMN_REQ_SIG,
         COLUMN_SPENDING_BLOCK_HEIGHT, COLUMN_TIMESTAMP, COLUMN_SPENDING_TRANSACTION_HASH, COLUMN_KEY_IMAGE, COLUMN_INPUT_IN_TRANSACTION
   };
 
   enum Roles {
-    ROLE_TYPE = Qt::UserRole, ROLE_STATE, ROLE_OUTPUT_KEY, ROLE_TX_HASH, ROLE_AMOUNT, ROLE_GLOBAL_OUTPUT_INDEX, ROLE_OUTPUT_IN_TRANSACTION,
+    ROLE_TYPE = Qt::UserRole, ROLE_STATE, ROLE_OUTPUT_KEY, ROLE_TX_HASH, ROLE_AMOUNT, ROLE_GLOBAL_OUTPUT_INDEX, ROLE_OUTPUT_IN_TRANSACTION, ROLE_TX_PUBLIC_KEY, ROLE_REQ_SIG,
       ROLE_SPENDING_BLOCK_HEIGHT, ROLE_TIMESTAMP, ROLE_SPENDING_TRANSACTION_HASH, ROLE_KEY_IMAGE, ROLE_INPUT_IN_TRANSACTION,
       ROLE_COLUMN, ROLE_ROW
    };
@@ -43,11 +43,15 @@ public:
   QModelIndex index(int _row, int _column, const QModelIndex& _parent = QModelIndex()) const Q_DECL_OVERRIDE;
   QModelIndex parent(const QModelIndex& _index) const Q_DECL_OVERRIDE;
 
-  CryptoNote::TransactionOutputInformation getOutput(const QModelIndex& _index) const;
-
 private:
   QVector<CryptoNote::TransactionOutputInformation> m_unspentOutputs;
   QVector<CryptoNote::TransactionSpentOutputInformation> m_spentOutputs;
+
+  static bool transactionSpentOutputInformationLessThan(const CryptoNote::TransactionSpentOutputInformation &left,
+                                                 const CryptoNote::TransactionSpentOutputInformation &right)
+  {
+      return left.globalOutputIndex < right.globalOutputIndex;
+  }
 
   OutputsModel();
   ~OutputsModel();

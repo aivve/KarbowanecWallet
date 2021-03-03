@@ -165,17 +165,25 @@ void CoinsFrame::computeSelected() {
 }
 
 void CoinsFrame::sendClicked() {
-  if (!m_ui->m_outputsView->selectionModel() || !WalletAdapter::instance().isOpen())
+  if(!m_ui->m_outputsView->selectionModel())
     return;
 
   QModelIndexList selection = m_ui->m_outputsView->selectionModel()->selectedRows();
   std::list<CryptoNote::TransactionOutputInformation> selectedOutputs;
 
   foreach (QModelIndex index, selection) {
-    CryptoNote::TransactionOutputInformation o = OutputsModel::instance().getOutput(index);
-    if (o.transactionHash != CryptoNote::NULL_HASH && o.amount != 0) {
-      selectedOutputs.push_back(o);
-    }
+     CryptoNote::TransactionOutputInformation o;
+     o.amount = index.data(OutputsModel::ROLE_AMOUNT).value<quint64>();
+     o.type = static_cast<CryptoNote::TransactionTypes::OutputType>(index.data(OutputsModel::ROLE_TYPE).value<quint8>());
+     o.globalOutputIndex = index.data(OutputsModel::ROLE_GLOBAL_OUTPUT_INDEX).value<quint32>();
+     o.outputInTransaction = index.data(OutputsModel::ROLE_OUTPUT_IN_TRANSACTION).value<quint32>();
+     o.transactionHash = *reinterpret_cast<const Crypto::Hash*>(index.data(OutputsModel::ROLE_TX_HASH).value<QByteArray>().data());
+     o.transactionPublicKey = *reinterpret_cast<const Crypto::PublicKey*>(index.data(OutputsModel::ROLE_TX_PUBLIC_KEY).value<QByteArray>().data());
+     o.outputKey = *reinterpret_cast<const Crypto::PublicKey*>(index.data(OutputsModel::ROLE_OUTPUT_KEY).value<QByteArray>().data());
+     o.requiredSignatures = index.data(OutputsModel::ROLE_REQ_SIG).value<quint32>();
+     if (o.amount != 0) {
+       selectedOutputs.push_back(o);
+     }
   }
 
   Q_EMIT sendOutputsSignal(selectedOutputs);

@@ -79,6 +79,8 @@ QVariant OutputsModel::headerData(int _section, Qt::Orientation _orientation, in
       return tr("Global index");
     case COLUMN_OUTPUT_IN_TRANSACTION:
       return tr("Index in transaction");
+    case COLUMN_TX_PUBLIC_KEY:
+      return tr("Transaction public key");
     case COLUMN_SPENDING_BLOCK_HEIGHT:
       return tr("Spent at height");
     case COLUMN_TIMESTAMP:
@@ -98,22 +100,6 @@ QVariant OutputsModel::headerData(int _section, Qt::Orientation _orientation, in
   }
 
   return QVariant();
-}
-
-CryptoNote::TransactionOutputInformation OutputsModel::getOutput(const QModelIndex& _index) const {
-  CryptoNote::TransactionOutputInformation out = boost::value_initialized<CryptoNote::TransactionOutputInformation>();
-
-  OutputState state = static_cast<OutputState>(_index.data(ROLE_STATE).value<quint8>());
-
-  if(!_index.isValid() || state == OutputState::SPENT) {
-    return out;
-  }
-
-  CryptoNote::TransactionSpentOutputInformation _output = m_spentOutputs.value(_index.row());
-
-  out = *static_cast<const CryptoNote::TransactionOutputInformation *>(&_output);
-
-  return out;
 }
 
 QVariant OutputsModel::data(const QModelIndex& _index, int _role) const {
@@ -216,6 +202,9 @@ QVariant OutputsModel::getDisplayRole(const QModelIndex& _index) const {
   case COLUMN_OUTPUT_IN_TRANSACTION:
     return _index.data(ROLE_OUTPUT_IN_TRANSACTION).value<qint32>();
 
+  case COLUMN_TX_PUBLIC_KEY:
+    return _index.data(ROLE_TX_PUBLIC_KEY).toByteArray().toHex().toUpper();
+
   case COLUMN_SPENDING_BLOCK_HEIGHT: {
     if (is_spent) {
       quint32 height = _index.data(ROLE_SPENDING_BLOCK_HEIGHT).value<qint32>();
@@ -304,6 +293,9 @@ QVariant OutputsModel::getUserRole(const QModelIndex& _index, int _role, CryptoN
   case ROLE_OUTPUT_IN_TRANSACTION:
     return static_cast<quint32>(_output.outputInTransaction);
 
+  case ROLE_TX_PUBLIC_KEY:
+    return QByteArray(reinterpret_cast<char*>(&_output.transactionPublicKey), sizeof(_output.transactionPublicKey));
+
   case ROLE_SPENDING_BLOCK_HEIGHT:
     return _output.spendingBlockHeight;
 
@@ -351,11 +343,15 @@ void OutputsModel::reloadWalletTransactions() {
   }
   m_unspentOutputs.clear();
 
+  // need to sort them
+  qSort(m_spentOutputs.begin(), m_spentOutputs.end(), transactionSpentOutputInformationLessThan);
+
   beginInsertRows(QModelIndex(), 0, outputsCount - 1);
   endInsertRows();
 }
 
 void OutputsModel::appendTransaction(CryptoNote::TransactionId _id) {
+  Q_UNUSED(_id);
   reloadWalletTransactions();
 }
 
