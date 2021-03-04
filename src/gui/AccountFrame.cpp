@@ -3,14 +3,21 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <QClipboard>
+#include <QDrag>
 #include <QTimer>
+#include <QImage>
+#include <QMimeData>
+#include <QClipboard>
+#include <QFileDialog>
+#include <QMouseEvent>
+#include <QApplication>
 #include <QFontDatabase>
+#include "qrencode.h"
 #include <QGraphicsDropShadowEffect>
+#include "MainWindow.h"
 #include "AccountFrame.h"
 #include "WalletAdapter.h"
 #include "CurrencyAdapter.h"
-#include "QRCodeDialog.h"
 
 #include "ui_accountframe.h"
 
@@ -29,7 +36,7 @@ QStringList AccountFrame::divideAmount(quint64 _val) {
   return list;
 }
 
-AccountFrame::AccountFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::AccountFrame) {
+AccountFrame::AccountFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::AccountFrame), contextMenu(0) {
   m_ui->setupUi(this);
   connect(&WalletAdapter::instance(), &WalletAdapter::updateWalletAddressSignal, this, &AccountFrame::updateWalletAddress);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &AccountFrame::updateActualBalance,
@@ -39,6 +46,14 @@ AccountFrame::AccountFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Acc
   connect(&WalletAdapter::instance(), &WalletAdapter::walletUnmixableBalanceUpdatedSignal, this, &AccountFrame::updateUnmixableBalance,
     Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &AccountFrame::reset);
+
+  contextMenu = new QMenu();
+  QAction* saveImageAction = new QAction(tr("&Save Image..."), this);
+  connect(saveImageAction, SIGNAL(triggered()), this, SLOT(saveImage()));
+  contextMenu->addAction(saveImageAction);
+  QAction* copyImageAction = new QAction(tr("&Copy Image"), this);
+  connect(copyImageAction, SIGNAL(triggered()), this, SLOT(copyImage()));
+  contextMenu->addAction(copyImageAction);
 
   m_ui->m_unmixableBalanceLabel->setVisible(false);
 
@@ -60,15 +75,11 @@ AccountFrame::~AccountFrame() {
 
 void AccountFrame::updateWalletAddress(const QString& _address) {
   m_ui->m_addressLabel->setText(_address);
+  showQRCode(_address);
 }
 
 void AccountFrame::copyAddress() {
   QApplication::clipboard()->setText(m_ui->m_addressLabel->text());
-}
-
-void AccountFrame::showQR() {
-  QRCodeDialog dlg(tr("QR Code"), m_ui->m_addressLabel->text(), this);
-  dlg.exec();
 }
 
 void AccountFrame::updateActualBalance(quint64 _balance) {
@@ -100,6 +111,74 @@ void AccountFrame::updateUnmixableBalance(quint64 _balance) {
   } else {
     m_ui->m_unmixableBalanceLabel->setVisible(false);
   }
+}
+
+void AccountFrame::showQRCode(const QString& _dataString) {
+  QRcode *qrcode = QRcode_encodeString(_dataString.toUtf8().constData(), 0, QR_ECLEVEL_L, QR_MODE_8, 1);
+  if (qrcode == nullptr) {
+    return;
+  }
+
+  QImage qrCodeImage = QImage(qrcode->width + 8, qrcode->width + 8, QImage::Format_RGB32);
+  qrCodeImage.fill(0xffffff);
+  unsigned char *p = qrcode->data;
+  for (int y = 0; y < qrcode->width; y++) {
+    for (int x = 0; x < qrcode->width; x++) {
+      qrCodeImage.setPixel(x + 4, y + 4, ((*p & 1) ? 0x0 : 0xffffff));
+      p++;
+    }
+  }
+
+  QRcode_free(qrcode);
+  m_ui->m_qrCodeLabel->setPixmap(QPixmap::fromImage(qrCodeImage).scaled(150, 150));
+  m_ui->m_qrCodeLabel->setEnabled(true);
+}
+
+QImage AccountFrame::exportImage()
+{
+    if (!m_ui->m_qrCodeLabel->pixmap())
+        return QImage();
+    return m_ui->m_qrCodeLabel->pixmap()->toImage();
+}
+
+void AccountFrame::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton && m_ui->m_qrCodeLabel->pixmap()) {
+        event->accept();
+        QMimeData* mimeData = new QMimeData;
+        mimeData->setImageData(exportImage());
+
+        QDrag* drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+        drag->exec();
+    } else {
+        //m_ui->m_qrCodeLabel->mousePressEvent(event);
+        Q_EMIT clicked();
+    }
+}
+
+void AccountFrame::saveImage()
+{
+    if (!m_ui->m_qrCodeLabel->pixmap())
+        return;
+    QString fn = QFileDialog::getSaveFileName(&MainWindow::instance(), tr("Save QR Code"), QDir::homePath(), "PNG (*.png)");
+    if (!fn.isEmpty()) {
+        exportImage().save(fn);
+    }
+}
+
+void AccountFrame::copyImage()
+{
+    if (!m_ui->m_qrCodeLabel->pixmap())
+        return;
+    QApplication::clipboard()->setImage(exportImage());
+}
+
+void AccountFrame::contextMenuEvent(QContextMenuEvent* event)
+{
+    if (!m_ui->m_qrCodeLabel->pixmap())
+        return;
+    contextMenu->exec(event->globalPos());
 }
 
 void AccountFrame::reset() {

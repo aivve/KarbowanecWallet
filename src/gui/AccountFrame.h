@@ -6,6 +6,8 @@
 #pragma once
 
 #include <QFrame>
+#include <QLabel>
+#include <QMenu>
 
 namespace Ui {
 class AccountFrame;
@@ -21,8 +23,24 @@ public:
   AccountFrame(QWidget* _parent);
   ~AccountFrame();
 
+  void showQRCode(const QString& _dataString);
+  QImage exportImage();
+
+Q_SIGNALS:
+  void clicked();
+
+public Q_SLOTS:
+  void saveImage();
+  void copyImage();
+
+protected:
+  virtual void mousePressEvent(QMouseEvent* event);
+  virtual void contextMenuEvent(QContextMenuEvent* event);
+
 private:
   QScopedPointer<Ui::AccountFrame> m_ui;
+
+  QMenu* contextMenu;
 
   void updateWalletAddress(const QString& _address);
   void updateActualBalance(quint64 _balance);
@@ -33,7 +51,6 @@ private:
   QStringList divideAmount(quint64 _val);
 
   Q_SLOT void copyAddress();
-  Q_SLOT void showQR();
 
 Q_SIGNALS:
   void showQRcodeSignal();

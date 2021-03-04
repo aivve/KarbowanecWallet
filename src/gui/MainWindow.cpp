@@ -148,11 +148,12 @@ void MainWindow::initUi() {
 #endif
 
   m_ui->accountToolBar->setAllowedAreas(Qt::TopToolBarArea);
+  m_ui->toolBar->setAllowedAreas(Qt::LeftToolBarArea);
 
   accountWidget = m_ui->accountToolBar->addWidget(m_ui->m_accountFrame);
   addToolBar(Qt::TopToolBarArea, m_ui->accountToolBar);
   addToolBarBreak();
-  addToolBar(Qt::TopToolBarArea, m_ui->toolBar);
+  addToolBar(Qt::LeftToolBarArea, m_ui->toolBar);
   addToolBarBreak();
   m_ui->accountToolBar->setMovable(false);
   m_ui->toolBar->setMovable(false);
