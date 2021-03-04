@@ -33,7 +33,7 @@ CoinsFrame::CoinsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::CoinsFr
   m_ui->m_outputsView->header()->setSectionResizeMode(QHeaderView::Interactive);
   m_ui->m_outputsView->header()->setSectionResizeMode(0, QHeaderView::Fixed);
   m_ui->m_outputsView->header()->resizeSection(0, 30);
-  m_ui->m_outputsView->header()->resizeSection(1, 30);
+  m_ui->m_outputsView->header()->resizeSection(1, 40);
   m_ui->m_outputsView->header()->resizeSection(2, 200);
   m_ui->m_outputsView->header()->resizeSection(3, 200);
   m_ui->m_outputsView->header()->resizeSection(6, 50);
