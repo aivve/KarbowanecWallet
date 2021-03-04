@@ -465,7 +465,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../resources.qrc">
-     <normaloff>:/icons/transactions</normaloff>:/icons/transactions</iconset>
+     <normaloff>:/icons/coins</normaloff>:/icons/coins</iconset>
    </property>
    <property name="text">
     <string>Coins</string>
