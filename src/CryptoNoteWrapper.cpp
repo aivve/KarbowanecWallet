@@ -473,11 +473,6 @@ Node* createInprocessNode(const CryptoNote::Currency& currency, Logging::LoggerM
   //TODO: move to settings?
   dbConfig.setConfigFolderDefaulted(true);
   dbConfig.setDataDir(std::string(Settings::instance().getDataDir().absolutePath().toLocal8Bit().data()));
-  dbConfig.setMaxOpenFiles(100);
-  dbConfig.setReadCacheSize(128 * 1024 * 1024);
-  dbConfig.setWriteBufferSize(128 * 1024 * 1024);
-  dbConfig.setTestnet(false);
-  dbConfig.setBackgroundThreadsCount(4);
 
   if (dbConfig.isConfigFolderDefaulted()) {
     if (!Tools::create_directories_if_necessary(dbConfig.getDataDir())) {
