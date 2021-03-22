@@ -462,7 +462,7 @@ QVariant TransactionsModel::getUserRole(const QModelIndex& _index, int _role, Cr
 
   case ROLE_NUMBER_OF_CONFIRMATIONS:
     return (_transaction.blockHeight == CryptoNote::WALLET_LEGACY_UNCONFIRMED_TRANSACTION_HEIGHT ? 0 :
-      NodeAdapter::instance().getLastKnownBlockHeight() - _transaction.blockHeight + 1);
+      NodeAdapter::instance().getLastKnownBlockHeight() + 1 - _transaction.blockHeight + 1);
 
   case ROLE_COLUMN:
     return headerData(_index.column(), Qt::Horizontal, ROLE_COLUMN);
