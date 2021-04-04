@@ -356,6 +356,8 @@ namespace WalletGui
 
         pause();
 
+        CachedBlock cb(b);
+
         qDebug() << "Found block for difficulty: " << local_diff;
         Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(cb.getBlockHash()))).arg(cb.getBlockIndex()).arg(local_diff).arg(QString::fromStdString(Common::podToHex(pow))));
 
