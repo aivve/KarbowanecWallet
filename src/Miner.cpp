@@ -321,13 +321,13 @@ namespace WalletGui
       }
 
       b.nonce = nonce;
-      Crypto::Hash h;
+      Crypto::Hash pow;
 
       // step 1: sing the block
       if (b.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_5) {
         CachedBlock sb(b);
         BinaryArray ba = sb.getBlockHashingBinaryArray();
-        h = Crypto::cn_fast_hash(ba.data(), ba.size());
+        Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
         try {
           Crypto::generate_signature(h, m_account.address.spendPublicKey, m_account.spendSecretKey, b.signature);
         }
@@ -343,23 +343,21 @@ namespace WalletGui
 
       if (!m_stop_mining) {
         try {
-          h = cb.getBlockLongHash(context);
+          pow = cb.getBlockLongHash(context);
         } catch (std::exception& e) {
           qDebug() << "getBlockLongHash failed: " << e.what();
           m_stop_mining = true;
         }
       }
 
-      if (!m_stop_mining && check_hash(h, local_diff))
+      if (!m_stop_mining && check_hash(pow, local_diff))
       {
-        //we lucky!
+        // we lucky!
 
         pause();
 
-        Crypto::Hash id = cb.getBlockHash();
- 
         qDebug() << "Found block for difficulty: " << local_diff;
-        Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(id))).arg(cb.getBlockIndex()).arg(local_diff).arg(QString::fromStdString(Common::podToHex(h))));
+        Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(cb.getBlockHash()))).arg(cb.getBlockIndex()).arg(local_diff).arg(QString::fromStdString(Common::podToHex(pow))));
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";
