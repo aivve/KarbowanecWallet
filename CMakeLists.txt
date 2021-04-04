@@ -67,11 +67,14 @@ include_directories(${CMAKE_BINARY_DIR}
     cryptonote/external/snappy
     cryptonote/external
     cryptonote/include
-    cryptonote/src)
+    cryptonote/src
+    external/libqrencode
+    external/qcustomplot)
 
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
+find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(Qt5DBus REQUIRED)
 
@@ -207,6 +210,7 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/crypto/slow-hash.c
   cryptonote/src/crypto/slow-hash.cpp
   cryptonote/src/crypto/tree-hash.c
+  cryptonote/src/crypto/yespower.c
   cryptonote/src/Checkpoints/Checkpoints.cpp
   cryptonote/src/CryptoNoteCore/*.cpp
   cryptonote/src/CryptoNoteProtocol/*.cpp
@@ -269,6 +273,7 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h)
 file(GLOB_RECURSE FORMS src/gui/ui/*.ui)
 file(GLOB_RECURSE Mnemonics cryptonote/src/Mnemonics/*)
+file(GLOB_RECURSE QCustomPlot external/qcustomplot/*)
 file(GLOB TRANSLATION_FILES src/languages/*.ts)
 
 set(QRC
@@ -557,6 +562,7 @@ set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} ${PLATFORM_SOURCES})
 
 add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
 add_library(Mnemonics ${Mnemonics})
+add_library(QCustomPlot ${QCustomPlot})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 
 if (WIN32)
@@ -567,10 +573,12 @@ endif ()
 
 set_target_properties(Mnemonics PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
 target_link_libraries(Mnemonics ${Boost_LIBRARIES})
+set_target_properties(QCustomPlot PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
+target_link_libraries(QCustomPlot Qt5::Core Qt5::PrintSupport)
 
 add_executable(${WALLET_NAME} ${BUILD_PLATFORM} ${BUILD_RESOURCES} ${SOURCES} ${HEADERS} ${UIS} ${RCC})
 set_target_properties(${WALLET_NAME} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
-target_link_libraries(${WALLET_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${QRENCODE_LIB} Mnemonics)
+target_link_libraries(${WALLET_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${QRENCODE_LIB} Mnemonics QCustomPlot)
 add_dependencies(${WALLET_NAME} translations)
 if (WIN32)
   add_dependencies(${WALLET_NAME} translations_default)
@@ -597,7 +605,7 @@ elseif (WIN32 AND ROCKSDB_FOUND)
   target_link_libraries(${WALLET_NAME} Imm32 Iphlpapi Winmm Rpcrt4 Shlwapi)
 endif (APPLE)
 
-qt5_use_modules(${WALLET_NAME} Widgets Gui Network)
+qt5_use_modules(${WALLET_NAME} Core Widgets Gui Network PrintSupport)
 
 # Installation
 

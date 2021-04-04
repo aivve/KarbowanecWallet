@@ -103,3 +103,7 @@ QProgressBar {
   font-size: 12px;
   margin-right: 6px;
 }
+
+#m_miningFrame #m_miningSplitter {
+  background-color: #19232D;
+}

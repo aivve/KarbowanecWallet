@@ -44,6 +44,7 @@ public:
   quint64 getLastLocalBlockHeight() const;
   QDateTime getLastLocalBlockTimestamp() const;
   quint64 getDifficulty();
+  quint64 getNextReward();
   quint64 getTxCount();
   quint64 getTxPoolSize();
   quint64 getAltBlocksCount();
@@ -64,6 +65,8 @@ public:
   void lastKnownBlockHeightUpdated(Node& _node, uint64_t _height) Q_DECL_OVERRIDE;
   void connectionStatusUpdated(bool _connected) Q_DECL_OVERRIDE;
   bool isOffline();
+  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountPublicAddress& adr, const CryptoNote::BinaryArray& extraNonce, CryptoNote::Difficulty& difficulty, uint32_t& height);
+  bool handleBlockFound(CryptoNote::BlockTemplate& b);
 
 private:
   Node* m_node;
