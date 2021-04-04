@@ -222,7 +222,7 @@ public:
       CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::response rsp = AUTO_VAL_INIT(rsp);
       req.wallet_address = getAccountAddressAsStr(CryptoNote::parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, adr);
       CryptoNote::HttpClient httpClient(m_dispatcher, m_node.m_nodeHost, m_node.m_nodePort, false);
-      CryptoNote::invokeJsonRpcCommand(httpClient, "prepareblocktemplate", req, rsp);
+      CryptoNote::invokeJsonRpcCommand(httpClient, "getblocktemplate", req, rsp);
       std::string err = interpret_rpc_response(true, rsp.status);
       if (err.empty()) {
         if (!CryptoNote::fromBinaryArray(b, Common::fromHex(rsp.blocktemplate_blob))) {
