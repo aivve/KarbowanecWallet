@@ -218,6 +218,7 @@ void MiningFrame::onBlockHeightUpdated() {
   quint64 difficulty = NodeAdapter::instance().getDifficulty();
   m_ui->m_difficulty->setText(QString(tr("%1")).arg(difficulty));
 
+  m_ui->m_startSolo->setEnabled(true);
 }
 
 void MiningFrame::updateBalance(quint64 _balance) {
