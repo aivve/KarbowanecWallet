@@ -221,7 +221,8 @@ void MiningFrame::onBlockHeightUpdated() {
 }
 
 void MiningFrame::onSynchronizationCompleted() {
-  m_ui->m_startSolo->setEnabled(true);
+  if (!m_miner->is_mining())
+    m_ui->m_startSolo->setEnabled(true);
 }
 
 void MiningFrame::updateBalance(quint64 _balance) {
