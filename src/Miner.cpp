@@ -110,9 +110,14 @@ namespace WalletGui
       return true;
     }
 
+    //pause();
+
     if (request_block_template()) {
-      resume();
+      //resume();
       return true;
+    }
+    else {
+      stop();
     }
 
     return false;
@@ -125,9 +130,6 @@ namespace WalletGui
     uint32_t height;
     CryptoNote::BinaryArray extra_nonce;
 
-    uint64_t actualBalance = WalletAdapter::instance().getActualBalance();
-
-    // get block template without coinbase tx
     if (!NodeAdapter::instance().getBlockTemplate(bl, m_account.address, extra_nonce, di, height)) {
       qDebug() << "Failed to get_block_template(), stopping mining";
       Q_EMIT minerMessageSignal(QString("Failed to get_block_template()"));
@@ -171,8 +173,8 @@ namespace WalletGui
         m_last_hash_rates.pop_front();
 
       uint64_t total_hr = std::accumulate(m_last_hash_rates.begin(), m_last_hash_rates.end(), static_cast<uint64_t>(0));
-      float hr = static_cast<float>(total_hr)/static_cast<float>(m_last_hash_rates.size())/static_cast<float>(1000);
-      qDebug() << "Hashrate: " /*<< std::setprecision(2) << std::fixed*/ << hr << " kH/s";
+      float hr = static_cast<float>(total_hr) / static_cast<float>(m_last_hash_rates.size());
+      qDebug() << "Hashrate: " << hr << " H/s";
     }
     
     m_last_hr_merge_time = millisecondsSinceEpoch();
@@ -237,6 +239,7 @@ namespace WalletGui
   void Miner::send_stop_signal() 
   {
     m_stop_mining = true;
+    m_current_hash_rate = 0;
   }
 
   //-----------------------------------------------------------------------------------------------------
@@ -357,7 +360,7 @@ namespace WalletGui
       {
         // we lucky!
 
-        pause();
+        //pause();
 
         qDebug() << "Found block for difficulty: " << local_diff;
         Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(cb.getBlockHash()))).arg(cb.getBlockIndex()).arg(local_diff).arg(QString::fromStdString(Common::podToHex(pow))));
