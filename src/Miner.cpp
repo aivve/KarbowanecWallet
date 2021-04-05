@@ -244,6 +244,8 @@ namespace WalletGui
   {
     send_stop_signal();
 
+    int threadsCount = m_threads.size();
+
     std::lock_guard<std::mutex> lk(m_threads_lock);
 
     for (auto& th : m_threads) {
@@ -251,8 +253,10 @@ namespace WalletGui
     }
 
     m_threads.clear();
+
     qDebug() << "Mining stopped, " << m_threads.size() << " finished" ;
-    Q_EMIT minerMessageSignal(QString("Mining stopped, %1 finished").arg(m_threads.size()));
+    Q_EMIT minerMessageSignal(QString("Mining stopped, %1 finished").arg(threadsCount));
+
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
