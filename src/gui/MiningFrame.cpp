@@ -32,13 +32,13 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   fixedFont.setStyleHint(QFont::TypeWriter);
   m_ui->m_minerLog->setFont(fixedFont);
 
+  m_ui->m_startSolo->setEnabled(false);
+  m_ui->m_stopSolo->setEnabled(false);
+
   QString connection = Settings::instance().getConnection();
   if (connection.compare("remote") == 0) {
     m_ui->m_startSolo->setDisabled(true);
   }
-
-  m_ui->m_startSolo->setEnabled(false);
-  m_ui->m_stopSolo->setEnabled(false);
 
   m_ui->m_hashRateChart->addGraph();
   m_ui->m_hashRateChart->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
@@ -71,7 +71,8 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   connect(&WalletAdapter::instance(), &WalletAdapter::walletInitCompletedSignal, this, &MiningFrame::walletOpened, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &MiningFrame::updateBalance, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletPendingBalanceUpdatedSignal, this, &MiningFrame::updatePendingBalance, Qt::QueuedConnection);
-  connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletSynchronizationCompletedSignal, this, &MiningFrame::onSynchronizationCompleted, Qt::QueuedConnection);
+  connect(&NodeAdapter::instance(), &NodeAdapter::localBlockchainUpdatedSignal, this, &MiningFrame::onBlockHeightUpdated, Qt::QueuedConnection);
   connect(&*m_miner, &Miner::minerMessageSignal, this, &MiningFrame::updateMinerLog, Qt::QueuedConnection);
 }
 
@@ -217,7 +218,9 @@ void MiningFrame::onBlockHeightUpdated() {
 
   quint64 difficulty = NodeAdapter::instance().getDifficulty();
   m_ui->m_difficulty->setText(QString(tr("%1")).arg(difficulty));
+}
 
+void MiningFrame::onSynchronizationCompleted() {
   m_ui->m_startSolo->setEnabled(true);
 }
 
