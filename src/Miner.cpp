@@ -130,7 +130,7 @@ namespace WalletGui
     uint32_t height;
     CryptoNote::BinaryArray extra_nonce;
 
-    if (!NodeAdapter::instance().getBlockTemplate(bl, m_account.address, extra_nonce, di, height)) {
+    if (!NodeAdapter::instance().getBlockTemplate(bl, m_account, extra_nonce, di, height)) {
       qDebug() << "Failed to get_block_template(), stopping mining";
       Q_EMIT minerMessageSignal(QString("Failed to get_block_template()"));
       return false;
@@ -348,10 +348,8 @@ namespace WalletGui
       CachedBlock cb(b);
 
       if (!m_stop_mining) {
-        try {
-          pow = cb.getBlockLongHash(context);
-        } catch (std::exception& e) {
-          qDebug() << "getBlockLongHash failed: " << e.what();
+        if (!m_handler.getBlockLongHash(context, cb, pow)) {
+          qDebug() << "getBlockLongHash failed.";
           m_stop_mining = true;
         }
       }

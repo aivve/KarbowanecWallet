@@ -216,11 +216,12 @@ public:
     return m_node.getNextReward();
   }
 
-  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountPublicAddress& adr, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
+  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
     try {
       CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::request req = AUTO_VAL_INIT(req);
       CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::response rsp = AUTO_VAL_INIT(rsp);
-      req.wallet_address = getAccountAddressAsStr(CryptoNote::parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, adr);
+      req.miner_spend_key = Common::podToHex(acc.spendSecretKey);
+      req.miner_view_key = Common::podToHex(acc.viewSecretKey);
       CryptoNote::HttpClient httpClient(m_dispatcher, m_node.m_nodeHost, m_node.m_nodePort, false);
       CryptoNote::invokeJsonRpcCommand(httpClient, "getblocktemplate", req, rsp);
       std::string err = interpret_rpc_response(true, rsp.status);
@@ -277,6 +278,11 @@ public:
     return false;
   }
   
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+    // unsupported
+    return false;
+  }
+
   uint64_t getAlreadyGeneratedCoins() {
     return m_node.getAlreadyGeneratedCoins();
   }
@@ -300,6 +306,10 @@ public:
     }
 
     return connections;
+  }
+
+  NodeType getNodeType() const {
+    return NodeType::RPC;
   }
 
   CryptoNote::IWalletLegacy* createWallet() override {
@@ -475,14 +485,18 @@ public:
     return m_node.getNextReward();
   }
 
-  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountPublicAddress& adr, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
-    return m_core.getBlockTemplate(b, adr, ex_nonce, diffic, height);
+  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
+    return m_core.getBlockTemplate(b, acc, ex_nonce, diffic, height);
   }
 
   bool handleBlockFound(CryptoNote::BlockTemplate& b) {
     return m_core.handleBlockFound(b);
   }
   
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+    return m_core.getBlockLongHash(context, block, res);
+  }
+
   uint64_t getAlreadyGeneratedCoins() {
     return m_node.getAlreadyGeneratedCoins();
   }
@@ -506,6 +520,10 @@ public:
     }
 
     return connections;
+  }
+
+  NodeType getNodeType() const {
+    return NodeType::IN_PROCESS;
   }
 
   CryptoNote::IWalletLegacy* createWallet() override {

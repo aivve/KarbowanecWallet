@@ -35,8 +35,8 @@ MiningFrame::MiningFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::Minin
   m_ui->m_startSolo->setEnabled(false);
   m_ui->m_stopSolo->setEnabled(false);
 
-  QString connection = Settings::instance().getConnection();
-  if (connection.compare("remote") == 0) {
+  NodeType node = NodeAdapter::instance().getNodeType();
+  if (node != NodeType::IN_PROCESS) {
     m_ui->m_startSolo->setDisabled(true);
   }
 
@@ -221,8 +221,14 @@ void MiningFrame::onBlockHeightUpdated() {
 }
 
 void MiningFrame::onSynchronizationCompleted() {
-  if (!m_miner->is_mining())
+  NodeType node = NodeAdapter::instance().getNodeType();
+  if (node != NodeType::IN_PROCESS) {
+    m_ui->m_startSolo->setEnabled(false);
+    return;
+  }
+  if (!m_miner->is_mining()) {
     m_ui->m_startSolo->setEnabled(true);
+  }
 }
 
 void MiningFrame::updateBalance(quint64 _balance) {
