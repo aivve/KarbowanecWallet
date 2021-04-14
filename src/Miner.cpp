@@ -348,7 +348,7 @@ namespace WalletGui
       CachedBlock cb(b);
 
       if (!m_stop_mining) {
-        if (!m_handler.getBlockLongHash(context, cb, pow)) {
+        if (!NodeAdapter::instance().getBlockLongHash(context, cb, pow)) {
           qDebug() << "getBlockLongHash failed.";
           m_stop_mining = true;
         }
