@@ -535,6 +535,7 @@ void TransactionsModel::updateWalletTransaction(CryptoNote::TransactionId _id) {
 }
 
 void TransactionsModel::localBlockchainUpdated(quint64 _height) {
+  Q_UNUSED(_height);
   if(rowCount() > 0) {
     Q_EMIT dataChanged(index(0, COLUMN_STATE), index(rowCount() - 1, COLUMN_STATE));
   }
