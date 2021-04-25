@@ -12,6 +12,7 @@
 #include "Common/StringTools.h"
 #include "CryptoNoteCore/CryptoNoteBasicImpl.h"
 #include "CryptoNoteCore/CryptoNoteFormatUtils.h"
+#include "CryptoNoteCore/CryptoNoteTools.h"
 #include "CryptoNoteCore/Currency.h"
 #include "NodeRpcProxy/NodeRpcProxy.h"
 #include "CryptoNoteCore/DataBaseConfig.h"
@@ -42,6 +43,10 @@
 #include "Settings.h"
 
 #include <QDebug>
+
+#ifndef AUTO_VAL_INIT
+#define AUTO_VAL_INIT(n) boost::value_initialized<decltype(n)>()
+#endif
 
 namespace WalletGui {
 
@@ -207,6 +212,77 @@ public:
     return getLastLocalBlockHeaderInfo().majorVersion;
   }
 
+  uint64_t getNextReward() {
+    return m_node.getNextReward();
+  }
+
+  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
+    try {
+      CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::request req = AUTO_VAL_INIT(req);
+      CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::response rsp = AUTO_VAL_INIT(rsp);
+      req.miner_spend_key = Common::podToHex(acc.spendSecretKey);
+      req.miner_view_key = Common::podToHex(acc.viewSecretKey);
+      CryptoNote::HttpClient httpClient(m_dispatcher, m_node.m_nodeHost, m_node.m_nodePort, false);
+      CryptoNote::invokeJsonRpcCommand(httpClient, "getblocktemplate", req, rsp);
+      std::string err = interpret_rpc_response(true, rsp.status);
+      if (err.empty()) {
+        if (!CryptoNote::fromBinaryArray(b, Common::fromHex(rsp.blocktemplate_blob))) {
+          qDebug() << "Failed to parse block binary array";
+          return false;
+        }
+        diffic = rsp.difficulty;
+        height = rsp.height;
+
+        return true;
+      }
+      else {
+        qDebug() << "Failed to invoke request: " << QString::fromStdString(err);
+      }
+    }
+    catch (const CryptoNote::ConnectException&) {
+      qDebug() << "Wallet failed to connect to daemon.";
+      return false;
+    }
+    catch (const std::exception& e) {
+      qDebug() << "Failed to invoke rpc method: " << e.what();
+      return false;
+    }
+
+    return false;
+  }
+
+  bool handleBlockFound(CryptoNote::BlockTemplate& b) {
+    try {
+      CryptoNote::COMMAND_RPC_SUBMITBLOCK::request req;
+      req.emplace_back(Common::toHex(CryptoNote::toBinaryArray(b)));
+      CryptoNote::COMMAND_RPC_SUBMITBLOCK::response res;
+      CryptoNote::HttpClient httpClient(m_dispatcher, m_node.m_nodeHost, m_node.m_nodePort, false);
+      CryptoNote::invokeJsonRpcCommand(httpClient, "submitblock", req, res);
+      std::string err = interpret_rpc_response(true, res.status);
+      if (err.empty()) {
+        return true;
+      }
+        else {
+        qDebug() << "Failed to invoke request: " << QString::fromStdString(err);
+      }
+    }
+    catch (const CryptoNote::ConnectException&) {
+      qDebug() << "Wallet failed to connect to daemon.";
+      return false;
+    }
+    catch (const std::exception& e) {
+      qDebug() << "Failed to invoke rpc method: " << e.what();
+      return false;
+    }
+
+    return false;
+  }
+  
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+    // unsupported
+    return false;
+  }
+
   uint64_t getAlreadyGeneratedCoins() {
     return m_node.getAlreadyGeneratedCoins();
   }
@@ -230,6 +306,10 @@ public:
     }
 
     return connections;
+  }
+
+  NodeType getNodeType() const {
+    return NodeType::RPC;
   }
 
   CryptoNote::IWalletLegacy* createWallet() override {
@@ -401,6 +481,22 @@ public:
     return getLastLocalBlockHeaderInfo().majorVersion;
   }
 
+  uint64_t getNextReward() {
+    return m_node.getNextReward();
+  }
+
+  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
+    return m_core.getBlockTemplate(b, acc, ex_nonce, diffic, height);
+  }
+
+  bool handleBlockFound(CryptoNote::BlockTemplate& b) {
+    return m_core.handleBlockFound(b);
+  }
+  
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+    return m_core.getBlockLongHash(context, block, res);
+  }
+
   uint64_t getAlreadyGeneratedCoins() {
     return m_node.getAlreadyGeneratedCoins();
   }
@@ -424,6 +520,10 @@ public:
     }
 
     return connections;
+  }
+
+  NodeType getNodeType() const {
+    return NodeType::IN_PROCESS;
   }
 
   CryptoNote::IWalletLegacy* createWallet() override {

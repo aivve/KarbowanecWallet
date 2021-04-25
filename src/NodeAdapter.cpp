@@ -122,6 +122,10 @@ CryptoNote::IWalletLegacy* NodeAdapter::createWallet() const {
   return m_node->createWallet();
 }
 
+NodeType NodeAdapter::getNodeType() const {
+  return m_node == nullptr ? NodeType::UNKNOWN : m_node->getNodeType();
+}
+
 bool NodeAdapter::init() {
   Q_ASSERT(m_node == nullptr);
 
@@ -225,6 +229,11 @@ quint64 NodeAdapter::getDifficulty() {
   return m_node->getDifficulty();
 }
 
+quint64 NodeAdapter::getNextReward() {
+  Q_CHECK_PTR(m_node);
+  return m_node->getNextReward();
+}
+
 quint64 NodeAdapter::getTxCount() {
   Q_CHECK_PTR(m_node);
   return m_node->getTxCount();
@@ -317,6 +326,21 @@ void NodeAdapter::lastKnownBlockHeightUpdated(Node& _node, uint64_t _height) {
 
 void NodeAdapter::connectionStatusUpdated(bool _connected) {
   Q_EMIT connectionStatusUpdatedSignal(_connected);
+}
+
+bool NodeAdapter::getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& extraNonce, CryptoNote::Difficulty& difficulty, uint32_t& height) {
+  Q_CHECK_PTR(m_node);
+  return m_node->getBlockTemplate(b, acc, extraNonce, difficulty, height);
+}
+
+bool NodeAdapter::handleBlockFound(CryptoNote::BlockTemplate& b) {
+  Q_CHECK_PTR(m_node);
+  return m_node->handleBlockFound(b);
+}
+
+bool NodeAdapter::getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+  Q_CHECK_PTR(m_node);
+  return m_node->getBlockLongHash(context, block, res);
 }
 
 bool NodeAdapter::initInProcessNode() {
