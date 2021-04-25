@@ -148,6 +148,9 @@ void MiningFrame::walletOpened() {
     stopSolo();
 
   m_wallet_closed = false;
+
+  quint64 difficulty = NodeAdapter::instance().getDifficulty();
+  m_ui->m_difficulty->setText(QString(tr("%1")).arg(difficulty));
 }
 
 void MiningFrame::walletClosed() {
@@ -160,6 +163,9 @@ void MiningFrame::walletClosed() {
 }
 
 void MiningFrame::startSolo() {
+  quint64 difficulty = NodeAdapter::instance().getDifficulty();
+  m_ui->m_difficulty->setText(QString(tr("%1")).arg(difficulty));
+
   m_miner->start(m_ui->m_cpuCoresSpin->value());
   m_ui->m_soloLabel->setText(tr("Starting..."));
   m_soloHashRateTimerId = startTimer(HASHRATE_TIMER_INTERVAL);
