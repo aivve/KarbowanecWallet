@@ -45,7 +45,7 @@ namespace WalletGui {
     Miner(QObject* _parent);
     ~Miner();
 
-    bool set_block_template(const BlockTemplate& bl, const Difficulty& diffic);
+    bool set_block_template(const Block& bl, const difficulty_type& diffic);
     bool on_block_chain_update();
     bool start(size_t threads_count);
     uint64_t get_speed();
@@ -72,10 +72,10 @@ namespace WalletGui {
 
     std::atomic<bool> m_stop_mining;
     std::mutex m_template_lock;
-    BlockTemplate m_template;
+    Block m_template;
     std::atomic<uint32_t> m_template_no;
     std::atomic<uint32_t> m_starter_nonce;
-    Difficulty m_diffic;
+    difficulty_type m_diffic;
 
     std::atomic<uint32_t> m_threads_total;
     std::atomic<int32_t> m_pausers_count;

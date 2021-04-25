@@ -10,7 +10,6 @@
 #include <string>
 #include <system_error>
 #include <INode.h>
-#include <CryptoNoteCore/CachedBlock.h>
 
 namespace CryptoNote {
 
@@ -61,9 +60,9 @@ public:
   virtual uint64_t getAlreadyGeneratedCoins() = 0;
   virtual CryptoNote::BlockHeaderInfo getLastLocalBlockHeaderInfo() = 0;
   virtual std::vector<CryptoNote::p2pConnection> getConnections() = 0;
-  virtual bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) = 0;
-  virtual bool handleBlockFound(CryptoNote::BlockTemplate& b) = 0;
-  virtual bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) = 0;
+  virtual bool getBlockTemplate(CryptoNote::Block& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::difficulty_type& diffic, uint32_t& height) = 0;
+  virtual bool handleBlockFound(CryptoNote::Block& b) = 0;
+  virtual bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::Block& block, Crypto::Hash& res) = 0;
 
   virtual NodeType getNodeType() const = 0;
 

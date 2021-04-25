@@ -162,7 +162,6 @@ void MainWindow::initUi() {
   m_ui->m_receiveFrame->hide();
   m_ui->m_transactionsFrame->hide();
   m_ui->m_addressBookFrame->hide();
-  m_ui->m_coinsFrame->hide();
   m_ui->m_miningFrame->hide();
 
   m_tabActionGroup->addAction(m_ui->m_overviewAction);
@@ -170,7 +169,6 @@ void MainWindow::initUi() {
   m_tabActionGroup->addAction(m_ui->m_receiveAction);
   m_tabActionGroup->addAction(m_ui->m_transactionsAction);
   m_tabActionGroup->addAction(m_ui->m_addressBookAction);
-  m_tabActionGroup->addAction(m_ui->m_coinsAction);
   m_tabActionGroup->addAction(m_ui->m_miningAction);
 
   m_syncProgressBar->setMaximum(maxProgressBar);
@@ -1203,7 +1201,6 @@ void MainWindow::walletClosed() {
   m_ui->m_sendFrame->hide();
   m_ui->m_transactionsFrame->hide();
   m_ui->m_addressBookFrame->hide();
-  m_ui->m_coinsFrame->hide();
   m_ui->m_miningFrame->hide();
   m_ui->m_noWalletFrame->show();
   m_encryptionStateIconLabel->hide();

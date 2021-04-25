@@ -330,17 +330,17 @@ void NodeAdapter::connectionStatusUpdated(bool _connected) {
   Q_EMIT connectionStatusUpdatedSignal(_connected);
 }
 
-bool NodeAdapter::getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& extraNonce, CryptoNote::Difficulty& difficulty, uint32_t& height) {
+bool NodeAdapter::getBlockTemplate(CryptoNote::Block& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& extraNonce, CryptoNote::difficulty_type& difficulty, uint32_t& height) {
   Q_CHECK_PTR(m_node);
   return m_node->getBlockTemplate(b, acc, extraNonce, difficulty, height);
 }
 
-bool NodeAdapter::handleBlockFound(CryptoNote::BlockTemplate& b) {
+bool NodeAdapter::handleBlockFound(CryptoNote::Block& b) {
   Q_CHECK_PTR(m_node);
   return m_node->handleBlockFound(b);
 }
 
-bool NodeAdapter::getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+bool NodeAdapter::getBlockLongHash(Crypto::cn_context &context, const CryptoNote::Block& block, Crypto::Hash& res) {
   Q_CHECK_PTR(m_node);
   return m_node->getBlockLongHash(context, block, res);
 }

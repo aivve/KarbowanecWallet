@@ -65,9 +65,9 @@ public:
   void lastKnownBlockHeightUpdated(Node& _node, uint64_t _height) Q_DECL_OVERRIDE;
   void connectionStatusUpdated(bool _connected) Q_DECL_OVERRIDE;
   bool isOffline();
-  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& extraNonce, CryptoNote::Difficulty& difficulty, uint32_t& height);
-  bool handleBlockFound(CryptoNote::BlockTemplate& b);
-  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res);
+  bool getBlockTemplate(CryptoNote::Block& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& extraNonce, CryptoNote::difficulty_type& difficulty, uint32_t& height);
+  bool handleBlockFound(CryptoNote::Block& b);
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::Block& block, Crypto::Hash& res);
 
   NodeType getNodeType() const;
 

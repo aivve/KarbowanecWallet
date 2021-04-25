@@ -61,7 +61,7 @@ namespace WalletGui
   Miner::Miner(QObject* _parent) :
     QObject(_parent),
     m_stop_mining(true),
-    m_template(boost::value_initialized<BlockTemplate>()),
+    m_template(boost::value_initialized<Block>()),
     m_template_no(0),
     m_diffic(0),
     m_pausers_count(0),
@@ -79,22 +79,20 @@ namespace WalletGui
     stop();
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::set_block_template(const BlockTemplate& bl, const Difficulty& di) {
+  bool Miner::set_block_template(const Block& bl, const difficulty_type& di) {
     std::lock_guard<decltype(m_template_lock)> lk(m_template_lock);
 
     m_template = bl;
 
     if (m_template.majorVersion == BLOCK_MAJOR_VERSION_2 || m_template.majorVersion == BLOCK_MAJOR_VERSION_3) {
-      CachedBlock cachedBlk(m_template);
-      CryptoNote::TransactionExtraMergeMiningTag mmTag;
-      mmTag.depth = 0;
-      try {
-        m_template.parentBlock.baseTransaction.extra.clear();
-        mmTag.merkleRoot = cachedBlk.getAuxiliaryBlockHeaderHash();
-        if (!CryptoNote::appendMergeMiningTagToExtra(m_template.parentBlock.baseTransaction.extra, mmTag)) {
-           return false;
-        }
-      } catch (std::exception&) {
+      CryptoNote::TransactionExtraMergeMiningTag mm_tag;
+      mm_tag.depth = 0;
+      if (!CryptoNote::get_aux_block_header_hash(m_template, mm_tag.merkleRoot)) {
+        return false;
+      }
+
+      m_template.parentBlock.baseTransaction.extra.clear();
+      if (!CryptoNote::appendMergeMiningTagToExtra(m_template.parentBlock.baseTransaction.extra, mm_tag)) {
         return false;
       }
     }
@@ -125,8 +123,8 @@ namespace WalletGui
   //-----------------------------------------------------------------------------------------------------
   bool Miner::request_block_template() {
     qDebug() << "Requesting block template";
-    BlockTemplate bl = boost::value_initialized<BlockTemplate>();
-    CryptoNote::Difficulty di = 0;
+    Block bl = boost::value_initialized<Block>();
+    CryptoNote::difficulty_type di = 0;
     uint32_t height;
     CryptoNote::BinaryArray extra_nonce;
 
@@ -297,10 +295,10 @@ namespace WalletGui
   {
     qDebug() << "Miner thread was started ["<< th_local_index << "]";
     uint32_t nonce = m_starter_nonce + th_local_index;
-    Difficulty local_diff = 0;
+    difficulty_type local_diff = 0;
     uint32_t local_template_ver = 0;
     Crypto::cn_context context;
-    BlockTemplate b;
+    Block b;
 
     while(!m_stop_mining)
     {
@@ -332,26 +330,31 @@ namespace WalletGui
 
       // step 1: sing the block
       if (b.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_5) {
-        CachedBlock sb(b);
-        BinaryArray ba = sb.getBlockHashingBinaryArray();
-        Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
-        try {
-          Crypto::generate_signature(h, m_account.address.spendPublicKey, m_account.spendSecretKey, b.signature);
+          BinaryArray ba;
+          if (!get_block_hashing_blob(b, ba)) {
+            qDebug() << "get_block_hashing_blob for signature failed.";
+            Q_EMIT minerMessageSignal(QString("get_block_hashing_blob for signature failed"));
+            m_stop_mining = true;
+          }
+          Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
+          try {
+            Crypto::generate_signature(h, m_account.address.spendPublicKey, m_account.spendSecretKey, b.signature);
+          }
+          catch (std::exception& e) {
+            qDebug() << "Signing block failed: " << e.what();
+            Q_EMIT minerMessageSignal(QString("Signing block failed"));
+            m_stop_mining = true;
+          }
         }
-        catch (std::exception& e) {
-          qDebug() << "Signing failed: " << e.what();
-        }
-      }
 
-      // step 2: get long hash
+        // step 2: get long hash
 
-      CachedBlock cb(b);
-
-      if (!m_stop_mining) {
-        if (!NodeAdapter::instance().getBlockLongHash(context, cb, pow)) {
-          qDebug() << "getBlockLongHash failed.";
-          m_stop_mining = true;
-        }
+        if (!m_stop_mining) {
+          if (!NodeAdapter::instance().getBlockLongHash(context, b, pow)) {
+            qDebug() << "getBlockLongHash failed.";
+            Q_EMIT minerMessageSignal(QString("getBlockLongHash failed"));
+            m_stop_mining = true;
+          }
       }
 
       if (!m_stop_mining && check_hash(pow, local_diff))
@@ -360,8 +363,16 @@ namespace WalletGui
 
         //pause();
 
+        Crypto::Hash id;
+        if (!get_block_hash(b, id)) {
+          qDebug() << "Failed to get block hash.";
+          Q_EMIT minerMessageSignal(QString("Failed to get block hash"));
+          m_stop_mining = true;
+        }
+        uint32_t bh = boost::get<BaseInput>(b.baseTransaction.inputs[0]).blockIndex;
+
         qDebug() << "Found block for difficulty: " << local_diff;
-        Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(cb.getBlockHash()))).arg(cb.getBlockIndex()).arg(local_diff).arg(QString::fromStdString(Common::podToHex(pow))));
+        Q_EMIT minerMessageSignal(QString("Found block %1 at height %2 for difficulty %3, POW %4").arg(QString::fromStdString(Common::podToHex(id))).arg(bh).arg(local_diff).arg(QString::fromStdString(Common::podToHex(pow))));
 
         if(!NodeAdapter::instance().handleBlockFound(b)) {
           qDebug() << "Failed to submit block";

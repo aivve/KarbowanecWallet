@@ -204,7 +204,7 @@ public:
     return m_node.getNextReward();
   }
 
-  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
+  bool getBlockTemplate(CryptoNote::Block& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::difficulty_type& diffic, uint32_t& height) {
     try {
       CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::request req = AUTO_VAL_INIT(req);
       CryptoNote::COMMAND_RPC_GETBLOCKTEMPLATE::response rsp = AUTO_VAL_INIT(rsp);
@@ -239,7 +239,7 @@ public:
     return false;
   }
 
-  bool handleBlockFound(CryptoNote::BlockTemplate& b) {
+  bool handleBlockFound(CryptoNote::Block& b) {
     try {
       CryptoNote::COMMAND_RPC_SUBMITBLOCK::request req;
       req.emplace_back(Common::toHex(CryptoNote::toBinaryArray(b)));
@@ -266,7 +266,7 @@ public:
     return false;
   }
   
-  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::Block& block, Crypto::Hash& res) {
     // unsupported
     return false;
   }
@@ -480,16 +480,16 @@ public:
     return m_node.getNextReward();
   }
 
-  bool getBlockTemplate(CryptoNote::BlockTemplate& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::Difficulty& diffic, uint32_t& height) {
-    return m_core.getBlockTemplate(b, acc, ex_nonce, diffic, height);
+  bool getBlockTemplate(CryptoNote::Block& b, const CryptoNote::AccountKeys& acc, const CryptoNote::BinaryArray& ex_nonce, CryptoNote::difficulty_type& diffic, uint32_t& height) {
+    return m_core.get_block_template(b, acc, diffic, height, ex_nonce);
   }
 
-  bool handleBlockFound(CryptoNote::BlockTemplate& b) {
-    return m_core.handleBlockFound(b);
+  bool handleBlockFound(CryptoNote::Block& b) {
+    return m_core.handle_block_found(b);
   }
   
-  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::CachedBlock& block, Crypto::Hash& res) {
-    return m_core.getBlockLongHash(context, block, res);
+  bool getBlockLongHash(Crypto::cn_context &context, const CryptoNote::Block& block, Crypto::Hash& res) {
+    return m_core.get_block_long_hash(context, block, res);
   }
 
   uint64_t getAlreadyGeneratedCoins() {
