@@ -337,18 +337,18 @@ namespace WalletGui
           m_stop_mining = true;
         }
 
-      Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
-      try {
-        Crypto::PublicKey txPublicKey = getTransactionPublicKeyFromExtra(b.baseTransaction.extra);
-        Crypto::KeyDerivation derivation;
-        if (!Crypto::generate_key_derivation(txPublicKey, m_account.viewSecretKey, derivation)) {
-          qDebug() << "Failed to generate_key_derivation for block signature";
-          Q_EMIT minerMessageSignal(QString("Failed to generate_key_derivation for block signature"));
-          m_stop_mining = true;
-        }
-        Crypto::SecretKey ephSecKey;
-        Crypto::derive_secret_key(derivation, 0, m_account.spendSecretKey, ephSecKey);
-        Crypto::PublicKey ephPubKey = boost::get<KeyOutput>(b.baseTransaction.outputs[0].target).key;
+        Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
+        try {
+          Crypto::PublicKey txPublicKey = getTransactionPublicKeyFromExtra(b.baseTransaction.extra);
+          Crypto::KeyDerivation derivation;
+          if (!Crypto::generate_key_derivation(txPublicKey, m_account.viewSecretKey, derivation)) {
+            qDebug() << "Failed to generate_key_derivation for block signature";
+            Q_EMIT minerMessageSignal(QString("Failed to generate_key_derivation for block signature"));
+            m_stop_mining = true;
+          }
+          Crypto::SecretKey ephSecKey;
+          Crypto::derive_secret_key(derivation, 0, m_account.spendSecretKey, ephSecKey);
+          Crypto::PublicKey ephPubKey = boost::get<KeyOutput>(b.baseTransaction.outputs[0].target).key;
 
           Crypto::generate_signature(h, ephPubKey, ephSecKey, b.signature);
         }
