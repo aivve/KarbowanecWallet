@@ -206,6 +206,47 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="6">
+     <widget class="QWidget" name="m_coinsFrame" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="7">
+     <widget class="WalletGui::AccountFrame" name="m_accountFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -358,6 +399,7 @@
    <addaction name="m_transactionsAction"/>
    <addaction name="m_addressBookAction"/>
    <addaction name="m_miningAction"/>
+   <addaction name="m_coinsAction"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="accountToolBar">
@@ -455,6 +497,21 @@
    </property>
    <property name="text">
     <string>Contacts</string>
+   </property>
+  </action>
+  <action name="m_coinsAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources.qrc">
+     <normaloff>:/icons/coins</normaloff>:/icons/coins</iconset>
+   </property>
+   <property name="text">
+    <string>Coins</string>
    </property>
   </action>
   <action name="m_createWalletAction">
@@ -997,6 +1054,22 @@
    <sender>m_transactionsAction</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_transactionsFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>787</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_coinsAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_coinsFrame</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
