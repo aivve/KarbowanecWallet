@@ -332,43 +332,43 @@ namespace WalletGui
       if (b.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_5) {
         BinaryArray ba;
         if (!get_block_hashing_blob(b, ba)) {
-            qDebug() << "get_block_hashing_blob for signature failed.";
-            Q_EMIT minerMessageSignal(QString("get_block_hashing_blob for signature failed"));
-            m_stop_mining = true;
+          qDebug() << "get_block_hashing_blob for signature failed.";
+          Q_EMIT minerMessageSignal(QString("get_block_hashing_blob for signature failed"));
+          m_stop_mining = true;
         }
 
-        Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
-        try {
-          Crypto::PublicKey txPublicKey = getTransactionPublicKeyFromExtra(b.baseTransaction.extra);
-          Crypto::KeyDerivation derivation;
-          if (!Crypto::generate_key_derivation(txPublicKey, m_account.viewSecretKey, derivation)) {
-            qDebug() << "Failed to generate_key_derivation for block signature";
-            Q_EMIT minerMessageSignal(QString("Failed to generate_key_derivation for block signature"));
-            m_stop_mining = true;
-          }
-          Crypto::SecretKey ephSecKey;
-          Crypto::derive_secret_key(derivation, 0, m_account.spendSecretKey, ephSecKey);
-          Crypto::PublicKey ephPubKey = boost::get<KeyOutput>(b.baseTransaction.outputs[0].target).key;
+      Crypto::Hash h = Crypto::cn_fast_hash(ba.data(), ba.size());
+      try {
+        Crypto::PublicKey txPublicKey = getTransactionPublicKeyFromExtra(b.baseTransaction.extra);
+        Crypto::KeyDerivation derivation;
+        if (!Crypto::generate_key_derivation(txPublicKey, m_account.viewSecretKey, derivation)) {
+          qDebug() << "Failed to generate_key_derivation for block signature";
+          Q_EMIT minerMessageSignal(QString("Failed to generate_key_derivation for block signature"));
+          m_stop_mining = true;
+        }
+        Crypto::SecretKey ephSecKey;
+        Crypto::derive_secret_key(derivation, 0, m_account.spendSecretKey, ephSecKey);
+        Crypto::PublicKey ephPubKey = boost::get<KeyOutput>(b.baseTransaction.outputs[0].target).key;
 
           Crypto::generate_signature(h, ephPubKey, ephSecKey, b.signature);
-       }
-       catch (std::exception& e) {
-         qDebug() << "Signing block failed: " << e.what();
-         Q_EMIT minerMessageSignal(QString("Signing block failed") + QString(e.what()));
-         m_stop_mining = true;
-       }
-     }
+        }
+        catch (std::exception& e) {
+          qDebug() << "Signing block failed: " << e.what();
+          Q_EMIT minerMessageSignal(QString("Signing block failed") + QString(e.what()));
+          m_stop_mining = true;
+        }
+      }
 
-     // step 2: get long hash
-     Crypto::Hash pow;
+      // step 2: get long hash
+      Crypto::Hash pow;
 
-     if (!m_stop_mining) {
-       if (!NodeAdapter::instance().getBlockLongHash(context, b, pow)) {
-         qDebug() << "getBlockLongHash failed.";
-         Q_EMIT minerMessageSignal(QString("getBlockLongHash failed"));
-         m_stop_mining = true;
-       }
-     }
+      if (!m_stop_mining) {
+        if (!NodeAdapter::instance().getBlockLongHash(context, b, pow)) {
+          qDebug() << "getBlockLongHash failed.";
+          Q_EMIT minerMessageSignal(QString("getBlockLongHash failed"));
+          m_stop_mining = true;
+        }
+      }
 
       if (!m_stop_mining && check_hash(pow, local_diff))
       {
