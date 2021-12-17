@@ -48,6 +48,7 @@ int main(int argc, char* argv[]) {
 
   QApplication app(argc, argv);
   app.setAttribute(Qt::AA_EnableHighDpiScaling);
+  app.setAttribute(Qt::AA_UseHighDpiPixmaps);
   app.setApplicationName(CurrencyAdapter::instance().getCurrencyName() + "wallet");
   app.setApplicationVersion(Settings::instance().getVersion());
   app.setQuitOnLastWindowClosed(false);
