@@ -25,6 +25,13 @@
 #include <QDebug>
 #include <QTime>
 
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#endif
+#if defined(Q_OS_LINUX)
+#include <pthread.h>
+#endif
+
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -57,6 +64,33 @@
 
 using namespace Logging;
 using namespace CryptoNote;
+
+namespace Affinity
+{
+  bool setThreadAffinity(uint64_t cpu_id)
+  {
+#if defined(Q_OS_WIN)
+    const bool result = (SetThreadAffinityMask(GetCurrentThread(), 1ULL << cpu_id) != 0);
+    Sleep(1);
+    return result;
+#endif
+#if defined(Q_OS_LINUX)
+    cpu_set_t mn;
+    CPU_ZERO(&mn);
+    CPU_SET(cpu_id, &mn);
+
+#   ifndef __ANDROID__
+    const bool result = (pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &mn) == 0);
+#   else
+    const bool result = (sched_setaffinity(gettid(), sizeof(cpu_set_t), &mn) == 0);
+#   endif
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    return result;
+#endif
+    return true;
+  }
+}
 
 namespace WalletGui
 {
@@ -308,6 +342,12 @@ namespace WalletGui
   bool Miner::worker_thread(uint32_t th_local_index)
   {
     m_logger(Logging::DEBUGGING) << "Miner thread was started ["<< th_local_index << "]";
+
+    //auto res = Affinity::setThreadAffinity(th_local_index);
+    //if (!res) {
+    //  m_logger(Logging::DEBUGGING) << "Could not set affinity to " << th_local_index;
+    //}
+
     uint32_t nonce = m_starter_nonce + th_local_index;
     difficulty_type local_diff = 0;
     uint32_t local_template_ver = 0;
