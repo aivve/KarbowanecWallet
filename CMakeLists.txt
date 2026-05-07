@@ -201,6 +201,11 @@ set(CRYPTONOTE_SOURCES
   cryptonote/src/crypto/slow-hash.cpp
   cryptonote/src/crypto/tree-hash.c
   cryptonote/src/crypto/yespower.c
+  cryptonote/src/crypto/ct_ecdh.cpp
+  cryptonote/src/crypto/gk_proof.cpp
+  cryptonote/src/crypto/mlsag.cpp
+  cryptonote/src/crypto/pedersen.cpp
+  cryptonote/src/crypto/transaction_balance.cpp
   cryptonote/src/CryptoNoteCore/BlockchainIndices.cpp
   cryptonote/src/CryptoNoteCore/LMDBBlockchainDB.cpp
   cryptonote/src/CryptoNoteCore/BlockchainMessages.cpp
