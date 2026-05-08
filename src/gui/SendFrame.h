@@ -42,8 +42,9 @@ private:
   quint64 m_nodeFee = 0;
   quint64 m_flatRateNodeFee = 0;
   quint64 m_totalAmount = 0;
-  quint64 m_unmixableBalance = 0;
   quint64 m_selectedOutputsAmount = 0;
+  bool m_ignoreMixinWarning = false;
+  bool m_mixinWarningShown = false;
   QList<CryptoNote::TransactionOutputInformation> m_selectedOutputs;
 
   void sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _error_text);
@@ -55,10 +56,10 @@ private:
   void onNodeFeeAddressFound(const QString& _address, const quint64 _feeAmount);
   double getMinimalFee();
   quint64 getFee();
+  quint64 getBackendMixin() const;
   void calculateNodeFee();
   void recalculateAmountsSendOutputs();
   void reset();
-  bool confirmZeroMixin();
 
   Q_SLOT void addRecipientClicked();
   Q_SLOT void clearAllClicked();

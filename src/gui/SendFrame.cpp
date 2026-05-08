@@ -12,7 +12,6 @@
 #include <QTime>
 #include <QUrl>
 
-#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "AddressBookModel.h"
 #include "CurrencyAdapter.h"
 #include "MainWindow.h"
@@ -32,13 +31,19 @@
 
 namespace WalletGui {
 
+namespace {
+const int DEFAULT_RING_SIZE = 16;
+}
+
 SendFrame::SendFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendFrame), m_glassFrame(new SendGlassFrame(nullptr)),
     m_nodeFee(0), m_flatRateNodeFee(0), m_selectedOutputsAmount(0)
 {
   m_ui->setupUi(this);
   m_glassFrame->setObjectName("m_sendGlassFrame");
   clearAllClicked();
-  m_ui->m_mixinSlider->setValue(7);
+  m_ui->m_mixinSlider->setMinimum(CryptoNote::parameters::CT_MIN_RING_SIZE);
+  m_ui->m_mixinSlider->setMaximum(CryptoNote::parameters::CT_MAX_RING_SIZE);
+  m_ui->m_mixinSlider->setValue(DEFAULT_RING_SIZE);
   mixinValueChanged(m_ui->m_mixinSlider->value());
   m_ui->m_prioritySlider->setValue(2);
   priorityValueChanged(m_ui->m_prioritySlider->value());
@@ -165,7 +170,10 @@ void SendFrame::clearAllClicked() {
   addRecipientClicked();
   amountValueChanged();
   m_ui->m_paymentIdEdit->clear();
-  m_ui->m_mixinSlider->setValue(7);
+  m_ignoreMixinWarning = true;
+  m_ui->m_mixinSlider->setValue(DEFAULT_RING_SIZE);
+  m_ignoreMixinWarning = false;
+  m_mixinWarningShown = false;
   m_ui->m_prioritySlider->setValue(2);
   priorityValueChanged(m_ui->m_prioritySlider->value());
 }
@@ -316,10 +324,6 @@ void SendFrame::sendOutputs(QList<CryptoNote::TransactionOutputInformation> _sel
 void SendFrame::sendClicked() {
   amountValueChanged();
 
-  if (WalletAdapter::instance().getUnmixableBalance() != 0 && m_ui->m_mixinSlider->value() != 0 && !confirmZeroMixin()) {
-    return;
-  }
-
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   if (actualBalance <= NodeAdapter::instance().getMinimalFee()) {
     QCoreApplication::postEvent(
@@ -433,17 +437,17 @@ void SendFrame::sendClicked() {
     if (WalletAdapter::instance().isOpen()) {
       if (!m_ui->dontRelayCheckBox->isChecked()) {
         if (m_selectedOutputsAmount > 0) {
-          WalletAdapter::instance().sendTransaction(walletTransfers, selectedOutputsList, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+          WalletAdapter::instance().sendTransaction(walletTransfers, selectedOutputsList, fee, m_ui->m_paymentIdEdit->text(), getBackendMixin());
         } else {
-          WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+          WalletAdapter::instance().sendTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), getBackendMixin());
         }
       } else {
         QString rawTx;
 
         if (m_selectedOutputsAmount > 0) {
-          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, selectedOutputsList, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, selectedOutputsList, fee, m_ui->m_paymentIdEdit->text(), getBackendMixin());
         } else {
-          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), m_ui->m_mixinSlider->value());
+          rawTx = WalletAdapter::instance().prepareRawTransaction(walletTransfers, fee, m_ui->m_paymentIdEdit->text(), getBackendMixin());
         }
 
         if (!rawTx.isEmpty()) {
@@ -458,6 +462,12 @@ void SendFrame::sendClicked() {
 
 void SendFrame::mixinValueChanged(int _value) {
   m_ui->m_mixinLabel->setText(QString::number(_value));
+  if (!m_ignoreMixinWarning && _value != DEFAULT_RING_SIZE && !m_mixinWarningShown) {
+    m_mixinWarningShown = true;
+    QMessageBox::warning(this, tr("Privacy warning"),
+                         tr("Lowering the ring size degrades privacy and should only be used when a transaction is too large because it has many inputs."),
+                         QMessageBox::Ok);
+  }
 }
 
 void SendFrame::priorityValueChanged(int _value) {
@@ -503,6 +513,10 @@ quint64 SendFrame::getFee() {
   return CurrencyAdapter::instance().parseAmount(QString::number(getMinimalFee() * m_ui->m_prioritySlider->value()));
 }
 
+quint64 SendFrame::getBackendMixin() const {
+  return m_ui->m_mixinSlider->value() > 0 ? static_cast<quint64>(m_ui->m_mixinSlider->value() - 1) : 0;
+}
+
 void SendFrame::sendTransactionCompleted(CryptoNote::TransactionId _id, bool _error, const QString& _errorText) {
   Q_UNUSED(_id);
   if (_error) {
@@ -515,7 +529,7 @@ void SendFrame::sendTransactionCompleted(CryptoNote::TransactionId _id, bool _er
 }
 
 void SendFrame::walletActualBalanceUpdated(quint64 _balance) {
-  m_unmixableBalance = WalletAdapter::instance().getUnmixableBalance();
+  Q_UNUSED(_balance);
 }
 
 bool SendFrame::isValidPaymentId(const QByteArray& _paymentIdString) {
@@ -558,24 +572,6 @@ void SendFrame::donateToggled(bool _donate) {
   }
 }
 
-bool SendFrame::confirmZeroMixin() {
-  int ret = QMessageBox::question(nullptr, tr("Sweep unmixable dust"),
-                                  tr("You have unmixable coins that can be only spent with zero privacy level.\n Shall we continue with zero privacy?"),
-                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-  switch (ret) {
-    case QMessageBox::Yes:
-      m_ui->m_mixinSlider->setValue(0);
-      return true;
-    case QMessageBox::No:
-      return false;
-    default:
-      // should never be reached
-      break;
-    }
-
-  return false;
-}
-
 void SendFrame::sendAllClicked() {
   quint64 actualBalance = WalletAdapter::instance().getActualBalance();
   if (actualBalance < NodeAdapter::instance().getMinimalFee()) {
@@ -584,12 +580,6 @@ void SendFrame::sendAllClicked() {
       new ShowMessageEvent(tr("Insufficient balance."), QtCriticalMsg));
     return;
   }
-  m_unmixableBalance = WalletAdapter::instance().getUnmixableBalance();
-  if (m_unmixableBalance != 0) {
-    if(!confirmZeroMixin())
-      return;
-  }
-
   quint64 fee = getFee();
   quint64 amount = actualBalance - (fee + m_nodeFee);
   if (m_ui->donateCheckBox->isChecked()) {

@@ -340,19 +340,19 @@
          </size>
         </property>
         <property name="minimum">
-         <number>0</number>
+         <number>4</number>
         </property>
         <property name="maximum">
-         <number>19</number>
+         <number>16</number>
         </property>
         <property name="pageStep">
          <number>1</number>
         </property>
         <property name="value">
-         <number>7</number>
+         <number>16</number>
         </property>
         <property name="sliderPosition">
-         <number>7</number>
+         <number>16</number>
         </property>
         <property name="tracking">
          <bool>false</bool>
